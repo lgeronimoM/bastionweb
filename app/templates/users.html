@@ -1,0 +1,78 @@
+{% extends 'base/base.html' %}
+{% block title %} DNSWEBADMIN Edit {% endblock title%}
+{% block content %}
+    <main class="container">
+        <div class="row">
+            <div class="card">
+                <div class="card-content">
+                    <span class="card-title">Users to access web administrator:</span>
+                    <div class="row">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>user</th>
+                                <th>email</th>
+                                <th>area</th>
+                                <th>Remove</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for name in names%}
+                            <tr>
+                                <td>
+                                    {{name['username']}}
+                                </td>
+                                <td>
+                                    {{name['email']}}
+                                </td>
+                                <td>
+                                    {{name['area']}}
+                                </td>
+                                <td>
+                                    <form method="POST" action="/core/deleteuser">
+                                        <button class="btn white" type="submit" name="delete_button" onclick="return confirm('Are you sure to delete?')" value="{{name['id']}}">
+                                            <i class="material-icons black-text">delete</i>
+                                        </button>
+                                    </form>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                    </div>
+                    <div class="row"><br>
+                    <form method="POST" action="/core/adduser">
+                    <p class="red-text">{{statususer}}</p>
+                    <p>Here you can add a new user</p>
+                    <div class="input-field col s12 m6 l3">
+                            <input placeholder="username" id="username" type="text" class="validate" name="username" required>
+                            <label for="username">username</label>
+                        </div>
+                        <div class="input-field col s12 m6 l3">
+                            <input placeholder="password" id="password" type="password" class="validate" name="password" required>
+                            <label for="password">Password</label>
+                        </div>
+                        <div class="input-field col s12 m6 l3">
+                            <input placeholder="email" id="email_inline" type="email" class="validate" name="email" required>
+                            <label for="email_inline">Email</label>
+                        </div>
+                        <div class="input-field col s12 m6 l3">
+                            <input placeholder="area" id="area" type="text" class="validate" name="area" required>
+                            <label for="area">work area</label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-field">
+                            <button class="btn waves-effect waves-green green darken-2" type="submit" name="edit_button">Add
+                            </button>
+                        </div>
+                    </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </main>    
+    <!-- Compiled and minified JavaScript -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+
+{% endblock content %}

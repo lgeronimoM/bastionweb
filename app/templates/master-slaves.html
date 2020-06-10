@@ -1,0 +1,89 @@
+{% extends 'base/base.html' %}
+{% block title %} DNSWEBADMIN Config {% endblock title%}
+{% block content %}
+    <main class="container">
+       <div class="row">
+            <div class="card">
+                <div class="card-content">
+                    <span class="card-title">The first step is to add the master/slave servers.</span>
+                    <form method="POST" action="/core/installdns">
+                        {% if exist==False %}
+                        <p>This acction install and config servers DNS master/Salaves.</p><br>
+                        <div class="form-field">
+                            <button class="btn waves-effect waves-green indigo darken-1" id="sendNewSms" type="submit" name="crearFile">commit
+                            </button>
+                        </div>
+                        {% endif %}
+                    </form><br>
+                     <p class="red-text">{{ statusmaster }}</p>
+                    <form method="POST" action="/core/deletemaster">
+                    {% if exist==False %}
+                        <span class="green-text">Master added: <b>{{master['ipmaster']}}</b></span>
+                        <button class="btn white" type="submit" name="delete_button" onclick="return confirm('Are you sure to delete?')" formaction="/core/deletemaster" value="{{master['id']}}">
+                            <i class="material-icons black-text">delete</i>
+                        </button>
+                    {% endif %}
+                    </form>
+                    <form method="POST" action="/core/addmaster"><br>
+                    <div class="row">
+                        <p>You can have only one server master.</p>
+                        {% if exist %}
+                        <div class="input-field col s12 m6 l3">
+                            <input placeholder="ip add master" id="master" type="text" value="" class="validate" name="master" required >
+                            <label for="master">Master</label>
+                        </div>
+                        <div class="input-field col s12 m6 l3">
+                            <input placeholder="User" id="user" type="text" value="" class="validate" name="user" required>
+                            <label for="user">User</label>
+                        </div>
+                        <div class="input-field col s12 m6 l3">
+                            <input placeholder="Password" id="password" type="password" value="" class="validate" name="password" required >
+                            <label for="password">Password</label>
+                        </div>
+                        <div class="form-field">
+                            <button class="btn waves-effect waves-green green darken-2 {{valid}}" formaction="/core/addmaster" type="submit" name="submit" >add
+                            </button>
+                        </div>
+                        {% endif %}
+                    </div>
+                    </form>
+                {% if exist==False %}
+                    <p class="red-text">{{ statuslave }}</p>
+                    <form method="POST">
+                    {% for slaves in ipslaves %}
+                        <span class="green-text">Slave added: <b>{{slaves['ipslave']}}</b></span>
+                        <button class="btn white" type="submit" name="delete_button" onclick="return confirm('Are you sure to delete?')" formaction="/core/deleteslave" value="{{slaves['id']}}">
+                            <i class="material-icons black-text">delete</i>
+                        </button><br>
+                    {% endfor %}
+                    </form>
+                    <form method="POST" action="/core/addslave"><br>
+                    <div class="row">
+                        <p>SLAVES. You can have several servers slaves.</p>
+                        <div class="input-field col s12 m6 l3">
+                            <input placeholder="ip add slave" id="slave" type="text" value="" class="validate" name="slave" required>
+                            <label for="slave">Slave</label>
+                        </div>
+                        <div class="input-field col s12 m6 l3">
+                            <input placeholder="User" id="user" type="text" value="" class="validate" name="user" required>
+                            <label for="user">User</label>
+                        </div>
+                        <div class="input-field col s12 m6 l3">
+                            <input placeholder="Password" id="password" type="password" value="" class="validate" name="password" required>
+                            <label for="password">Password</label>
+                        </div>
+                        <div class="form-field">
+                            <button class="btn waves-effect waves-green green darken-2" type="submit" name="submit">add
+                            </button>
+                        </div>
+                    </div>
+                    </form>
+                </div>
+            </div>
+        {% endif %}
+        </div>
+    </main>    
+    <!-- Compiled and minified JavaScript -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+
+{% endblock content %}

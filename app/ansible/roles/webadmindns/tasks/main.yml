@@ -1,0 +1,130 @@
+---
+# Instalar y administrar DNS Server maestro
+
+- name: instalar service bind
+  yum:
+    name: bind
+    state: present
+  tags: install
+
+- name: instalar service bind-utils
+  yum:
+    name: bind-utils
+    state: present
+  tags: install
+
+- name: Configurar DNS maestro
+  template: 
+    src: named.conf.master.j2 
+    dest: /etc/named.conf 
+    owner: root
+    group: named
+    mode: '640'
+  notify: restart named
+  tags: 
+    - configmaster 
+
+- name: Configurar DNS esclavo
+  template: 
+    src: named.conf.slave.j2
+    dest: /etc/named.conf
+    owner: root
+    group: named
+    mode: '640'
+  notify: restart named
+  tags: 
+    - configslave 
+
+- name: Crear directorio de Zonas
+  file:
+    path: /etc/named/zones
+    state: directory
+    owner: root
+    group: named
+    mode: 0750
+  tags: 
+    - configmaster 
+
+- name: Crear dominio {{ zoneDomain }}
+  template:
+    src: '{{ item }}.zone.j2'
+    dest: '/etc/named/zones/{{ item }}.zone'
+    owner: root
+    group: named
+    mode: 0640
+  with_items: '{{ zoneDomain }}'
+  notify: restart named
+  tags: 
+    - configmaster 
+
+- name: Crear directorio de Zonas
+  file:
+    path: /etc/named/cache
+    state: directory
+    owner: root
+    group: named
+    mode: 0750
+  tags:
+    - configslave 
+
+- name: Permitir modificaciones en el directorio /etc/named/cache
+  sefcontext:
+    target: '/etc/named/cache'
+    setype: named_cache_t
+    state: present
+  tags:
+    - configslave 
+
+- name: Crear subdominio {{ subDomain }}
+  template:
+    src: '{{ subDomain }}.zone.j2'
+    dest: '/etc/named/zones/{{ subDomain }}.zone'
+    owner: root
+    group: named
+    mode: 0640
+  notify: restart named
+  tags: 
+    - subdomain 
+
+- name: Empezar servicio de firewall.
+  service:
+    name: firewalld
+    state: started
+  tags: install
+
+- name: Empezar servicio de dns.
+  service:
+    name: named
+    state: started
+  tags: install
+
+- name: abrir puerto
+  firewalld:
+    service: dns
+    zone: 'public'
+    permanent: true
+    state: enabled
+    immediate: yes
+  tags: install
+
+- name: Configurar named DNS maestro
+  template: 
+    src: named.conf.master.j2 
+    dest: /etc/named.conf 
+    owner: root
+    group: named
+    mode: '640'
+  notify: restart named
+  tags: 
+    - allowquerymaster
+
+- name: Configurar named DNS esclavo
+  template: 
+    src: named.conf.slave.j2
+    dest: /etc/named.conf
+    owner: root
+    group: named
+    mode: '640'
+  notify: restart named
+  tags: 
+    - allowqueryslave

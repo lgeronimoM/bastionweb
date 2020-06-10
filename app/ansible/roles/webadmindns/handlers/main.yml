@@ -1,0 +1,6 @@
+---
+# handlers file for roles/manageDNServer
+- name: restart named
+  service:
+    name: named
+    state: restarted

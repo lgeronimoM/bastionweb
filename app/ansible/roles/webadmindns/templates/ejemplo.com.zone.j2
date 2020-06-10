@@ -1,0 +1,16 @@
+$ORIGIN ejemplo.com.
+$TTL 86400
+@   IN  SOA     masterdns.ejemplo.com. root.ejemplo.com. (
+        1041    ;Serial
+        3600        ;Refresh
+        1800        ;Retry
+        604800      ;Expire
+        86400       ;Minimum TTL )
+)
+        NS      masterdns.ejemplo.com.
+@   IN  NS   slavedns1.ejemplo.com.
+slavedns1       IN  A   192.168.3.101
+masterdns   IN  A   192.168.3.106
+page   A  192.168.0.3
+mypage   A  192.168.0.5
+ejemplodomain   A  192.168.0.6

@@ -1,0 +1,37 @@
+acl "allowed" {
+        172.16.0.0/20;
+        10.190.0.0/16;
+        192.168.0.0/16;
+        10.10.0.0/16;
+};
+acl "slaves" {
+        192.168.3.101;
+};
+options {
+        directory "/etc/named";
+        listen-on port 53 { 192.168.3.106; 127.0.0.1; };
+        listen-on-v6 { none; };
+        allow-query  { allowed; 127.0.0.0/8; };
+        forwarders {
+                8.8.8.8; 
+                1.1.1.1; 
+        };
+        version "No disponible";
+        check-names master ignore;
+        check-names response ignore;
+};
+zone "mydomain.org" {
+        type master;
+        file "/etc/named/zones/mydomain.org.zone";
+        allow-transfer { slaves; };
+};
+zone "ejemplo.com" {
+        type master;
+        file "/etc/named/zones/ejemplo.com.zone";
+        allow-transfer { slaves; };
+};
+zone "ejemplo1.com" {
+        type master;
+        file "/etc/named/zones/ejemplo1.com.zone";
+        allow-transfer { slaves; };
+};

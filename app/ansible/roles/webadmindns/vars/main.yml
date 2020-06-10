@@ -1,0 +1,6 @@
+---
+#configuracion zonas
+zoneDomain:
+  - mydomain.org
+  - ejemplo.com
+  - ejemplo1.com

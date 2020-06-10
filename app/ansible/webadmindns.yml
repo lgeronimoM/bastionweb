@@ -1,0 +1,8 @@
+---
+- hosts: dnsservers
+  name: "Playbook Webadmin DNS server slaves and masters"
+  gather_facts: no
+  vars:
+    subDomain: mydomain.org
+  roles:
+    - roles/webadmindns
