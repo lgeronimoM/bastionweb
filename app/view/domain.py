@@ -51,16 +51,6 @@ logging.basicConfig(filename=LOG_FILENAME,level=logging.DEBUG)
 logging.info('Comenzando la aplicacion...')
         
 ####################### Endpoints #############################
-@app.route('/')
-def home():
-    is_auth = current_user.is_authenticated
-    if is_auth:
-        logging.info('User authentication')
-        user = current_user.username
-        return render_template('index.html', graph=graphing(), pie=pie(), user = user)
-    else:
-        logging.info('User trying access to page')
-        return render_template('login.html')
 
 @app.route('/hostedzone')
 @login_required
@@ -120,7 +110,7 @@ def addhostedzone():
 @app.route('/deletedomainzone', methods=['POST'])
 @login_required
 def deletedomainzone():
-    idf = int(request.args['id'])
+    idf = int(request.form['id'])
     url = cf.APIHOSETD
     headers = {'Content-type': 'application/json'}
     hosting = requests.get(url, headers=headers, verify=False).json()
@@ -296,440 +286,7 @@ def deletedomain():
         subdomain_conf(subdomain,zoneid, namef, valuef, typef)
         install_dns_playbook(tagsexc, ipmanage, passwd, user)
         return redirect(url_for('domain', res=zoneid))
-############################################# manage users ####################################
-@app.route('/users')
-@login_required
-def users():
-    statususer = ''
-    if request.args.get('statususer'):
-        statususer=request.args.get('statususer')
-    query=db.session.query(Users).filter().all()
-    db.session.commit()
-    logging.info('Access page user')
-    user = current_user.username
-    return render_template('users.html', user = user, names=query, statususer=statususer)
 
-@app.route('/core/adduser', methods=['POST'])
-@login_required
-def adduser():
-    name = str(request.form['username'])
-    user = db.session.query(Users).filter(Users.username == name).first()
-    validate=''
-    if user:
-        validate='This user already exist'
-        return redirect(url_for('users', statususer=validate))
-    password = str(request.form['password'])
-    email = str(request.form['email'])
-    area = str(request.form['area'])
-    insertQuery = Users(name,password,email,area,True,1)
-    db.session.add(insertQuery)
-    db.session.commit()
-    logging.info('Add user '+name+' '+area)
-    return redirect(url_for('users'))
-
-@app.route('/core/deleteuser', methods=['POST'])
-@login_required
-def deleteuser():
-    if request.form['delete_button']:
-        idf = int(request.form['delete_button'])
-        db.session.query(Users).filter(Users.id == idf).delete(synchronize_session=False)
-        db.session.commit()
-        return redirect(url_for('users'))
-
-######################################### install master and Slaves servers ###################3333
-@app.route('/masterslaves')
-@login_required
-def masterslaves():
-    master = db.session.query(Master).filter().first()
-    statuslave = ''
-    statusmaster = ''
-    statusacl = ''
-    exist=True
-    if request.args.get('statusmaster'):
-        statusmaster=request.args.get('statusmaster')
-    elif request.args.get('statuslave'):
-        statuslave=request.args.get('statuslave')
-    elif request.args.get('statusacl'):
-        statusacl = request.args.get('statusacl')
-    if master:
-        exist=False
-    slaves = db.session.query(Slaves).filter().all()
-    acls = db.session.query(Acls).filter().all()
-    db.session.commit()
-    user = current_user.username
-    return render_template('master-slaves.html', ipslaves=slaves, master=master, user=user, exist=exist, acls=acls, statuslave=statuslave, statusmaster=statusmaster, statusacl=statusacl)
-
-@app.route('/core/addmaster', methods=['POST'])
-@login_required
-def addmaster():
-    master = str(request.form['master'])
-    masterserver = db.session.query(Master).filter(Master.ipmaster == master).first()
-    slaveserver = db.session.query(Slaves).filter(Slaves.ipslave == master).first()
-    statusmaster=''
-    if masterserver:
-        validate='You have already this server master'
-        return redirect(url_for('config', statusmaster=validate))
-    elif slaveserver:
-        validate='This server is slave'
-        return redirect(url_for('config', statusmaster=validate))
-    user = str(request.form['user'])
-    password = str(request.form['password'])
-    insertQuery = Master(master,user,password)
-    db.session.add(insertQuery)
-    db.session.commit()
-    logging.info('Add master '+master+' '+user)
-    return redirect(url_for('masterslaves'))
-
-@app.route('/core/deletemaster', methods=['POST'])
-@login_required
-def deletemaster():
-    if request.form['delete_button']:
-        idf = int(request.form['delete_button'])
-        db.session.query(Master).filter(Master.id == idf).delete(synchronize_session=False)
-        db.session.commit()
-        return redirect(url_for('masterslaves'))
-
-@app.route('/core/addslave', methods=['POST'])
-@login_required
-def addslave():
-    slave = str(request.form['slave'])
-    master = db.session.query(Master).filter(Master.ipmaster == slave).first()
-    slaveserver = db.session.query(Slaves).filter(Slaves.ipslave == slave).first()
-    validate=''
-    if master:
-        validate='This server is master'
-        return redirect(url_for('masterslaves', statuslave=validate))
-    elif slaveserver:
-        validate='You have already added this server'
-        return redirect(url_for('masterslaves', statuslave=validate))
-    user = str(request.form['user'])
-    password = str(request.form['password'])
-    insertQuery = Slaves(slave,user,password)
-    db.session.add(insertQuery)
-    db.session.commit()
-    logging.info('Add slave '+slave+' '+user)
-    return redirect(url_for('config'))
-
-@app.route('/core/deleteslave', methods=['POST'])
-@login_required
-def deleteslave():
-    if request.form['delete_button']:
-        idf = int(request.form['delete_button'])
-        db.session.query(Slaves).filter(Slaves.id == idf).delete(synchronize_session=False)
-        db.session.commit()
-        return redirect(url_for('masterslaves'))
-
-@app.route('/core/installdns', methods=['POST'])
-@login_required
-def installdns():
-    tagsexc='install'
-    master = db.session.query(Master).filter().first()
-    ipmanage= master.ipmaster
-    passwd= master.password
-    user= master.user
-    db.session.commit()
-    install_dns_playbook(tagsexc, ipmanage, passwd, user)
-    slaves = db.session.query(Slaves).filter().all()
-    if slaves:
-        for slave in slaves:
-            ipmanage= slave.ipslave
-            passwd= slave.password
-            user= slave.user
-            install_dns_playbook(tagsexc, ipmanage, passwd, user)
-            db.session.commit()
-    return redirect(url_for('masterslaves'))
-
-################################### named config ######################################
-@app.route('/named')
-@login_required
-def named():
-    master = db.session.query(Master).filter().first()
-    statusacl = ''
-    statusforward = ''
-    exist=True
-    if request.args.get('statusacl'):
-        statusacl = request.args.get('statusacl')
-    elif request.args.get('statusforward'):
-        statusforward = request.args.get('statusforward')
-    elif master:
-        exist=False
-    acls = db.session.query(Acls).filter().all()
-    forwards = db.session.query(Forwards).filter().all()
-    db.session.commit()
-    user = current_user.username
-    return render_template('named.html', forwards=forwards, master=master, user=user, exist=exist, acls=acls, statusacl=statusacl, statusforward=statusforward)
-
-@app.route('/core/addforward', methods=['POST'])
-@login_required
-def addforward():
-    forward = str(request.form['forward'])
-    forwards = db.session.query(Forwards).filter(Forwards.ipforward == forward).first()
-    validate=''
-    if forwards:
-        validate='You have already added this forward'
-        return redirect(url_for('named', statusforward=validate))
-    insertQuery = Forwards(forward)
-    db.session.add(insertQuery)
-    db.session.commit()
-    logging.info('Add forward '+forward)
-    return redirect(url_for('named'))
-
-@app.route('/core/forwadcommit', methods=['POST'])
-@login_required
-def forwadcommit():
-    slaves = db.session.query(Slaves).filter().all()
-    if slaves:
-        for slave in slaves:
-            dif=slave.id
-            nameconf_slave(dif)
-            tagsexc='allowqueryslave'
-            ipmanage= slave.ipslave
-            passwd= slave.password
-            user= slave.user
-            install_dns_playbook(tagsexc, ipmanage, passwd, user)
-    tagsexc='allowquerymaster'
-    master = db.session.query(Master).filter().first()
-    ipmanage= master.ipmaster
-    passwd= master.password
-    user= master.user
-    nameconf_master()
-    install_dns_playbook(tagsexc, ipmanage, passwd, user)
-    db.session.commit()
-    return redirect(url_for('named')) 
-
-@app.route('/core/deleteforward', methods=['POST'])
-@login_required
-def deleteforward():
-    if request.form['delete_button']:
-        idf = int(request.form['delete_button'])
-        db.session.query(Forwards).filter(Forwards.id == idf).delete(synchronize_session=False)
-        db.session.commit()
-        return redirect(url_for('named'))
-
-@app.route('/core/addacl', methods=['POST'])
-@login_required
-def addacl():
-    acl = str(request.form['acl'])
-    acls = db.session.query(Acls).filter(Acls.ipacl == acl).first()
-    validate=''
-    if acls:
-        validate='You have already added this acl'
-        return redirect(url_for('named', statusacl=validate))
-    insertQuery = Acls(acl)
-    db.session.add(insertQuery)
-    db.session.commit()
-    logging.info('Add acl '+acl)
-    return redirect(url_for('named'))
-
-@app.route('/core/allowquery', methods=['POST'])
-@login_required
-def allowquery():
-    slaves = db.session.query(Slaves).filter().all()
-    if slaves:
-        for slave in slaves:
-            dif=slave.id
-            nameconf_slave(dif)
-            tagsexc='allowqueryslave'
-            ipmanage= slave.ipslave
-            passwd= slave.password
-            user= slave.user
-            install_dns_playbook(tagsexc, ipmanage, passwd, user)
-    tagsexc='allowquerymaster'
-    master = db.session.query(Master).filter().first()
-    ipmanage= master.ipmaster
-    passwd= master.password
-    user= master.user
-    nameconf_master()
-    install_dns_playbook(tagsexc, ipmanage, passwd, user)
-    db.session.commit()
-    return redirect(url_for('named'))
-
-@app.route('/core/deleteacl', methods=['POST'])
-@login_required
-def deleteacl():
-    if request.form['delete_button']:
-        idf = int(request.form['delete_button'])
-        db.session.query(Acls).filter(Acls.id == idf).delete(synchronize_session=False)
-        db.session.commit()
-        return redirect(url_for('named'))
-
-########################### Login access ###################################
-@app.route('/login', methods=['POST'])
-def login():
-    POST_USERNAME = str(request.form['username'])
-    POST_PASSWORD = str(request.form['password'])
-    url = cf.APIUSER
-    content = {
-            "username": POST_USERNAME,
-            "password": POST_PASSWORD }
-    headers = {'Content-type': 'application/json'}
-    result = requests.post(url, json=content, headers=headers, verify=False)
-    c = result.json()
-    userdata=c['data']['username']
-    if c['success']==True:
-        logging.info('Correct user '+userdata)
-        actUser = Users.query.filter_by(username=userdata).first()
-        login_user(actUser)
-        return redirect(url_for('home')) 
-    else:
-        message_error = c['error']
-        print(message_error)
-        logging.warning('Error to authentication user '+userdata)
-        return render_template('login.html', message=message_error)
-
-@app.route("/logout")
-@login_required
-def logout():
-    logging.info('logout')
-    logout_user()
-    return redirect(url_for('home'))
-
-########################################################################################
-@app.route("/mensaje", methods=['POST'])
-def mensaje():
-    user = str(request.form['username'])        
-    telefono = str(request.form['telefono'])
-    email = str(request.form['email'])
-    descli = str(request.form['descripcion'])
-
-    port = cf.PMAIL
-    smtp_server = cf.SMTP
-    sender_email = cf.SEMAIL
-    receiver_email = cf.REMAIL
-    password = cf.EPASS
-    subject = "Notificación cliente"
-    body = "El usario "+user+" con telefono "+telefono+" y su email "+email+"\nSe contacto con usted por el siguiente problema: "+descli
-    # Create a multipart message and set headers
-    message = MIMEMultipart()
-    message["From"] = sender_email
-    message["To"] = receiver_email
-    message["Subject"] = subject
-    message["Bcc"] = receiver_email  # Recommended for mass emails
-    # Add body to email
-    message.attach(MIMEText(body, "plain"))
-    text = message.as_string()
-    # Log in to server using secure context and send email
-    context = ssl.create_default_context()
-    with smtplib.SMTP(smtp_server, port) as server:
-        server.starttls(context=context)
-        server.login(sender_email, password)
-        server.sendmail(sender_email, receiver_email, text)
-    return redirect(url_for('home'))
-
-################# API Restfull ######################
-
-@app.route('/core/v1.0/apiuser', methods=['POST'])
-def api_user():
-    user_request = request.json
-    veri_username = user_request['username']
-    veri_password = user_request['password']
-    query = db.session.query(Users).filter(and_(Users.username==veri_username,Users.password==veri_password)).first()
-    if query: 
-        response_body = {
-            "success": True,
-            "error" : None,
-            "data": {
-                "username": query.username,
-                "id_rol": query.id_rol,
-                "email": query.email,
-                "area": query.area,
-                "activo": query.admin
-            }
-        }
-        db.session.commit()
-        return jsonify(response_body), 200
-    else:
-        response_body = {
-            "success": False,
-            "error" : "User or password incorrect",
-            "data": {
-                "username": veri_username,
-                "password": veri_password           
-            }
-        }   
-        db.session.commit()
-        return jsonify(response_body), 404
-
-@app.route('/core/v1.0/hostedzone')
-def apihostedzone():
-    resul = db.session.query(Hosting).all()
-    art=[]
-    for res in resul:
-        zone=res.zone+"."+res.domain
-        value=res.zone
-        idf=res.id
-        dict ={'zones': zone, 'value': value, 'domain': res.domain, 'id':idf }
-        art.append(dict)
-    db.session.commit()
-    return jsonify(art), 200
-
-@app.route('/core/v1.0/domain/<domain>')
-def apidomain(domain):
-    art=[]
-    resul = db.session.query(Domain).filter(Domain.host.in_([domain])).all()
-    for res in resul:
-        idf = res.id
-        dom = res.name
-        tipe = res.typevalue
-        value = res.value
-        active = res.active
-        host = res.host
-        dict ={'domain' : dom, 'type' : tipe, 'value' : value, 'active' : active, 'zone': host, 'id': idf}
-        art.append(dict)
-    db.session.commit()
-    return jsonify(art), 200
-
-########################### Graphics ##############################
-
-def graphing():
-    graph = pygal.StackedLine(fill=True, interpolate='cubic', style=NeonStyle, width=1200, height=300)
-    datem = date.today().month
-    month=['January','February','March','April','May','June','July','August','September','October','November','December']
-    months=month[0:datem]
-    graph.x_labels = months
-    url = cf.APIHOSETD
-    headers = {'Content-type': 'application/json'}
-    hosting = requests.get(url, headers=headers, verify=False).json()
-    con=-1
-    for zone in hosting:
-        ranges=[]
-        for res in months:
-            con=con+1
-            connew=0
-            regs = db.session.query(Register).filter(and_(Register.registerdate==str(month[con]),Register.registerdomain==zone['zones'])).all()
-            for reg in regs:
-                connew=connew+1
-            ranges.append(connew)
-        graph.add(zone['zones'], ranges)
-        ranges=[]
-        con=-1
-        connew=0
-    db.session.commit()
-    return graph.render_data_uri()
-
-def pie():
-    custom_style = Style(
-    background='transparent',
-    plot_background='transparent',
-    foreground='#212121',
-    foreground_strong='#53A0E8',
-    foreground_subtle='#630C0D',
-    opacity='.8',
-    opacity_hover='.6',
-    transition='400ms ease-in',
-    colors=('#4a148c', '#880e4f', '#b71c1c', '#0d47a1'))
-    pie_chart = pygal.Pie(half_pie=True, width=400, height=200, style=custom_style)
-    url = cf.APIHOSETD
-    headers = {'Content-type': 'application/json'}
-    hosting = requests.get(url, headers=headers, verify=False).json()
-    for zone in hosting:
-        con=0
-        dominios = db.session.query(Domain).filter(Domain.host==int(zone['id'])).all()
-        for dominio in dominios:
-            con=con+1
-        pie_chart.add(zone['zones'], con)
-    db.session.commit()
-    return pie_chart.render_data_uri()
 
 ########################################### API Ansible-Playbooks ###################################################
 
@@ -931,3 +488,34 @@ def zone_subdomain(zone):
     file.write('  roles:\n')
     file.write('    - roles/webadmindns\n')
     file.close()
+
+#################################### API ###################################
+
+@app.route('/core/v1.0/hostedzone')
+def apihostedzone():
+    resul = db.session.query(Hosting).all()
+    art=[]
+    for res in resul:
+        zone=res.zone+"."+res.domain
+        value=res.zone
+        idf=res.id
+        dict ={'zones': zone, 'value': value, 'domain': res.domain, 'id':idf }
+        art.append(dict)
+    db.session.commit()
+    return jsonify(art), 200
+
+@app.route('/core/v1.0/domain/<domain>')
+def apidomain(domain):
+    art=[]
+    resul = db.session.query(Domain).filter(Domain.host.in_([domain])).all()
+    for res in resul:
+        idf = res.id
+        dom = res.name
+        tipe = res.typevalue
+        value = res.value
+        active = res.active
+        host = res.host
+        dict ={'domain' : dom, 'type' : tipe, 'value' : value, 'active' : active, 'zone': host, 'id': idf}
+        art.append(dict)
+    db.session.commit()
+    return jsonify(art), 200

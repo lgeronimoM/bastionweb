@@ -48,4 +48,8 @@ db = SQLAlchemy(app)
 login_manager = LoginManager()
 login_manager.init_app(app)
 
-from app import routes
+from app.view import dashboard
+from app.view import domain
+from app.view import named
+from app.view import masterslave
+from app.view import users
