@@ -1,7 +1,7 @@
 $ORIGIN mydomain.org.
 $TTL 86400
 @   IN  SOA     masterdns.mydomain.org. root.mydomain.org. (
-        1046    ;Serial
+        1056    ;Serial
         3600        ;Refresh
         1800        ;Retry
         604800      ;Expire
@@ -11,10 +11,7 @@ $TTL 86400
 @   IN  NS   slavedns1.mydomain.org.
 slavedns1       IN  A   192.168.3.101
 masterdns   IN  A   192.168.3.106
-server           A          192.168.0.2
-mypage           A          192.168.0.7
-record           A          192.168.0.10
-webservice           A          192.168.0.11
-website           A          192.168.0.12
-web           A          10.10.10.10
-web           A          10.10.10.10
+mypage   A  192.168.0.7
+webservice   A  192.168.0.11
+website   A  192.168.0.12
+web   A  10.10.10.10

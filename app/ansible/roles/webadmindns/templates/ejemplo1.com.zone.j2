@@ -1,7 +1,7 @@
 $ORIGIN ejemplo1.com.
 $TTL 86400
 @   IN  SOA     masterdns.ejemplo1.com. root.ejemplo1.com. (
-        1044    ;Serial
+        1054    ;Serial
         3600        ;Refresh
         1800        ;Retry
         604800      ;Expire
@@ -11,6 +11,11 @@ $TTL 86400
 @   IN  NS   slavedns1.ejemplo1.com.
 slavedns1       IN  A   192.168.3.101
 masterdns   IN  A   192.168.3.106
-page   A  192.168.0.3
-mypage   A  192.168.0.5
-ejemplodomain   A  192.168.0.6
+pageok2           A          192.168.0.3
+mypage           A          192.168.0.5
+ejemplodomain           A          192.168.0.6
+ansible-awx           A          192.168.0.21
+ansible-awx2           A          192.168.0.22
+ansible-awx3           A          192.168.0.23
+ansible-awx           A          10.10.10.21
+pageok2           A          192.168.0.3

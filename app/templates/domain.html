@@ -3,23 +3,7 @@
 {% block content %}
     <main class="container">
         <h4>Register your DNS</h4>
-        <div class="row">
-            <form method="GET">
-                <div class="input-field col s12 m6 l5">
-                    <select class="blue-text text-darken-2" id="select" name="res" required>
-                        <option value="" disabled selected>Select domain</option>
-                        {% for res in zone %}
-                            <option value="{{res['id']}}">{{res['zones']}}</option>
-                        {% endfor %}
-                    </select><br>
-                    <div class="form-field">
-                        <button class="btn waves-effect waves-green green darken-2" type="submit" name="Submit">filter
-                        </button>
-                    </div>
-                </div>
-            </form>
-        </div>
-        <div class="row">
+        <div class="row"><br>
             <form method="POST" action="/core/adddomain">
                 <input type="hidden" value="" name="valueres" required>
                 <div class="input-field col s12 m6 l3">
@@ -56,76 +40,96 @@
             </form>
         </div>
         <div class="row">
-        {% if mess %} 
-            <span class="red-text">{{ mess }}</span>
-        {% endif %}
-        <h4>Zone Domain: <b class="green-text text-darken-2">{{name}}</b></h4>
-        <form method="POST" action="">
-            <input type="hidden" value="{{valueres}}" name="valueres" required>
-            <table>
-                <thead>
-                    <tr>
-                        <th>type</th>
-                        <th>Name</th>
-                        <th>Value</th>
-                        <th>TTL</th>
-                        <th>Active</th>
-                        <th>Edit/Remove</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for res in data %}
-                    <tr>
-                        <td name="type">
-                            {{res['type']}}
-                        </td>
-                        <td name="name">
-                            {{res['domain']}}
-                        </td>
-                        <td name="value">
-                            {{res['value']}}
-                        </td>
-                        <td name="ttl">
-                            Automatic
-                        </td>
-                        <td name="active">
-                            True 
-                            <!-- <div class="switch">
-                                <label>
-                                {% if res['active'] == True %}
-                                    <input type="checkbox" checked="checked">
-                                    <span class="lever"></span>
-                                {% else %}
-                                    <input type="checkbox">
-                                    <span class="lever"></span>
-                                {% endif %}
-                                </label>
-                            </div>  -->
-                        </td>
-                        <td>
-                            <button class="btn white" type="submit" formaction="/core/editdomain" name="update_button"  value="{{res['id']}}" >
-                                <i class="material-icons black-text">edit</i>
-                            </button>
-                            <button class="btn white" type="submit" name="delete_button" onclick="return confirm('Are you sure to delete?')" formaction="/core/deletedomain" value="{{res['id']}}">
-                                <i class="material-icons black-text">delete</i>
-                            </button>
-                        </td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
+            <form method="GET">
+            <h4>Filter registers</h4>
+                <div class="input-field col s12 m6 l5">
+                    <select class="blue-text text-darken-2" id="select" name="res" required>
+                        <option value="" disabled selected>Select domain</option>
+                        {% for res in zone %}
+                            <option value="{{res['id']}}">{{res['zones']}}</option>
+                        {% endfor %}
+                    </select><br>
+                    <div class="form-field">
+                        <button class="btn waves-effect waves-green green darken-2" type="submit" name="Submit">filter
+                        </button>
+                    </div>
+                </div>
             </form>
-            <!-- Modal Structure -->
-            <div id="modal1" class="modal">
-                <div class="modal-content">
-                <h4>Modal Header</h4>
-                <p>A bunch of text</p>
-                </div>
-                <div class="modal-footer">
-                <a href="#!" class="modal-close waves-effect waves-green btn-flat">Agree</a>
-                </div>
-            </div>
-
         </div>
-    </main>    
+        <div class="row">
+            {% if mess %} 
+            <span class="red-text">{{ mess }}</span>
+            {% endif %}
+            <h4>Zone Domain: <b class="green-text text-darken-2">{{name}}</b></h4>
+            <div class="col s12 m12 l12 center">
+            {{ pagination.info }}
+                <table>
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Name</th>
+                            <th>type</th>
+                            <th>Value</th>
+                            <th>TTL</th>
+                            <th>Active</th>
+                            <th>Edit/Remove</th>
+                        </tr>
+                    </thead>
+                    <tbody> 
+                    {% for res in data %}
+                        <tr>
+                            <td>
+                                {{ loop.index + pagination.skip }}
+                            </td>
+                            <td>
+                                {{res['name']}}
+                            </td>
+                            <td>
+                                {{res['typevalue']}}
+                            </td>
+                            <td>
+                                {{res['value']}}
+                            </td>
+                            <td>
+                                Automatic
+                            </td>
+                            <td>
+                                True 
+                                <!-- <div class="switch">
+                                    <label>
+                                    {% if res['active'] == True %}
+                                        <input type="checkbox" checked="checked">
+                                        <span class="lever"></span>
+                                    {% else %}
+                                        <input type="checkbox">
+                                        <span class="lever"></span>
+                                    {% endif %}
+                                    </label>
+                                </div>  -->
+                            </td>
+                            <td>
+                                <form method='post'>
+                                    <input type="hidden" value="{{res['host']}}" name="iddomain" required>
+                                    <button class="btn white" type="submit" formmethod="post" formaction="/core/editdomain" name="update_button"  value="{{res['id']}}" >
+                                        <i class="material-icons black-text">edit</i>
+                                    </button>
+                                    <button class="btn white" type="submit" formmethod="post" name="delete_button" onclick="return confirm('Are you sure to delete?')" formaction="/core/deletedomain" value="{{res['id']}}">
+                                        <i class="material-icons black-text">delete</i>
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                <ul id="myPager">{{ pagination.links }}</ul>
+            </div>
+        </div>
+    </main>
+    
+    <script type="text/javascript">
+    $(document).ready( function () {
+    $('#table_id').DataTable();
+    } );
+    </script>    
 {% endblock content %}

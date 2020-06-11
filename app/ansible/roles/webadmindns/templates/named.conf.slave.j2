@@ -20,8 +20,8 @@ zone "mydomain.org" {
         file "/etc/named/cache/mydomain.org.zone";
         masters { 192.168.3.106; };
 };
-zone "ejemplo1.com" {
+zone "ejemplo2.com" {
         type slave;
-        file "/etc/named/cache/ejemplo1.com.zone";
+        file "/etc/named/cache/ejemplo2.com.zone";
         masters { 192.168.3.106; };
 };

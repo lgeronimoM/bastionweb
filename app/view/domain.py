@@ -1,4 +1,4 @@
-from flask import render_template, redirect, url_for, request, jsonify, session
+from flask import render_template, redirect, url_for, request, jsonify, session, Blueprint
 import os, requests, json, sys
 
 # APP MVC
@@ -20,9 +20,9 @@ from ansible.executor.playbook_executor import PlaybookExecutor
 from ansible.parsing.dataloader import DataLoader
 from ansible.inventory.manager import InventoryManager
 from ansible.vars.manager import VariableManager
-
-# Files yaml
-import yaml
+ 
+#pagination
+from flask_paginate import Pagination, get_page_parameter
 
 # Graficas
 import pygal
@@ -151,25 +151,30 @@ def updatedomainzone():
     zone()
     return redirect(url_for('hostedZone'))
 
+#################################### dns domain ##################################
 @app.route('/domain')
 @login_required
 def domain():
     url=cf.APIHOSETD
     value=request.args.get('res')
     mess=request.args.get('mess')
-    domain=""
+    domain=db.session.query(Domain).filter().all()
     name=""
     headers = {'Content-type': 'application/json'}
     hosting = requests.get(url, headers=headers, verify=False).json()
+    search = False
+    data = db.session.query(Domain).filter().all()
     if value:
-        url2 = cf.APIDOMAIN+value
+        search = True
         query = db.session.query(Hosting).filter(Hosting.id == int(value)).first()
         name=query.zone+'.'+query.domain
-        domain = requests.get(url2, headers=headers, verify=False).json()
         logging.info('Consult Domain and show on table')
+        domain = db.session.query(Domain).filter(Domain.host==int(value)).all()
+    page = request.args.get(get_page_parameter(), type=int, default=1)
+    pagination = Pagination(page=page, total=len(data), offset=0, per_page=10, search=search, record_name='Domains')
     logging.info('Access page Domain')
     user = current_user.username
-    return render_template('domain.html', user = user, zone=hosting, data=domain, name=name, mess=mess, valueres=value)
+    return render_template('domain.html', user = user, zone=hosting, data=domain, name=name, mess=mess, valueres=value, pagination=pagination)
 
 @app.route('/core/adddomain', methods=['POST'])
 @login_required
@@ -211,12 +216,12 @@ def adddomain():
 @login_required
 def editdomain():
     if request.form['update_button']:
-        valueres=request.form['valueres']
+        iddomain=request.form['iddomain']
         idf = int(request.form['update_button'])
         query = db.session.query(Domain).filter(Domain.id == idf).first()
         user = current_user.username
         #return str(query.name)+str(query.host)+str(query.typevalue)+str(query.value)+str(query.active)+' '+"Update"
-        return render_template('edit.html', user=user, 	typef=query.typevalue, name = query.name, value=query.value, id=idf, valueres=valueres )
+        return render_template('edit.html', user=user, 	typef=query.typevalue, name = query.name, value=query.value, id=idf, iddomain=iddomain )
 
 @app.route('/core/updatedomain', methods=['POST'])
 @login_required
@@ -227,7 +232,7 @@ def updatedomain():
     apihosting = requests.get(url, headers=headers, verify=False).json()
 
     idf=int(request.form['id'])
-    zoneid=int(request.form['valueres'])
+    zoneid=int(request.form['iddomain'])
     valuef=str(request.form['valuef'])
     namef=str(request.form['namef'])
     typef=str(request.form['typevalue'])
@@ -251,7 +256,7 @@ def updatedomain():
         passwd= master.password
         user= master.user
         tagsexc='subdomain'
-        subdomain_conf(subdomain,zoneid, namef, valuef, typef)
+        subdomain_conf(subdomain, zoneid, namef, valuef, typef)
         install_dns_playbook(tagsexc, ipmanage, passwd, user)
         return redirect(url_for('domain', res=zoneid))
 
@@ -264,7 +269,7 @@ def deletedomain():
         headers = {'Content-type': 'application/json'}
         apihosting = requests.get(url, headers=headers, verify=False).json()
 
-        zoneid=request.form['valueres']
+        zoneid=request.form['iddomain']
         idf = int(request.form['delete_button'])
         db.session.query(Domain).filter(Domain.id == idf).delete(synchronize_session=False)
         db.session.commit()
@@ -422,7 +427,7 @@ def zone_conf():
         url2 = cf.APIDOMAIN+str(dif)
         domains = requests.get(url2, headers=headers, verify=False).json()
         for domain in domains:
-            file.write(domain['domain']+'   '+domain['type']+'  '+domain['value']+'\n')
+            file.write(domain['name']+'   '+domain['typevalue']+'  '+domain['value']+'\n')
     db.session.commit()
     file.close() 
 
@@ -466,7 +471,7 @@ def subdomain_conf(zone, dif, namef, valuef, tipof):
     url2 = cf.APIDOMAIN+str(dif)
     domains = requests.get(url2, headers=headers, verify=False).json()
     for domain in domains:
-        file.write(domain['domain']+'           '+domain['type']+'          '+domain['value']+'\n')
+        file.write(domain['name']+'           '+domain['typevalue']+'          '+domain['value']+'\n')
         #file.write('};\n')
     if namef:
         file.write(namef+'           '+tipof+'          '+valuef+'\n')
@@ -515,7 +520,7 @@ def apidomain(domain):
         value = res.value
         active = res.active
         host = res.host
-        dict ={'domain' : dom, 'type' : tipe, 'value' : value, 'active' : active, 'zone': host, 'id': idf}
+        dict ={'name' : dom, 'typevalue' : tipe, 'value' : value, 'active' : active, 'zone': host, 'id': idf}
         art.append(dict)
     db.session.commit()
     return jsonify(art), 200

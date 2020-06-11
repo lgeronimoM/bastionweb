@@ -7,5 +7,5 @@ logger
 requests
 datetime
 pygal
-pyyaml
+flask-paginate
 ansible
