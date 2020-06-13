@@ -2,7 +2,7 @@
 {% block title %} Domains {% endblock title%}
 {% block content %}
     <main class="container">
-        <h4>Register your DNS</h4>
+        <h5>Register your subdomains here</h5>
         <div class="row"><br>
             <form method="POST" action="/core/adddomain">
                 <input type="hidden" value="" name="valueres" required>
@@ -40,17 +40,17 @@
             </form>
         </div>
         <div class="row">
-            <form method="GET">
-            <h4>Filter registers</h4>
-                <div class="input-field col s12 m6 l5">
+            <form method="GET" action="/domain/1">
+            <h5>Select your domain zone to filter your subdomains</h5>
+                <div class="input-field col s12 m6 l6">
                     <select class="blue-text text-darken-2" id="select" name="res" required>
                         <option value="" disabled selected>Select domain</option>
                         {% for res in zone %}
                             <option value="{{res['id']}}">{{res['zones']}}</option>
                         {% endfor %}
-                    </select><br>
+                    </select>
                     <div class="form-field">
-                        <button class="btn waves-effect waves-green green darken-2" type="submit" name="Submit">filter
+                        <button class="btn waves-effect waves-green green darken-2" type="submit">filter
                         </button>
                     </div>
                 </div>
@@ -58,15 +58,20 @@
         </div>
         <div class="row">
             {% if mess %} 
-            <span class="red-text">{{ mess }}</span>
+                <span class="red-text">{{ mess }}</span>
             {% endif %}
-            <h4>Zone Domain: <b class="green-text text-darken-2">{{name}}</b></h4>
+
+            {% if name %}
+                <h5>Domain zone: <b class="green-text text-darken-2">{{name}}</b>
+                <a href="/domain/1" class="waves-effect waves-light btn red darken-2">Remove filter</a></h5>
+            {% else %}
+                <h5>All subdomains</h5>
+            {% endif %}
+            
             <div class="col s12 m12 l12 center">
-            {{ pagination.info }}
-                <table>
+                <table class="striped">
                     <thead>
                         <tr>
-                            <th>#</th>
                             <th>Name</th>
                             <th>type</th>
                             <th>Value</th>
@@ -76,19 +81,16 @@
                         </tr>
                     </thead>
                     <tbody> 
-                    {% for res in data %}
+                    {% for domain in data.items %}
                         <tr>
                             <td>
-                                {{ loop.index + pagination.skip }}
+                                {{domain['name']}}
                             </td>
                             <td>
-                                {{res['name']}}
+                                {{domain['typevalue']}}
                             </td>
                             <td>
-                                {{res['typevalue']}}
-                            </td>
-                            <td>
-                                {{res['value']}}
+                                {{domain['value']}}
                             </td>
                             <td>
                                 Automatic
@@ -97,7 +99,7 @@
                                 True 
                                 <!-- <div class="switch">
                                     <label>
-                                    {% if res['active'] == True %}
+                                    {% if domain['active'] == True %}
                                         <input type="checkbox" checked="checked">
                                         <span class="lever"></span>
                                     {% else %}
@@ -109,11 +111,11 @@
                             </td>
                             <td>
                                 <form method='post'>
-                                    <input type="hidden" value="{{res['host']}}" name="iddomain" required>
-                                    <button class="btn white" type="submit" formmethod="post" formaction="/core/editdomain" name="update_button"  value="{{res['id']}}" >
+                                    <input type="hidden" value="{{domain['host']}}" name="iddomain" required>
+                                    <button class="btn white" type="submit" formmethod="post" formaction="/core/editdomain" name="update_button"  value="{{domain['id']}}" >
                                         <i class="material-icons black-text">edit</i>
                                     </button>
-                                    <button class="btn white" type="submit" formmethod="post" name="delete_button" onclick="return confirm('Are you sure to delete?')" formaction="/core/deletedomain" value="{{res['id']}}">
+                                    <button class="btn white" type="submit" formmethod="post" name="delete_button" onclick="return confirm('Are you sure to delete?')" formaction="/core/deletedomain" value="{{domain['id']}}">
                                         <i class="material-icons black-text">delete</i>
                                     </button>
                                 </form>
@@ -122,14 +124,31 @@
                         {% endfor %}
                     </tbody>
                 </table>
-                <ul id="myPager">{{ pagination.links }}</ul>
+                 <ul class="pagination">
+
+                    {% if data.has_prev %}
+                        <li class="waves-effect"><a class="page-link" href="{{ url_for('domain', page_num=data.prev_num, res=valueres) }}"><i class="material-icons">chevron_left</i></a></li>
+                    {% else %}
+                        <li class="disabled"><span><i class="material-icons">chevron_left</i></span>
+                    {% endif %}
+                        </li>
+
+                    {% for page in data.iter_pages(left_edge=3, right_edge=3) %}
+                    {% if page %}
+                    <li class="waves-effect"><a href="{{ url_for('domain', page_num=page, res=valueres) }}">{{ page }}</a></li>
+                    {% else %}
+                    <li class="disabled"><a href="#">…</a></li> 
+                    {% endif %}
+                    {% endfor %}
+
+                    {% if data.has_next %}
+                        <li class="waves-effect"><a href="{{ url_for('domain', page_num=data.next_num, res=valueres) }}"><i class="material-icons">chevron_right</i></a></li>
+                    {% else %}
+                        <li class="disabled"><span><i class="material-icons">chevron_right</i></span>
+                    {% endif %}
+                            
+                </ul>
             </div>
         </div>
     </main>
-    
-    <script type="text/javascript">
-    $(document).ready( function () {
-    $('#table_id').DataTable();
-    } );
-    </script>    
 {% endblock content %}

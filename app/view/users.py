@@ -1,4 +1,4 @@
-from flask import render_template, redirect, url_for, request, jsonify, session
+from flask import render_template, redirect, url_for, request, jsonify, session, flash
 import os, requests, json, sys
 
 # APP MVC
@@ -110,10 +110,9 @@ def login():
         login_user(actUser)
         return redirect(url_for('home')) 
     else:
-        message_error = c['error']
-        print(message_error)
+        flash(c['error'])
         logging.warning('Error to authentication user '+userdata)
-        return render_template('login.html', message=message_error)
+        return render_template('login.html')
 
 @app.route("/logout")
 @login_required

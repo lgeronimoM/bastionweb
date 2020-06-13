@@ -5,30 +5,6 @@ import os, requests, json, sys
 from app import app, cf, login_manager, db
 from app.models import Users, Hosting, Domain, Register, Master, Slaves, Acls, Forwards
 
-# MAIL
-import email, smtplib, ssl
-from email import encoders
-from email.mime.base import MIMEBase
-from email.mime.multipart import MIMEMultipart
-from email.mime.text import MIMEText
-
-#packages ansible
-from ansible import context
-from ansible.cli import CLI
-from ansible.module_utils.common.collections import ImmutableDict
-from ansible.executor.playbook_executor import PlaybookExecutor
-from ansible.parsing.dataloader import DataLoader
-from ansible.inventory.manager import InventoryManager
-from ansible.vars.manager import VariableManager
-
-# Files yaml
-import yaml
-
-# Graficas
-import pygal
-from pygal.style import NeonStyle
-from pygal.style import Style
-
 #Logs
 import logging
 from datetime import datetime #Fecha logs
@@ -50,6 +26,10 @@ for handler in logging.root.handlers[:]:
 logging.basicConfig(filename=LOG_FILENAME,level=logging.DEBUG)
 logging.info('Comenzando la aplicacion...')
         
+######################################### global vars ##############################3
+url_api_ansible = "http://127.0.0.1:8292/core/v1.0/ansible"
+headers = {"Content-type": "application/json"}
+
 ######################################### install master and Slaves servers ###################3333
 @app.route('/masterslaves')
 @login_required
@@ -142,33 +122,17 @@ def installdns():
     passwd= master.password
     user= master.user
     db.session.commit()
-    install_dns_playbook(tagsexc, ipmanage, passwd, user)
+    content={ "tagsexc": tagsexc, "ipmanage": ipmanage, "passwd": passwd, "user": user }
+    result = requests.post(url_api_ansible, json=content, headers=headers, verify=False)
+    c = result.json()
     slaves = db.session.query(Slaves).filter().all()
     if slaves:
         for slave in slaves:
             ipmanage= slave.ipslave
             passwd= slave.password
             user= slave.user
-            install_dns_playbook(tagsexc, ipmanage, passwd, user)
+            content={ "tagsexc": tagsexc, "ipmanage": ipmanage, "passwd": passwd, "user": user }
+            result = requests.post(url_api_ansible, json=content, headers=headers, verify=False)
+            c = result.json()
             db.session.commit()
     return redirect(url_for('masterslaves'))
-
-########################################## API Ansible-Playbooks ###################################################
-
-def install_dns_playbook(tagsexc, ipmanage, passwd, user):
-    logging.info('runnig ansible-playbook install dns')
-    file = open('app/ansible/hosts','w')
-    file.write('[dnsservers]\n')
-    file.write(ipmanage)
-    file.close()
-    loader = DataLoader()
-    context.CLIARGS = ImmutableDict(tags={tagsexc}, listtags=False, listtasks=False, listhosts=False, syntax=False, connection='ssh',
-                    module_path=None, forks=10, remote_user='ansadmin', private_key_file=None,
-                    ssh_common_args=None, ssh_extra_args=None, sftp_extra_args=None, scp_extra_args=None, become=True,
-                    become_method='sudo', become_user='root', verbosity=True, check=False, start_at_task=None,
-                    extra_vars={'ansible_ssh_user='+user+'', 'ansible_ssh_pass='+passwd+'', 'ansible_become_pass='+passwd+''})
-    inventory = InventoryManager(loader=loader, sources=('app/ansible/hosts'))
-    variable_manager = VariableManager(loader=loader, inventory=inventory, version_info=CLI.version_info(gitinfo=False))
-    pbex = PlaybookExecutor(playbooks=['app/ansible/webadmindns.yml'], inventory=inventory, variable_manager=variable_manager, loader=loader, passwords={})
-    results = pbex.run()
-    db.session.commit() 

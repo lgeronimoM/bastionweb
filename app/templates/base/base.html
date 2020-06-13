@@ -9,35 +9,53 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
         <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css' ) }}">
         <meta charset="utf-8">
-        
   </head>
   <body>
   <header>
-        <div class="container">
-            <nav class="nav-extended white z-depth-0">
-                <div class="nav-wrapper">
-                <a href="/logout" class="brand-logo right"><i class="material-icons blue-text"><b>power_settings_new</b></i></a>
-                <ul id="nav-mobile" class="left hide-on-med-and-down">
-                    <li><a class="black-text" href="https://encontrack.com">Encontrack</a></li>
-                    <li class="black-text">Username: {{user}}</li>
+    </header>
+        <div class="navbar-fixed">
+            <nav class="white">
+                <div class="nav-wrapper container">
+                <a href="#" class="brand-logo"><img class="responsive-img" src="{{ url_for('static', filename='img/ti.png' ) }}" style="width: 50px; margin-top: 10px;"></a>
+                <ul id="nav-mobile" class="right hide-on-med-and-down">
+                    <li style="margin-right: 50px;"><a class="black-text" href="https://github.com/lgeronimoM/DNSPOWERADMIN">Project Github</a></li>
+                    <li><i class="material-icons grey-text">account_circle</i></li>
+                    <li class="black-text" style="margin-right: 50px;">{{user}}</li>
+                    <li><a href="/logout"><i class="material-icons red-text darken-4"><b>exit_to_app</b></i></a></li>
                 </ul>
-                </div>
-                <div class="nav-content">
-                    <ul class="tabs tabs-transparent">
-                        <li class="tab"><a href="/" class="active black-text">Dashbord</a></li>
-                        <li class="tab"><a href="/hostedzone" class="black-text">Domain Zones</a></li>
-                        <li class="tab"><a href="/domain" class="black-text">DNS</a></li>
-                        <li class="tab"><a href="/users" class="black-text">Users</a></li>
-                        <li class="tab"><a href="/masterslaves" class="black-text">Master/Slaves</a></li>
-                        <li class="tab"><a href="/named" class="black-text">named.conf</a></li>
-                    </ul>
                 </div>
             </nav>
         </div>
-    </header>
-    {% block content %}
-
-    {% endblock content %}
+        <div class="row">
+            <ul id="menu-side" class="sidenav">
+                <li>
+                    <div class="user-view">
+                        <div class="background blue darken-4">
+                            
+                        </div>
+                        <a href="/users"><i class="material-icons" style="font-size: 50px;">account_circle</i></a>
+                        <a href="/" class="name white-text">{{user}}</a>
+                        <a href="/" class="email white-text">admin@localhost.com</a>
+                    </div>
+                </li>
+                <li><a href="/">Dashbord</a></a></li>
+                <li><a href="/hostedzone">Domain Zones</a></a></li>
+                <li><a href="/domain/1">Subdomains</a></li>
+                <li><a href="/users">Users access</a></li>
+                <li><a href="/masterslaves">Master/Slaves</a></li>
+                <li><a href="/named">named.conf</a></li>
+            </ul>
+        </div>   
+        <div class="container section">
+            <a href="#menu" class="sidenav-trigger" data-target="menu-side">
+                <li class="material-icons">menu</li>
+            </a>
+        </div>
+        {% block content %} 
+        
+        {% endblock content %}
+     
+    </div>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
     <!--JavaScript at end of body for optimized loading-->
     <script type="text/javascript" src="{{ url_for('static', filename='js/materialize.min.js' ) }}"></script>
@@ -46,7 +64,16 @@
     $(document).ready(function(){
         $('select').formSelect();
     });
-    
+    document.addEventListener('DOMContentLoaded', function() {
+        var elems = document.querySelectorAll('.slider');
+        var instances = M.Slider.init(elems, {
+        });
+        var elems = document.querySelectorAll('.materialboxed');
+        var instances = M.Materialbox.init(elems);
+
+        var elems = document.querySelectorAll('.sidenav');
+        var instances = M.Sidenav.init(elems);
+    });
     </script>
   </body>
 </html>

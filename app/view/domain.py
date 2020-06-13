@@ -50,6 +50,12 @@ for handler in logging.root.handlers[:]:
 logging.basicConfig(filename=LOG_FILENAME,level=logging.DEBUG)
 logging.info('Comenzando la aplicacion...')
         
+######################################### global vars ##############################3
+
+url_api_ansible = "http://127.0.0.1:8292/core/v1.0/ansible"
+headers = {"Content-type": "application/json"}
+
+
 ####################### Endpoints #############################
 
 @app.route('/hostedzone')
@@ -77,11 +83,13 @@ def zone():
         for slave in slaves:
             dif=slave.id
             nameconf_slave(dif)
-            tagsexc='configslave'
+            tagsexc="configslave"
             ipmanage= slave.ipslave
             passwd= slave.password
             user= slave.user
-            install_dns_playbook(tagsexc, ipmanage, passwd, user)
+            content={ "tagsexc": tagsexc, "ipmanage": ipmanage, "passwd": passwd, "user": user }
+            result = requests.post(url_api_ansible, json=content, headers=headers, verify=False)
+            c = result.json()
     tagsexc='configmaster'
     master = db.session.query(Master).filter().first()
     ipmanage= master.ipmaster
@@ -90,7 +98,9 @@ def zone():
     zone_conf()
     nameconf_master()
     zone_domain()
-    install_dns_playbook(tagsexc, ipmanage, passwd, user)
+    content={ "tagsexc": tagsexc, "ipmanage": ipmanage, "passwd": passwd, "user": user }
+    result = requests.post(url_api_ansible, json=content, headers=headers, verify=False)
+    c = result.json()
 
 @app.route('/core/addhostedzone', methods=['POST'])
 @login_required
@@ -152,29 +162,26 @@ def updatedomainzone():
     return redirect(url_for('hostedZone'))
 
 #################################### dns domain ##################################
-@app.route('/domain')
+@app.route('/domain/<int:page_num>')
 @login_required
-def domain():
+def domain(page_num):
     url=cf.APIHOSETD
     value=request.args.get('res')
     mess=request.args.get('mess')
-    domain=db.session.query(Domain).filter().all()
+    domain=db.session.query(Domain).paginate(per_page=10, page=page_num, error_out=True)
     name=""
     headers = {'Content-type': 'application/json'}
     hosting = requests.get(url, headers=headers, verify=False).json()
-    search = False
-    data = db.session.query(Domain).filter().all()
+    #search = False
+    #data = db.session.query(Domain).filter().all()
     if value:
-        search = True
         query = db.session.query(Hosting).filter(Hosting.id == int(value)).first()
         name=query.zone+'.'+query.domain
         logging.info('Consult Domain and show on table')
-        domain = db.session.query(Domain).filter(Domain.host==int(value)).all()
-    page = request.args.get(get_page_parameter(), type=int, default=1)
-    pagination = Pagination(page=page, total=len(data), offset=0, per_page=10, search=search, record_name='Domains')
+        domain=db.session.query(Domain).filter(Domain.host==int(value)).paginate(per_page=10, page=page_num, error_out=True)
     logging.info('Access page Domain')
     user = current_user.username
-    return render_template('domain.html', user = user, zone=hosting, data=domain, name=name, mess=mess, valueres=value, pagination=pagination)
+    return render_template('domain.html', user = user, zone=hosting, data=domain, name=name, mess=mess, valueres=value)
 
 @app.route('/core/adddomain', methods=['POST'])
 @login_required
@@ -207,7 +214,9 @@ def adddomain():
     user= master.user
     tagsexc='subdomain'
     subdomain_conf(subdomain,hostingf, namef, valuef, tipof)
-    install_dns_playbook(tagsexc, ipmanage, passwd, user)
+    content={ "tagsexc": tagsexc, "ipmanage": ipmanage, "passwd": passwd, "user": user }
+    result = requests.post(url_api_ansible, json=content, headers=headers, verify=False)
+    c = result.json()
     db.session.commit()
     logging.info('Add Domain'+namef+' '+tipof+' '+valuef+' '+hostingf)
     return redirect(url_for('domain', res=hostingf))
@@ -257,7 +266,9 @@ def updatedomain():
         user= master.user
         tagsexc='subdomain'
         subdomain_conf(subdomain, zoneid, namef, valuef, typef)
-        install_dns_playbook(tagsexc, ipmanage, passwd, user)
+        content={ "tagsexc": tagsexc, "ipmanage": ipmanage, "passwd": passwd, "user": user }
+        result = requests.post(url_api_ansible, json=content, headers=headers, verify=False)
+        c = result.json()
         return redirect(url_for('domain', res=zoneid))
 
 @app.route('/core/deletedomain', methods=['POST'])
@@ -289,14 +300,21 @@ def deletedomain():
         valuef=""
         typef=""
         subdomain_conf(subdomain,zoneid, namef, valuef, typef)
-        install_dns_playbook(tagsexc, ipmanage, passwd, user)
+        content={ "tagsexc": tagsexc, "ipmanage": ipmanage, "passwd": passwd, "user": user }
+        result = requests.post(url_api_ansible, json=content, headers=headers, verify=False)
+        c = result.json()
         return redirect(url_for('domain', res=zoneid))
-
 
 ########################################### API Ansible-Playbooks ###################################################
 
-def install_dns_playbook(tagsexc, ipmanage, passwd, user):
-    logging.info('runnig ansible-playbook install dns')
+@app.route('/core/v1.0/ansible', methods=['POST'])
+def install_dns_playbook():
+    content=request.get_json(force=True)
+    tagsexc=content['tagsexc']
+    ipmanage=content['ipmanage']
+    passwd=content['passwd']
+    user=content['user']
+    logging.info('runnig ansible-playbook install dns '+tagsexc+' '+ipmanage)
     file = open('app/ansible/hosts','w')
     file.write('[dnsservers]\n')
     file.write(ipmanage)
@@ -312,6 +330,7 @@ def install_dns_playbook(tagsexc, ipmanage, passwd, user):
     pbex = PlaybookExecutor(playbooks=['app/ansible/webadmindns.yml'], inventory=inventory, variable_manager=variable_manager, loader=loader, passwords={})
     results = pbex.run()
     db.session.commit() 
+    return jsonify({'status': results })
 
 ####################################### File config named.conf #############################################################
 

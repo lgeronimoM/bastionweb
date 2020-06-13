@@ -3,14 +3,14 @@
 {% block title %} Login {% endblock title%}
 
 {% block content %}
-<main class="grey">
+<main class="grey maincont">
     <div class="row">
         <div class="col l6 m6 s12 offset-l3 mc5">
-            <div class="col s12 m6 l6 white center-align">
-                <i class="material-icons green-text text-darken-2 pc1" style="font-size: 200px">lock_outline</i>
-                <h2 class="grey-text">SystemDNS</h2>
+            <div class="col s12 m6 l6 white center-align" style="height: 350px;">
+                <i class="material-icons green-text text-darken-2 pc1" style="font-size: 200px; margin-top: 40px;">lock_outline</i>
+                <h4 class="grey-text" style="margin-bottom: 40px;">DNSPOWERADMIN</h4>
             </div>
-            <div class="col s12 m6 l6 white">
+            <div class="col s12 m6 l6 white" style="height: 350px;">
                 <form action="/login" method="POST">
                     <div class="row">
                         <div class="col l12 m12 pc1">
@@ -18,21 +18,27 @@
                         </div>
                         <div class="input-field col s10 l10 m10">
                             <i class="material-icons prefix">account_circle</i>
-                            <input id="icon_prefix" placeholder="User" type="text" data-length="15" name="username" required>
+                            <input id="icon_prefix" placeholder="Username" type="text" data-length="15" name="username" required>
                         </div>
                         <div class="input-field col s10 l10 m10">
                             <i class="material-icons prefix">settings_ethernet</i>
                             <input id="icon_prefix" placeholder="Password" type="password" data-length="25" name="password" required>
                         </div>
                     </div>
-                    <div class="form-field center-align" id="appalert">
+                    <div class="form-field center-align">
                         <button class="btn waves-effect waves-light green darken-2" type="submit" name="action">INGRESAR
                         <i class="material-icons left">send</i>
                         </button> 
-                    </div>   
-                    <script>
-                       
-                    </script>                   
+                        {% with messages = get_flashed_messages() %}
+                            {% if messages %}
+                                <ul class=flashes>
+                                {% for message in messages %}
+                                    <li class="center">Error: {{ message }}.</li>
+                                {% endfor %}
+                                </ul>
+                            {% endif %}
+                        {% endwith %} 
+                    </div>               
                 </form>
             </div>  
         </div>

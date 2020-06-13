@@ -1,0 +1,13 @@
+$ORIGIN new.com.
+$TTL 86400
+@   IN  SOA     masterdns.new.com. root.new.com. (
+        1065    ;Serial
+        3600        ;Refresh
+        1800        ;Retry
+        604800      ;Expire
+        86400       ;Minimum TTL )
+)
+        NS      masterdns.new.com.
+@   IN  NS   slavedns1.new.com.
+slavedns1       IN  A   192.168.3.101
+masterdns   IN  A   192.168.3.106
