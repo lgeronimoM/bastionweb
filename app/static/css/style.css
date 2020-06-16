@@ -19,3 +19,15 @@
 .mc5 {
     margin-top: 13%;
 }
+.cardbg {
+    background-image: url("../img/login_I_2.png");
+    background-repeat: no-repeat;
+    height: 100vh;
+    background-size: cover;
+ }
+ .cardbgLog {
+    background-image: url("../img/login_D6.png");
+    background-repeat: no-repeat;
+    height: 100vh;
+    background-size: cover;
+ }

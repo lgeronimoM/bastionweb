@@ -30,8 +30,3 @@ zone "ejemplo2.com" {
         file "/etc/named/zones/ejemplo2.com.zone";
         allow-transfer { slaves; };
 };
-zone "new.com" {
-        type master;
-        file "/etc/named/zones/new.com.zone";
-        allow-transfer { slaves; };
-};
