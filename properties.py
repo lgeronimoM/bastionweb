@@ -5,12 +5,8 @@ class Config(object):
     LINK='/admin'
     TEM='bootstrap3'
     NAMEAPP= 'DNS'
-    # propiedades para Email
-    PMAIL = 587  # For starttls
-    SMTP = 'smtp.office365.com'
-    SEMAIL = 'servers@encontrack.com'
-    EPASS = 'Tav76551'
-    REMAIL = 'luis.geronimo@encontrack.com'
+    
+    LOG_LEVEL = 'DEBUG' 
 
 class ProductionConfig(Config):
     DEBUG=False

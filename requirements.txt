@@ -1,4 +1,5 @@
 Flask
+gunicorn
 flask-environments
 flask_sqlalchemy
 flask_admin
@@ -7,5 +8,4 @@ logger
 requests
 datetime
 pygal
-flask-paginate
 ansible

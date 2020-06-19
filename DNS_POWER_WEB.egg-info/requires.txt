@@ -1,0 +1,10 @@
+Flask
+datetime
+flask-environments
+flask-login
+flask_admin
+flask_sqlalchemy
+gunicorn
+logger
+pygal
+requests

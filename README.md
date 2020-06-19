@@ -16,6 +16,19 @@ Description
 Administrador web de DNS privados en la intranet
 Flask with ansible DNS BIND.
 
-Operation System
+Operation System DNS
 ------------------
-Centos7/8
+master: Centos7/8
+slave: Centos7/8
+
+Dependencies
+------------------
+install python-pip python-dev ansible python
+
+pip install virtualenv
+
+source yourvitualenv/bin/activate
+
+pip install -r requirements.txt
+
+gunicorn -b 0.0.0.0:4000 -w 4 main:app

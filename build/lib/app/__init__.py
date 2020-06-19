@@ -29,6 +29,7 @@ app.config['SECRET_KEY'] = 'mysecret'
 class cf():
     SERVER=app.config["SERVER"]
     PTO=app.config["PRTO"]
+    DEBUG=app.config["DEBUG"]
     PMAIL=app.config["PMAIL"]
     SMTP=app.config["SMTP"]
     SEMAIL=app.config["SEMAIL"]
@@ -42,8 +43,6 @@ class cf():
     APIHOSETD=app.config["APIHOSETD"]
     APIDOMAIN=app.config["APIDOMAIN"]
     LOG_DIR=app.config["LOG_DIR"]
-    LOG_LEVEL=app.config["LOG_LEVEL"]
-    DEBUG=app.config["DEBUG"]
 
 app.config['SQLALCHEMY_DATABASE_URI'] = cf.DB_DIR
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False

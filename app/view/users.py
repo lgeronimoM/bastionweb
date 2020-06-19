@@ -85,6 +85,7 @@ def adduser():
 @login_required
 def deleteuser():
     if request.form['delete_button']:
+        logging.info('delete user')
         idf = int(request.form['delete_button'])
         db.session.query(Users).filter(Users.id == idf).delete(synchronize_session=False)
         db.session.commit()
@@ -121,39 +122,6 @@ def logout():
     logout_user()
     return redirect(url_for('home'))
 
-#######################d############## Mensajes ##############################################
-
-@app.route("/mensaje", methods=['POST'])
-def mensaje():
-    user = str(request.form['username'])        
-    telefono = str(request.form['telefono'])
-    email = str(request.form['email'])
-    descli = str(request.form['descripcion'])
-
-    port = cf.PMAIL
-    smtp_server = cf.SMTP
-    sender_email = cf.SEMAIL
-    receiver_email = cf.REMAIL
-    password = cf.EPASS
-    subject = "Notificación cliente"
-    body = "El usario "+user+" con telefono "+telefono+" y su email "+email+"\nSe contacto con usted por el siguiente problema: "+descli
-    # Create a multipart message and set headers
-    message = MIMEMultipart()
-    message["From"] = sender_email
-    message["To"] = receiver_email
-    message["Subject"] = subject
-    message["Bcc"] = receiver_email  # Recommended for mass emails
-    # Add body to email
-    message.attach(MIMEText(body, "plain"))
-    text = message.as_string()
-    # Log in to server using secure context and send email
-    context = ssl.create_default_context()
-    with smtplib.SMTP(smtp_server, port) as server:
-        server.starttls(context=context)
-        server.login(sender_email, password)
-        server.sendmail(sender_email, receiver_email, text)
-    return redirect(url_for('home'))
-
 ################# API Restfull ######################
 
 @app.route('/core/v1.0/apiuser', methods=['POST'])
@@ -161,8 +129,10 @@ def api_user():
     user_request = request.json
     veri_username = user_request['username']
     veri_password = user_request['password']
+    logging.info('Verification user '+veri_username+' on api users')
     query = db.session.query(Users).filter(and_(Users.username==veri_username,Users.password==veri_password)).first()
     if query: 
+        logging.info('user '+veri_username+' is correct')
         response_body = {
             "success": True,
             "error" : None,
@@ -177,6 +147,7 @@ def api_user():
         db.session.commit()
         return jsonify(response_body), 200
     else:
+        logging.info('user '+veri_username+' is incorrect')
         response_body = {
             "success": False,
             "error" : "User or password incorrect",
