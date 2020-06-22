@@ -1,6 +1,5 @@
 __author__ = 'Luis Geronimo'
 from flask import Flask
-from flask_material import Material
 
 #Entorno
 from flask_environments import Environments
@@ -13,7 +12,7 @@ from sqlalchemy.orm import sessionmaker
 from flask_login import LoginManager
 
 app = Flask(__name__)
-Material(app)
+
 app.config['SECRET_KEY'] = 'OCML3BRawWEUeaxcuKHLp'
 
 if app.config["ENV"] == "production":
