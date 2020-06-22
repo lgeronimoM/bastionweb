@@ -39,4 +39,4 @@ def load_user(id):
 
 if __name__ == '__main__':
     db.create_all()
-    app.run(debug = cf.DEBUG, host=cf.SERVER, port = cf.PTO, threaded=True)
+    app.run(debug = cf.DEBUG, host=cf.SERVER, port = cf.PRTO, threaded=True)
