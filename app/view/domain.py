@@ -49,7 +49,7 @@ logging.info('Comenzando la aplicacion...')
         
 ######################################### global vars ##############################3
 
-url_api_ansible = "http://"+cf.SERVER+":"+cf.PRTO+"/core/v1.0/ansible"
+url_api_ansible = "http://"+cf.SERVER+":"+str(cf.PRTO)+"/core/v1.0/ansible"
 headers = {"Content-type": "application/json"}
 
 

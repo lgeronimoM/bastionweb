@@ -27,7 +27,7 @@ app.config['SECRET_KEY'] = 'mysecret'
 
 class cf():
     SERVER=app.config["SERVER"]
-    PTO=app.config["PRTO"]
+    PRTO=app.config["PRTO"]
     #PMAIL=app.config["PMAIL"]
     #SMTP=app.config["SMTP"]
     #SEMAIL=app.config["SEMAIL"]
