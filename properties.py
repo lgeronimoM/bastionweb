@@ -3,11 +3,11 @@ __author__ = 'Luis Geronimo'
 import logging
 
 class Config(object):
-    # propiedades Admin
+    # properties Admin
     LINK='/admin'
     TEM='bootstrap3'
     NAMEAPP= 'DNS'
-    # propiedades para Email
+    # properties for Email
     #PMAIL = 587  # For starttls
     #SMTP = ''
     #SEMAIL = ''
@@ -17,13 +17,13 @@ class Config(object):
 
 class ProductionConfig(Config):
     DEBUG=False
-    # propiedades host
+    # properties host
     SERVER='0.0.0.0'
-    # propiedades SQlite
+    # properties SQlite
     DB_DIR = 'sqlite:///db/data.db'
     # Log
     LOG_DIR='/var/log/dnsweb/dns_web_%d_%m_%Y.log'
-    # Puerto
+    # Port
     PRTO = 4000
     #Service
     _SER=str('http://'+SERVER+':'+str(PRTO))
@@ -36,13 +36,13 @@ class ProductionConfig(Config):
 
 class DevelopmentConfig(Config):
     DEBUG=True
-    # propiedades host
+    # properties host
     SERVER='127.0.0.1'
-    # Propiedades SQlite
+    # properties SQlite
     DB_DIR = 'sqlite:///db/des-data.db'
     # Log
     LOG_DIR='dns_web_%d_%m_%Y.log'
-    # Puerto
+    # Port
     PRTO = 8292
     #service
     _SER=str('http://'+SERVER+':'+str(PRTO))
