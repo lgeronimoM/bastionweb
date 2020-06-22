@@ -1,12 +1,19 @@
 __author__ = 'Luis Geronimo'
 
+import logging
+
 class Config(object):
     # propiedades Admin
     LINK='/admin'
     TEM='bootstrap3'
     NAMEAPP= 'DNS'
-    
-    LOG_LEVEL = 'DEBUG' 
+    # propiedades para Email
+    #PMAIL = 587  # For starttls
+    #SMTP = ''
+    #SEMAIL = ''
+    #EPASS = ''
+    #REMAIL = ''
+    LOG_LEVEL = logging.DEBUG
 
 class ProductionConfig(Config):
     DEBUG=False
@@ -15,7 +22,7 @@ class ProductionConfig(Config):
     # propiedades SQlite
     DB_DIR = 'sqlite:///db/data.db'
     # Log
-    LOG_DIR='/var/log/Aplicaciones/dns/dns_server_%d_%m_%Y.log'
+    LOG_DIR='/var/log/dnsweb/dns_web_%d_%m_%Y.log'
     # Puerto
     PRTO = 4000
     #Service
@@ -34,7 +41,7 @@ class DevelopmentConfig(Config):
     # Propiedades SQlite
     DB_DIR = 'sqlite:///db/des-data.db'
     # Log
-    LOG_DIR='dns_server_%d_%m_%Y.log'
+    LOG_DIR='dns_web_%d_%m_%Y.log'
     # Puerto
     PRTO = 8292
     #service

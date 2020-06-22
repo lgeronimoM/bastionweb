@@ -47,7 +47,7 @@ from sqlalchemy import and_
 LOG_FILENAME = datetime.now().strftime(cf.LOG_DIR)
 for handler in logging.root.handlers[:]:
     logging.root.removeHandler(handler)
-logging.basicConfig(filename=LOG_FILENAME,level=logging.DEBUG)
+logging.basicConfig(filename=LOG_FILENAME,level=cf.LOG_LEVEL)
 logging.info('Comenzando la aplicacion...')
 
 ############################################# manage users ####################################
@@ -121,6 +121,39 @@ def logout():
     logging.info('logout')
     logout_user()
     return redirect(url_for('home'))
+
+#######################d############## Messages ##############################################
+"""
+@app.route("/message", methods=['POST'])
+def message():
+    user = str(request.form['username'])        
+    telefono = str(request.form['telefono'])
+    email = str(request.form['email'])
+    descli = str(request.form['descripcion'])
+
+    port = cf.PMAIL
+    smtp_server = cf.SMTP
+    sender_email = cf.SEMAIL
+    receiver_email = cf.REMAIL
+    password = cf.EPASS
+    subject = "Notificación cliente"
+    body = "El usario "+user+" con telefono "+telefono+" y su email "+email+"\nSe contacto con usted por el siguiente problema: "+descli
+    # Create a multipart message and set headers
+    message = MIMEMultipart()
+    message["From"] = sender_email
+    message["To"] = receiver_email
+    message["Subject"] = subject
+    message["Bcc"] = receiver_email  # Recommended for mass emails
+    # Add body to email
+    message.attach(MIMEText(body, "plain"))
+    text = message.as_string()
+    # Log in to server using secure context and send email
+    context = ssl.create_default_context()
+    with smtplib.SMTP(smtp_server, port) as server:
+        server.starttls(context=context)
+        server.login(sender_email, password)
+        server.sendmail(sender_email, receiver_email, text)
+    return redirect(url_for('home')) """
 
 ################# API Restfull ######################
 

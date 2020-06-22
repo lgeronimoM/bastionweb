@@ -13,7 +13,7 @@ from sqlalchemy.orm import sessionmaker
 from flask_login import LoginManager
 
 app = Flask(__name__)
-#Material(app)
+Material(app)
 app.config['SECRET_KEY'] = 'OCML3BRawWEUeaxcuKHLp'
 
 if app.config["ENV"] == "production":
@@ -29,11 +29,11 @@ app.config['SECRET_KEY'] = 'mysecret'
 class cf():
     SERVER=app.config["SERVER"]
     PTO=app.config["PRTO"]
-    PMAIL=app.config["PMAIL"]
-    SMTP=app.config["SMTP"]
-    SEMAIL=app.config["SEMAIL"]
-    REMAIL=app.config["REMAIL"]
-    EPASS=app.config["EPASS"]
+    #PMAIL=app.config["PMAIL"]
+    #SMTP=app.config["SMTP"]
+    #SEMAIL=app.config["SEMAIL"]
+    #REMAIL=app.config["REMAIL"]
+    #EPASS=app.config["EPASS"]
     DB_DIR=app.config["DB_DIR"]
     LINK=app.config["LINK"]
     TEM=app.config["TEM"]

@@ -15,11 +15,10 @@ from flask_admin.contrib.sqla import ModelView
 from app.models import Hosting, Domain, Users, Rols, Register, Master, Slaves, Acls, Forwards, AdminView
 
 #logs
-lev=cf.LOG_LEVEL
 LOG_FILENAME = datetime.now().strftime(cf.LOG_DIR)
 for handler in logging.root.handlers[:]:
     logging.root.removeHandler(handler)
-logging.basicConfig(filename=LOG_FILENAME,level=logging.lev)
+logging.basicConfig(filename=LOG_FILENAME,level=cf.LOG_LEVEL)
 logging.info('Comenzando la aplicacion...')
 
 ############################## Admin ###################################

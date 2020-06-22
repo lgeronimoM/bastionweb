@@ -47,7 +47,7 @@ from sqlalchemy import and_
 LOG_FILENAME = datetime.now().strftime(cf.LOG_DIR)
 for handler in logging.root.handlers[:]:
     logging.root.removeHandler(handler)
-logging.basicConfig(filename=LOG_FILENAME,level=logging.DEBUG)
+logging.basicConfig(filename=LOG_FILENAME,level=cf.LOG_LEVEL)
 logging.info('Comenzando la aplicacion...')
         
 ######################################### global vars ##############################3
