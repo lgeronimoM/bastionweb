@@ -20,9 +20,6 @@ from ansible.executor.playbook_executor import PlaybookExecutor
 from ansible.parsing.dataloader import DataLoader
 from ansible.inventory.manager import InventoryManager
 from ansible.vars.manager import VariableManager
- 
-#pagination
-from flask_paginate import Pagination, get_page_parameter
 
 # Graficas
 import pygal
@@ -52,7 +49,7 @@ logging.info('Comenzando la aplicacion...')
         
 ######################################### global vars ##############################3
 
-url_api_ansible = "http://127.0.0.1:8292/core/v1.0/ansible"
+url_api_ansible = "http://"+cf.SERVER+":"+cf.PRTO+"/core/v1.0/ansible"
 headers = {"Content-type": "application/json"}
 
 

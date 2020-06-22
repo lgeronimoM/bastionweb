@@ -27,7 +27,7 @@ logging.basicConfig(filename=LOG_FILENAME,level=cf.LOG_LEVEL)
 logging.info('Comenzando la aplicacion...')
         
 ######################################### global vars ##############################3
-url_api_ansible = "http://127.0.0.1:8292/core/v1.0/ansible"
+url_api_ansible = "http://"+cf.SERVER+":"+cf.PRTO+"/core/v1.0/ansible"
 headers = {"Content-type": "application/json"}
 
 ######################################### install master and Slaves servers ###################3333
