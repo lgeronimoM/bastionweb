@@ -216,7 +216,7 @@ def adddomain():
     c = result.json()
     db.session.commit()
     logging.info('Add Domain'+namef+' '+tipof+' '+valuef+' '+hostingf)
-    return redirect(url_for('domain', res=hostingf))
+    return redirect(url_for('domain', page_num=1, res=hostingf))
 
 @app.route('/core/editdomain', methods=['POST'])
 @login_required
@@ -246,7 +246,7 @@ def updatedomain():
 
     if domain:
         mensage="This domain have already been added"
-        return redirect(url_for('domain', res=zoneid, mess=mensage))
+        return redirect(url_for('domain', page_num=1, res=zoneid, mess=mensage))
     else:
         db.session.query(Domain).filter(Domain.id == idf).update({'value':valuef,'name':namef})
         db.session.commit()
@@ -266,7 +266,7 @@ def updatedomain():
         content={ "tagsexc": tagsexc, "ipmanage": ipmanage, "passwd": passwd, "user": user }
         result = requests.post(url_api_ansible, json=content, headers=headers, verify=False)
         c = result.json()
-        return redirect(url_for('domain', res=zoneid))
+        return redirect(url_for('domain', page_num=1, res=zoneid))
 
 @app.route('/core/deletedomain', methods=['POST'])
 @login_required
@@ -300,7 +300,7 @@ def deletedomain():
         content={ "tagsexc": tagsexc, "ipmanage": ipmanage, "passwd": passwd, "user": user }
         result = requests.post(url_api_ansible, json=content, headers=headers, verify=False)
         c = result.json()
-        return redirect(url_for('domain', res=zoneid))
+        return redirect(url_for('domain', page_num=1, res=int(zoneid)))
 
 ########################################### API Ansible-Playbooks ###################################################
 
