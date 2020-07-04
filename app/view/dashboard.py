@@ -57,7 +57,9 @@ def home():
     if is_auth:
         logging.info('User authentication')
         user = current_user.username
-        return render_template('index.html', graph=graphing(), pie=pie(), user = user)
+        query = db.session.query(Users).filter(Users.username==user).first()
+        mail = query.email
+        return render_template('index.html', graph=graphing(), pie=pie(), user=user, mail=mail)
     else:
         logging.info('User trying access to page')
         return render_template('login.html')
@@ -69,6 +71,7 @@ def graphing():
     datem = date.today().month
     month=['January','February','March','April','May','June','July','August','September','October','November','December']
     months=month[0:datem]
+    actually_year = date.today().year
     graph.x_labels = months
     url = cf.APIHOSETD
     headers = {'Content-type': 'application/json'}
@@ -79,7 +82,7 @@ def graphing():
         for res in months:
             con=con+1
             connew=0
-            regs = db.session.query(Register).filter(and_(Register.registerdate==str(month[con]),Register.registerdomain==zone['zones'])).all()
+            regs = db.session.query(Register).filter(and_(Register.registerdate==str(month[con])+str(actually_year),Register.registerdomain==zone['zones'])).all()
             for reg in regs:
                 connew=connew+1
             ranges.append(connew)

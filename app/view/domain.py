@@ -52,7 +52,6 @@ logging.info('Comenzando la aplicacion...')
 url_api_ansible = "http://"+cf.SERVER+":"+str(cf.PRTO)+"/core/v1.0/ansible"
 headers = {"Content-type": "application/json"}
 
-
 ####################### Endpoints #############################
 
 @app.route('/hostedzone')
@@ -61,16 +60,19 @@ def hostedZone():
     url = cf.APIHOSETD
     headers = {'Content-type': 'application/json'}
     hosting = requests.get(url, headers=headers, verify=False).json()
-    user = current_user.username
     logging.info('Access page HostedZone')
-    return render_template('hostedzone.html', user = user, zone=hosting)
+    user = current_user.username
+    queryuser = db.session.query(Users).filter(Users.username==user).first()
+    mail = queryuser.email
+    return render_template('hostedzone.html', user=user, zone=hosting, mail=mail)
 
 def registers(registertype,registerdomain):
     reg = db.session.query(Register).filter().order_by(desc(Register.id)).first()
     val=int(reg.register)
     newregister=val+1
+    dateyear = date.today().year
     now = datetime.now()
-    registerdate = now.strftime("%B")
+    registerdate = now.strftime("%B")+str(dateyear)
     register = Register(newregister,registerdate,registertype,registerdomain )
     db.session.add(register)
 
@@ -141,8 +143,9 @@ def editdomainzone():
         query = db.session.query(Hosting).filter(Hosting.id == idf).first()
         db.session.commit()
         user = current_user.username
-        #return str(query.name)+str(query.host)+str(query.typevalue)+str(query.value)+str(query.active)+' '+"Update"
-        return render_template('editZone.html', user=user, value=query.zone, id=idf, domain=query.domain )
+        queryuser = db.session.query(Users).filter(Users.username==user).first()
+        mail = queryuser.email
+        return render_template('editZone.html', user=user, mail=mail, value=query.zone, id=idf, domain=query.domain )
 
 @app.route('/updatedomainzone', methods=['POST'])
 @login_required
@@ -177,8 +180,7 @@ def domain(page_num):
         logging.info('Consult Domain and show on table')
         domain=db.session.query(Domain).filter(Domain.host==int(value)).paginate(per_page=10, page=page_num, error_out=True)
     logging.info('Access page Domain')
-    user = current_user.username
-    return render_template('domain.html', user = user, zone=hosting, data=domain, name=name, mess=mess, valueres=value)
+    return render_template('domain.html', user = user, mail=mail, zone=hosting, data=domain, name=name, mess=mess, valueres=value)
 
 @app.route('/core/adddomain', methods=['POST'])
 @login_required
@@ -226,8 +228,9 @@ def editdomain():
         idf = int(request.form['update_button'])
         query = db.session.query(Domain).filter(Domain.id == idf).first()
         user = current_user.username
-        #return str(query.name)+str(query.host)+str(query.typevalue)+str(query.value)+str(query.active)+' '+"Update"
-        return render_template('edit.html', user=user, 	typef=query.typevalue, name = query.name, value=query.value, id=idf, iddomain=iddomain )
+        queryuser = db.session.query(Users).filter(Users.username==user).first()
+        mail = queryuser.email
+        return render_template('edit.html', user=user, mail=mail, typef=query.typevalue, name = query.name, value=query.value, id=idf, iddomain=iddomain )
 
 @app.route('/core/updatedomain', methods=['POST'])
 @login_required

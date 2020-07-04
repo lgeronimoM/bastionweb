@@ -1,0 +1,473 @@
+INFO:root:Comenzando la aplicacion...
+INFO:root:Comenzando la aplicacion...
+INFO:root:Comenzando la aplicacion...
+INFO:root:Comenzando la aplicacion...
+INFO:root:Comenzando la aplicacion...
+INFO:root:Comenzando la aplicacion...
+INFO:werkzeug: * Running on http://127.0.0.1:8292/ (Press CTRL+C to quit)
+INFO:werkzeug: * Restarting with stat
+INFO:root:Comenzando la aplicacion...
+INFO:root:Comenzando la aplicacion...
+INFO:root:Comenzando la aplicacion...
+INFO:root:Comenzando la aplicacion...
+INFO:root:Comenzando la aplicacion...
+INFO:root:Comenzando la aplicacion...
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 193-244-297
+INFO:werkzeug:127.0.0.1 - - [04/Jul/2020 12:34:03] "[37mGET /admin/domain/ HTTP/1.1[0m" 200 -
+INFO:root:User authentication
+INFO:werkzeug:127.0.0.1 - - [04/Jul/2020 12:34:08] "[35m[1mGET / HTTP/1.1[0m" 500 -
+INFO:werkzeug:127.0.0.1 - - [04/Jul/2020 12:34:08] "[37mGET /?__debugger__=yes&cmd=resource&f=style.css HTTP/1.1[0m" 200 -
+INFO:werkzeug:127.0.0.1 - - [04/Jul/2020 12:34:08] "[37mGET /?__debugger__=yes&cmd=resource&f=debugger.js HTTP/1.1[0m" 200 -
+INFO:werkzeug:127.0.0.1 - - [04/Jul/2020 12:34:09] "[37mGET /?__debugger__=yes&cmd=resource&f=jquery.js HTTP/1.1[0m" 200 -
+INFO:werkzeug:127.0.0.1 - - [04/Jul/2020 12:34:09] "[37mGET /?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1[0m" 200 -
+INFO:werkzeug:127.0.0.1 - - [04/Jul/2020 12:34:09] "[37mGET /?__debugger__=yes&cmd=resource&f=ubuntu.ttf HTTP/1.1[0m" 200 -
+INFO:werkzeug:127.0.0.1 - - [04/Jul/2020 12:34:09] "[37mGET /?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1[0m" 200 -
+INFO:werkzeug: * Detected change in '/mnt/c/Users/LP-0220/Documents/Desarrollos/flask/DNS_Server/app/view/dashboard.py', reloading
+INFO:werkzeug: * Restarting with stat
+INFO:root:Comenzando la aplicacion...
+INFO:root:Comenzando la aplicacion...
+INFO:root:Comenzando la aplicacion...
+INFO:root:Comenzando la aplicacion...
+INFO:root:Comenzando la aplicacion...
+INFO:root:Comenzando la aplicacion...
+INFO:werkzeug: * Running on http://127.0.0.1:8292/ (Press CTRL+C to quit)
+INFO:werkzeug: * Restarting with stat
+INFO:root:Comenzando la aplicacion...
+INFO:root:Comenzando la aplicacion...
+INFO:root:Comenzando la aplicacion...
+INFO:root:Comenzando la aplicacion...
+INFO:root:Comenzando la aplicacion...
+INFO:root:Comenzando la aplicacion...
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 193-244-297
+INFO:root:User authentication
+INFO:werkzeug:127.0.0.1 - - [04/Jul/2020 12:38:05] "[35m[1mGET / HTTP/1.1[0m" 500 -
+INFO:werkzeug:127.0.0.1 - - [04/Jul/2020 12:38:05] "[37mGET /?__debugger__=yes&cmd=resource&f=style.css HTTP/1.1[0m" 200 -
+INFO:werkzeug:127.0.0.1 - - [04/Jul/2020 12:38:05] "[37mGET /?__debugger__=yes&cmd=resource&f=jquery.js HTTP/1.1[0m" 200 -
+INFO:werkzeug:127.0.0.1 - - [04/Jul/2020 12:38:05] "[37mGET /?__debugger__=yes&cmd=resource&f=debugger.js HTTP/1.1[0m" 200 -
+INFO:werkzeug:127.0.0.1 - - [04/Jul/2020 12:38:06] "[37mGET /?__debugger__=yes&cmd=resource&f=ubuntu.ttf HTTP/1.1[0m" 200 -
+INFO:werkzeug:127.0.0.1 - - [04/Jul/2020 12:38:06] "[37mGET /?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1[0m" 200 -
+INFO:werkzeug:127.0.0.1 - - [04/Jul/2020 12:38:06] "[37mGET /?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1[0m" 200 -
+INFO:werkzeug: * Detected change in '/mnt/c/Users/LP-0220/Documents/Desarrollos/flask/DNS_Server/app/view/dashboard.py', reloading
+INFO:werkzeug: * Restarting with stat
+INFO:root:Comenzando la aplicacion...
+INFO:root:Comenzando la aplicacion...
+INFO:root:Comenzando la aplicacion...
+INFO:root:Comenzando la aplicacion...
+INFO:root:Comenzando la aplicacion...
+INFO:root:Comenzando la aplicacion...
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 193-244-297
+INFO:root:User authentication
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): 127.0.0.1:8292
+INFO:werkzeug:127.0.0.1 - - [04/Jul/2020 12:38:42] "[37mGET /core/v1.0/hostedzone HTTP/1.1[0m" 200 -
+DEBUG:urllib3.connectionpool:http://127.0.0.1:8292 "GET /core/v1.0/hostedzone HTTP/1.1" 200 202
+INFO:werkzeug:127.0.0.1 - - [04/Jul/2020 12:38:43] "[35m[1mGET / HTTP/1.1[0m" 500 -
+INFO:werkzeug:127.0.0.1 - - [04/Jul/2020 12:38:43] "[37mGET /?__debugger__=yes&cmd=resource&f=style.css HTTP/1.1[0m" 200 -
+INFO:werkzeug:127.0.0.1 - - [04/Jul/2020 12:38:43] "[37mGET /?__debugger__=yes&cmd=resource&f=jquery.js HTTP/1.1[0m" 200 -
+INFO:werkzeug:127.0.0.1 - - [04/Jul/2020 12:38:43] "[37mGET /?__debugger__=yes&cmd=resource&f=debugger.js HTTP/1.1[0m" 200 -
+INFO:werkzeug:127.0.0.1 - - [04/Jul/2020 12:38:43] "[37mGET /?__debugger__=yes&cmd=resource&f=ubuntu.ttf HTTP/1.1[0m" 200 -
+INFO:werkzeug:127.0.0.1 - - [04/Jul/2020 12:38:43] "[37mGET /?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1[0m" 200 -
+INFO:werkzeug:127.0.0.1 - - [04/Jul/2020 12:38:43] "[37mGET /?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1[0m" 200 -
+INFO:werkzeug: * Detected change in '/mnt/c/Users/LP-0220/Documents/Desarrollos/flask/DNS_Server/app/view/dashboard.py', reloading
+INFO:werkzeug: * Restarting with stat
+INFO:root:Comenzando la aplicacion...
+INFO:root:Comenzando la aplicacion...
+INFO:root:Comenzando la aplicacion...
+INFO:root:Comenzando la aplicacion...
+INFO:root:Comenzando la aplicacion...
+INFO:root:Comenzando la aplicacion...
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 193-244-297
+INFO:root:User authentication
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): 127.0.0.1:8292
+INFO:werkzeug:127.0.0.1 - - [04/Jul/2020 12:39:43] "[37mGET /core/v1.0/hostedzone HTTP/1.1[0m" 200 -
+DEBUG:urllib3.connectionpool:http://127.0.0.1:8292 "GET /core/v1.0/hostedzone HTTP/1.1" 200 202
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): 127.0.0.1:8292
+INFO:werkzeug:127.0.0.1 - - [04/Jul/2020 12:39:44] "[37mGET /core/v1.0/hostedzone HTTP/1.1[0m" 200 -
+DEBUG:urllib3.connectionpool:http://127.0.0.1:8292 "GET /core/v1.0/hostedzone HTTP/1.1" 200 202
+INFO:werkzeug:127.0.0.1 - - [04/Jul/2020 12:39:44] "[37mGET / HTTP/1.1[0m" 200 -
+INFO:werkzeug:127.0.0.1 - - [04/Jul/2020 12:39:44] "[37mGET /static/css/materialize.min.css HTTP/1.1[0m" 200 -
+INFO:werkzeug:127.0.0.1 - - [04/Jul/2020 12:39:44] "[37mGET /static/js/materialize.min.js HTTP/1.1[0m" 200 -
+INFO:werkzeug:127.0.0.1 - - [04/Jul/2020 12:39:44] "[37mGET /static/css/style.css HTTP/1.1[0m" 200 -
+INFO:werkzeug:127.0.0.1 - - [04/Jul/2020 12:39:44] "[37mGET /static/img/logo.png HTTP/1.1[0m" 200 -
+INFO:werkzeug:127.0.0.1 - - [04/Jul/2020 12:39:45] "[33mGET /favicon.ico HTTP/1.1[0m" 404 -
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): 127.0.0.1:8292
+INFO:werkzeug:127.0.0.1 - - [04/Jul/2020 12:39:52] "[37mGET /core/v1.0/hostedzone HTTP/1.1[0m" 200 -
+DEBUG:urllib3.connectionpool:http://127.0.0.1:8292 "GET /core/v1.0/hostedzone HTTP/1.1" 200 202
+INFO:root:Access page HostedZone
+INFO:werkzeug:127.0.0.1 - - [04/Jul/2020 12:39:53] "[37mGET /hostedzone HTTP/1.1[0m" 200 -
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): 127.0.0.1:8292
+INFO:werkzeug:127.0.0.1 - - [04/Jul/2020 12:39:58] "[37mGET /core/v1.0/hostedzone HTTP/1.1[0m" 200 -
+DEBUG:urllib3.connectionpool:http://127.0.0.1:8292 "GET /core/v1.0/hostedzone HTTP/1.1" 200 202
+INFO:root:Access page Domain
+INFO:werkzeug:127.0.0.1 - - [04/Jul/2020 12:39:59] "[37mGET /domain/1 HTTP/1.1[0m" 200 -
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): 127.0.0.1:8292
+INFO:werkzeug:127.0.0.1 - - [04/Jul/2020 12:40:07] "[37mGET /core/v1.0/hostedzone HTTP/1.1[0m" 200 -
+DEBUG:urllib3.connectionpool:http://127.0.0.1:8292 "GET /core/v1.0/hostedzone HTTP/1.1" 200 202
+INFO:root:creating YML file
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): 127.0.0.1:8292
+INFO:werkzeug:127.0.0.1 - - [04/Jul/2020 12:40:07] "[37mGET /core/v1.0/hostedzone HTTP/1.1[0m" 200 -
+DEBUG:urllib3.connectionpool:http://127.0.0.1:8292 "GET /core/v1.0/hostedzone HTTP/1.1" 200 202
+INFO:root:creating YML file
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): 127.0.0.1:8292
+INFO:werkzeug:127.0.0.1 - - [04/Jul/2020 12:40:07] "[37mGET /core/v1.0/domain/1 HTTP/1.1[0m" 200 -
+DEBUG:urllib3.connectionpool:http://127.0.0.1:8292 "GET /core/v1.0/domain/1 HTTP/1.1" 200 1229
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): 127.0.0.1:8292
+INFO:root:runnig ansible-playbook install dns subdomain 192.168.3.106
+INFO:ansible:PLAY [Playbook Webadmin DNS server slaves and masters] *****************************************************************
+INFO:ansible:TASK [roles/webadmindns : Crear subdominio mydomain.org] ***************************************************************
+ERROR:ansible:fatal: [192.168.3.106]: UNREACHABLE! => {"changed": false, "msg": "Failed to connect to the host via ssh: ssh: connect to host 192.168.3.106 port 22: Connection timed out", "unreachable": true}
+INFO:ansible:PLAY RECAP *************************************************************************************************************
+INFO:ansible:192.168.3.106              : ok=0    changed=0    unreachable=1    failed=0    skipped=0    rescued=0    ignored=0   
+INFO:werkzeug:127.0.0.1 - - [04/Jul/2020 12:40:35] "[37mPOST /core/v1.0/ansible HTTP/1.1[0m" 200 -
+DEBUG:urllib3.connectionpool:http://127.0.0.1:8292 "POST /core/v1.0/ansible HTTP/1.1" 200 18
+INFO:werkzeug:127.0.0.1 - - [04/Jul/2020 12:40:35] "[32mPOST /core/deletedomain HTTP/1.1[0m" 302 -
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): 127.0.0.1:8292
+INFO:werkzeug:127.0.0.1 - - [04/Jul/2020 12:40:35] "[37mGET /core/v1.0/hostedzone HTTP/1.1[0m" 200 -
+DEBUG:urllib3.connectionpool:http://127.0.0.1:8292 "GET /core/v1.0/hostedzone HTTP/1.1" 200 202
+INFO:root:Consult Domain and show on table
+INFO:root:Access page Domain
+INFO:werkzeug:127.0.0.1 - - [04/Jul/2020 12:40:35] "[37mGET /domain/1?res=1 HTTP/1.1[0m" 200 -
+INFO:werkzeug:127.0.0.1 - - [04/Jul/2020 12:40:56] "[33mGET /domain/admin HTTP/1.1[0m" 404 -
+INFO:werkzeug:127.0.0.1 - - [04/Jul/2020 12:41:01] "[37mGET /admin/ HTTP/1.1[0m" 200 -
+INFO:werkzeug:127.0.0.1 - - [04/Jul/2020 12:41:08] "[37mGET /admin/register/ HTTP/1.1[0m" 200 -
+INFO:root:Comenzando la aplicacion...
+INFO:root:Comenzando la aplicacion...
+INFO:root:Comenzando la aplicacion...
+INFO:root:Comenzando la aplicacion...
+INFO:root:Comenzando la aplicacion...
+INFO:root:Comenzando la aplicacion...
+INFO:werkzeug: * Running on http://127.0.0.1:8292/ (Press CTRL+C to quit)
+INFO:werkzeug: * Restarting with stat
+INFO:root:Comenzando la aplicacion...
+INFO:root:Comenzando la aplicacion...
+INFO:root:Comenzando la aplicacion...
+INFO:root:Comenzando la aplicacion...
+INFO:root:Comenzando la aplicacion...
+INFO:root:Comenzando la aplicacion...
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 193-244-297
+INFO:werkzeug:127.0.0.1 - - [04/Jul/2020 12:51:42] "[37mGET /admin/register/ HTTP/1.1[0m" 200 -
+INFO:root:User authentication
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): 127.0.0.1:8292
+INFO:werkzeug:127.0.0.1 - - [04/Jul/2020 12:51:46] "[37mGET /core/v1.0/hostedzone HTTP/1.1[0m" 200 -
+DEBUG:urllib3.connectionpool:http://127.0.0.1:8292 "GET /core/v1.0/hostedzone HTTP/1.1" 200 202
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): 127.0.0.1:8292
+INFO:werkzeug:127.0.0.1 - - [04/Jul/2020 12:51:47] "[37mGET /core/v1.0/hostedzone HTTP/1.1[0m" 200 -
+DEBUG:urllib3.connectionpool:http://127.0.0.1:8292 "GET /core/v1.0/hostedzone HTTP/1.1" 200 202
+INFO:werkzeug:127.0.0.1 - - [04/Jul/2020 12:51:47] "[37mGET / HTTP/1.1[0m" 200 -
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): 127.0.0.1:8292
+INFO:werkzeug:127.0.0.1 - - [04/Jul/2020 12:52:20] "[37mGET /core/v1.0/hostedzone HTTP/1.1[0m" 200 -
+DEBUG:urllib3.connectionpool:http://127.0.0.1:8292 "GET /core/v1.0/hostedzone HTTP/1.1" 200 202
+INFO:root:Access page Domain
+INFO:werkzeug:127.0.0.1 - - [04/Jul/2020 12:52:20] "[37mGET /domain/1 HTTP/1.1[0m" 200 -
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): 127.0.0.1:8292
+INFO:werkzeug:127.0.0.1 - - [04/Jul/2020 12:52:58] "[37mGET /core/v1.0/hostedzone HTTP/1.1[0m" 200 -
+DEBUG:urllib3.connectionpool:http://127.0.0.1:8292 "GET /core/v1.0/hostedzone HTTP/1.1" 200 202
+INFO:root:creating YML file
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): 127.0.0.1:8292
+INFO:werkzeug:127.0.0.1 - - [04/Jul/2020 12:52:58] "[37mGET /core/v1.0/hostedzone HTTP/1.1[0m" 200 -
+DEBUG:urllib3.connectionpool:http://127.0.0.1:8292 "GET /core/v1.0/hostedzone HTTP/1.1" 200 202
+INFO:werkzeug:127.0.0.1 - - [04/Jul/2020 12:52:59] "[35m[1mPOST /core/deletedomain HTTP/1.1[0m" 500 -
+INFO:werkzeug:127.0.0.1 - - [04/Jul/2020 12:52:59] "[37mGET /core/deletedomain?__debugger__=yes&cmd=resource&f=debugger.js HTTP/1.1[0m" 200 -
+INFO:werkzeug:127.0.0.1 - - [04/Jul/2020 12:52:59] "[37mGET /core/deletedomain?__debugger__=yes&cmd=resource&f=style.css HTTP/1.1[0m" 200 -
+INFO:werkzeug:127.0.0.1 - - [04/Jul/2020 12:52:59] "[37mGET /core/deletedomain?__debugger__=yes&cmd=resource&f=jquery.js HTTP/1.1[0m" 200 -
+INFO:werkzeug:127.0.0.1 - - [04/Jul/2020 12:53:00] "[37mGET /core/deletedomain?__debugger__=yes&cmd=resource&f=ubuntu.ttf HTTP/1.1[0m" 200 -
+INFO:werkzeug:127.0.0.1 - - [04/Jul/2020 12:53:00] "[37mGET /core/deletedomain?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1[0m" 200 -
+INFO:root:Comenzando la aplicacion...
+INFO:root:Comenzando la aplicacion...
+INFO:root:Comenzando la aplicacion...
+INFO:root:Comenzando la aplicacion...
+INFO:root:Comenzando la aplicacion...
+INFO:root:Comenzando la aplicacion...
+INFO:werkzeug: * Running on http://127.0.0.1:8292/ (Press CTRL+C to quit)
+INFO:werkzeug: * Restarting with stat
+INFO:root:Comenzando la aplicacion...
+INFO:root:Comenzando la aplicacion...
+INFO:root:Comenzando la aplicacion...
+INFO:root:Comenzando la aplicacion...
+INFO:root:Comenzando la aplicacion...
+INFO:root:Comenzando la aplicacion...
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 193-244-297
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): 127.0.0.1:8292
+INFO:werkzeug:127.0.0.1 - - [04/Jul/2020 12:55:23] "[37mGET /core/v1.0/hostedzone HTTP/1.1[0m" 200 -
+DEBUG:urllib3.connectionpool:http://127.0.0.1:8292 "GET /core/v1.0/hostedzone HTTP/1.1" 200 202
+INFO:root:Access page Domain
+INFO:werkzeug:127.0.0.1 - - [04/Jul/2020 12:55:23] "[37mGET /domain/1 HTTP/1.1[0m" 200 -
+INFO:werkzeug:127.0.0.1 - - [04/Jul/2020 12:55:23] "[37mGET /static/css/materialize.min.css HTTP/1.1[0m" 200 -
+INFO:werkzeug:127.0.0.1 - - [04/Jul/2020 12:55:23] "[37mGET /static/css/style.css HTTP/1.1[0m" 200 -
+INFO:werkzeug:127.0.0.1 - - [04/Jul/2020 12:55:23] "[37mGET /static/img/logo.png HTTP/1.1[0m" 200 -
+INFO:werkzeug:127.0.0.1 - - [04/Jul/2020 12:55:24] "[37mGET /static/js/materialize.min.js HTTP/1.1[0m" 200 -
+INFO:werkzeug:127.0.0.1 - - [04/Jul/2020 12:55:24] "[33mGET /favicon.ico HTTP/1.1[0m" 404 -
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): 127.0.0.1:8292
+INFO:werkzeug:127.0.0.1 - - [04/Jul/2020 12:55:30] "[37mGET /core/v1.0/hostedzone HTTP/1.1[0m" 200 -
+DEBUG:urllib3.connectionpool:http://127.0.0.1:8292 "GET /core/v1.0/hostedzone HTTP/1.1" 200 202
+INFO:root:creating YML file
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): 127.0.0.1:8292
+INFO:werkzeug:127.0.0.1 - - [04/Jul/2020 12:55:30] "[37mGET /core/v1.0/hostedzone HTTP/1.1[0m" 200 -
+DEBUG:urllib3.connectionpool:http://127.0.0.1:8292 "GET /core/v1.0/hostedzone HTTP/1.1" 200 202
+INFO:root:creating YML file
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): 127.0.0.1:8292
+INFO:werkzeug:127.0.0.1 - - [04/Jul/2020 12:55:30] "[37mGET /core/v1.0/domain/1 HTTP/1.1[0m" 200 -
+DEBUG:urllib3.connectionpool:http://127.0.0.1:8292 "GET /core/v1.0/domain/1 HTTP/1.1" 200 954
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): 127.0.0.1:8292
+INFO:root:runnig ansible-playbook install dns subdomain 192.168.3.106
+INFO:ansible:PLAY [Playbook Webadmin DNS server slaves and masters] *****************************************************************
+INFO:ansible:TASK [roles/webadmindns : Crear subdominio mydomain.org] ***************************************************************
+ERROR:ansible:fatal: [192.168.3.106]: UNREACHABLE! => {"changed": false, "msg": "Failed to connect to the host via ssh: ssh: connect to host 192.168.3.106 port 22: Connection timed out", "unreachable": true}
+INFO:ansible:PLAY RECAP *************************************************************************************************************
+INFO:ansible:192.168.3.106              : ok=0    changed=0    unreachable=1    failed=0    skipped=0    rescued=0    ignored=0   
+INFO:werkzeug:127.0.0.1 - - [04/Jul/2020 12:55:51] "[37mPOST /core/v1.0/ansible HTTP/1.1[0m" 200 -
+DEBUG:urllib3.connectionpool:http://127.0.0.1:8292 "POST /core/v1.0/ansible HTTP/1.1" 200 18
+INFO:werkzeug:127.0.0.1 - - [04/Jul/2020 12:55:51] "[32mPOST /core/deletedomain HTTP/1.1[0m" 302 -
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): 127.0.0.1:8292
+INFO:werkzeug:127.0.0.1 - - [04/Jul/2020 12:55:51] "[37mGET /core/v1.0/hostedzone HTTP/1.1[0m" 200 -
+DEBUG:urllib3.connectionpool:http://127.0.0.1:8292 "GET /core/v1.0/hostedzone HTTP/1.1" 200 202
+INFO:root:Consult Domain and show on table
+INFO:root:Access page Domain
+INFO:werkzeug:127.0.0.1 - - [04/Jul/2020 12:55:51] "[37mGET /domain/1?res=1 HTTP/1.1[0m" 200 -
+INFO:werkzeug:127.0.0.1 - - [04/Jul/2020 12:56:12] "[37mGET /admin/ HTTP/1.1[0m" 200 -
+INFO:werkzeug:127.0.0.1 - - [04/Jul/2020 12:56:16] "[37mGET /admin/register/ HTTP/1.1[0m" 200 -
+INFO:root:User authentication
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): 127.0.0.1:8292
+INFO:werkzeug:127.0.0.1 - - [04/Jul/2020 12:56:23] "[37mGET /core/v1.0/hostedzone HTTP/1.1[0m" 200 -
+DEBUG:urllib3.connectionpool:http://127.0.0.1:8292 "GET /core/v1.0/hostedzone HTTP/1.1" 200 202
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): 127.0.0.1:8292
+INFO:werkzeug:127.0.0.1 - - [04/Jul/2020 12:56:23] "[37mGET /core/v1.0/hostedzone HTTP/1.1[0m" 200 -
+DEBUG:urllib3.connectionpool:http://127.0.0.1:8292 "GET /core/v1.0/hostedzone HTTP/1.1" 200 202
+INFO:werkzeug:127.0.0.1 - - [04/Jul/2020 12:56:23] "[37mGET / HTTP/1.1[0m" 200 -
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): 127.0.0.1:8292
+INFO:werkzeug:127.0.0.1 - - [04/Jul/2020 12:57:10] "[37mGET /core/v1.0/hostedzone HTTP/1.1[0m" 200 -
+DEBUG:urllib3.connectionpool:http://127.0.0.1:8292 "GET /core/v1.0/hostedzone HTTP/1.1" 200 202
+INFO:root:Access page Domain
+INFO:werkzeug:127.0.0.1 - - [04/Jul/2020 12:57:10] "[37mGET /domain/1 HTTP/1.1[0m" 200 -
+INFO:werkzeug:127.0.0.1 - - [04/Jul/2020 12:57:14] "[37mPOST /core/editdomain HTTP/1.1[0m" 200 -
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): 127.0.0.1:8292
+INFO:werkzeug:127.0.0.1 - - [04/Jul/2020 12:57:18] "[37mGET /core/v1.0/hostedzone HTTP/1.1[0m" 200 -
+DEBUG:urllib3.connectionpool:http://127.0.0.1:8292 "GET /core/v1.0/hostedzone HTTP/1.1" 200 202
+INFO:root:creating YML file
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): 127.0.0.1:8292
+INFO:werkzeug:127.0.0.1 - - [04/Jul/2020 12:57:18] "[37mGET /core/v1.0/hostedzone HTTP/1.1[0m" 200 -
+DEBUG:urllib3.connectionpool:http://127.0.0.1:8292 "GET /core/v1.0/hostedzone HTTP/1.1" 200 202
+INFO:root:creating YML file
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): 127.0.0.1:8292
+INFO:werkzeug:127.0.0.1 - - [04/Jul/2020 12:57:19] "[37mGET /core/v1.0/domain/1 HTTP/1.1[0m" 200 -
+DEBUG:urllib3.connectionpool:http://127.0.0.1:8292 "GET /core/v1.0/domain/1 HTTP/1.1" 200 954
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): 127.0.0.1:8292
+INFO:root:runnig ansible-playbook install dns subdomain 192.168.3.106
+INFO:ansible:PLAY [Playbook Webadmin DNS server slaves and masters] *****************************************************************
+INFO:ansible:TASK [roles/webadmindns : Crear subdominio mydomain.org] ***************************************************************
+ERROR:ansible:fatal: [192.168.3.106]: UNREACHABLE! => {"changed": false, "msg": "Failed to connect to the host via ssh: ssh: connect to host 192.168.3.106 port 22: Connection timed out", "unreachable": true}
+INFO:ansible:PLAY RECAP *************************************************************************************************************
+INFO:ansible:192.168.3.106              : ok=0    changed=0    unreachable=1    failed=0    skipped=0    rescued=0    ignored=0   
+INFO:werkzeug:127.0.0.1 - - [04/Jul/2020 12:57:30] "[37mPOST /core/v1.0/ansible HTTP/1.1[0m" 200 -
+DEBUG:urllib3.connectionpool:http://127.0.0.1:8292 "POST /core/v1.0/ansible HTTP/1.1" 200 18
+INFO:werkzeug:127.0.0.1 - - [04/Jul/2020 12:57:30] "[32mPOST /core/updatedomain HTTP/1.1[0m" 302 -
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): 127.0.0.1:8292
+INFO:werkzeug:127.0.0.1 - - [04/Jul/2020 12:57:30] "[37mGET /core/v1.0/hostedzone HTTP/1.1[0m" 200 -
+DEBUG:urllib3.connectionpool:http://127.0.0.1:8292 "GET /core/v1.0/hostedzone HTTP/1.1" 200 202
+INFO:root:Consult Domain and show on table
+INFO:root:Access page Domain
+INFO:werkzeug:127.0.0.1 - - [04/Jul/2020 12:57:30] "[37mGET /domain/1?res=1 HTTP/1.1[0m" 200 -
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): 127.0.0.1:8292
+INFO:werkzeug:127.0.0.1 - - [04/Jul/2020 12:57:54] "[37mGET /core/v1.0/hostedzone HTTP/1.1[0m" 200 -
+DEBUG:urllib3.connectionpool:http://127.0.0.1:8292 "GET /core/v1.0/hostedzone HTTP/1.1" 200 202
+INFO:root:Consult Domain and show on table
+INFO:root:Access page Domain
+INFO:werkzeug:127.0.0.1 - - [04/Jul/2020 12:57:54] "[37mGET /domain/1?res=3 HTTP/1.1[0m" 200 -
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): 127.0.0.1:8292
+INFO:werkzeug:127.0.0.1 - - [04/Jul/2020 12:58:52] "[37mGET /core/v1.0/hostedzone HTTP/1.1[0m" 200 -
+DEBUG:urllib3.connectionpool:http://127.0.0.1:8292 "GET /core/v1.0/hostedzone HTTP/1.1" 200 202
+INFO:root:creating YML file
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): 127.0.0.1:8292
+INFO:werkzeug:127.0.0.1 - - [04/Jul/2020 12:58:52] "[37mGET /core/v1.0/hostedzone HTTP/1.1[0m" 200 -
+DEBUG:urllib3.connectionpool:http://127.0.0.1:8292 "GET /core/v1.0/hostedzone HTTP/1.1" 200 202
+INFO:root:creating YML file
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): 127.0.0.1:8292
+INFO:werkzeug:127.0.0.1 - - [04/Jul/2020 12:58:52] "[37mGET /core/v1.0/domain/3 HTTP/1.1[0m" 200 -
+DEBUG:urllib3.connectionpool:http://127.0.0.1:8292 "GET /core/v1.0/domain/3 HTTP/1.1" 200 695
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): 127.0.0.1:8292
+INFO:root:runnig ansible-playbook install dns subdomain 192.168.3.106
+INFO:ansible:PLAY [Playbook Webadmin DNS server slaves and masters] *****************************************************************
+INFO:ansible:TASK [roles/webadmindns : Crear subdominio ejemplo2.com] ***************************************************************
+INFO:ansible:changed: [192.168.3.106]
+INFO:ansible:RUNNING HANDLER [roles/webadmindns : restart named] ********************************************************************
+ERROR:ansible:fatal: [192.168.3.106]: FAILED! => {"changed": false, "msg": "Unable to restart service named: Job for named.service failed because the control process exited with error code. See \"systemctl status named.service\" and \"journalctl -xe\" for details.\n"}
+INFO:ansible:NO MORE HOSTS LEFT *****************************************************************************************************
+INFO:ansible:PLAY RECAP *************************************************************************************************************
+INFO:ansible:192.168.3.106              : ok=1    changed=1    unreachable=0    failed=1    skipped=0    rescued=0    ignored=0   
+INFO:werkzeug:127.0.0.1 - - [04/Jul/2020 12:59:17] "[37mPOST /core/v1.0/ansible HTTP/1.1[0m" 200 -
+DEBUG:urllib3.connectionpool:http://127.0.0.1:8292 "POST /core/v1.0/ansible HTTP/1.1" 200 18
+INFO:root:Add Domain192.168.3.22 A registers 3
+INFO:werkzeug:127.0.0.1 - - [04/Jul/2020 12:59:17] "[32mPOST /core/adddomain HTTP/1.1[0m" 302 -
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): 127.0.0.1:8292
+INFO:werkzeug:127.0.0.1 - - [04/Jul/2020 12:59:17] "[37mGET /core/v1.0/hostedzone HTTP/1.1[0m" 200 -
+DEBUG:urllib3.connectionpool:http://127.0.0.1:8292 "GET /core/v1.0/hostedzone HTTP/1.1" 200 202
+INFO:root:Consult Domain and show on table
+INFO:root:Access page Domain
+INFO:werkzeug:127.0.0.1 - - [04/Jul/2020 12:59:17] "[37mGET /domain/1?res=3 HTTP/1.1[0m" 200 -
+INFO:root:User authentication
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): 127.0.0.1:8292
+INFO:werkzeug:127.0.0.1 - - [04/Jul/2020 12:59:43] "[37mGET /core/v1.0/hostedzone HTTP/1.1[0m" 200 -
+DEBUG:urllib3.connectionpool:http://127.0.0.1:8292 "GET /core/v1.0/hostedzone HTTP/1.1" 200 202
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): 127.0.0.1:8292
+INFO:werkzeug:127.0.0.1 - - [04/Jul/2020 12:59:44] "[37mGET /core/v1.0/hostedzone HTTP/1.1[0m" 200 -
+DEBUG:urllib3.connectionpool:http://127.0.0.1:8292 "GET /core/v1.0/hostedzone HTTP/1.1" 200 202
+INFO:werkzeug:127.0.0.1 - - [04/Jul/2020 12:59:44] "[37mGET / HTTP/1.1[0m" 200 -
+INFO:werkzeug:127.0.0.1 - - [04/Jul/2020 13:00:03] "[33mGET /admin/Register HTTP/1.1[0m" 404 -
+INFO:werkzeug:127.0.0.1 - - [04/Jul/2020 13:00:07] "[37mGET /admin/ HTTP/1.1[0m" 200 -
+INFO:werkzeug:127.0.0.1 - - [04/Jul/2020 13:00:09] "[37mGET /admin/register/ HTTP/1.1[0m" 200 -
+INFO:werkzeug: * Detected change in '/mnt/c/Users/LP-0220/Documents/Desarrollos/flask/DNS_Server/app/view/dashboard.py', reloading
+INFO:werkzeug: * Restarting with stat
+INFO:root:Comenzando la aplicacion...
+INFO:root:Comenzando la aplicacion...
+INFO:root:Comenzando la aplicacion...
+INFO:root:Comenzando la aplicacion...
+INFO:root:Comenzando la aplicacion...
+INFO:root:Comenzando la aplicacion...
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 193-244-297
+INFO:werkzeug:127.0.0.1 - - [04/Jul/2020 13:01:04] "[37mGET /admin/ HTTP/1.1[0m" 200 -
+INFO:root:User authentication
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): 127.0.0.1:8292
+INFO:werkzeug:127.0.0.1 - - [04/Jul/2020 13:01:07] "[37mGET /core/v1.0/hostedzone HTTP/1.1[0m" 200 -
+DEBUG:urllib3.connectionpool:http://127.0.0.1:8292 "GET /core/v1.0/hostedzone HTTP/1.1" 200 202
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): 127.0.0.1:8292
+INFO:werkzeug:127.0.0.1 - - [04/Jul/2020 13:01:08] "[37mGET /core/v1.0/hostedzone HTTP/1.1[0m" 200 -
+DEBUG:urllib3.connectionpool:http://127.0.0.1:8292 "GET /core/v1.0/hostedzone HTTP/1.1" 200 202
+INFO:werkzeug:127.0.0.1 - - [04/Jul/2020 13:01:08] "[37mGET / HTTP/1.1[0m" 200 -
+INFO:root:Access page user
+INFO:werkzeug:127.0.0.1 - - [04/Jul/2020 13:01:23] "[37mGET /users HTTP/1.1[0m" 200 -
+INFO:root:Add user user TI
+INFO:werkzeug:127.0.0.1 - - [04/Jul/2020 13:02:19] "[32mPOST /core/adduser HTTP/1.1[0m" 302 -
+INFO:root:Access page user
+INFO:werkzeug:127.0.0.1 - - [04/Jul/2020 13:02:19] "[37mGET /users HTTP/1.1[0m" 200 -
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): 127.0.0.1:8292
+INFO:werkzeug:127.0.0.1 - - [04/Jul/2020 13:04:23] "[37mGET /core/v1.0/hostedzone HTTP/1.1[0m" 200 -
+DEBUG:urllib3.connectionpool:http://127.0.0.1:8292 "GET /core/v1.0/hostedzone HTTP/1.1" 200 202
+INFO:root:Access page HostedZone
+INFO:werkzeug:127.0.0.1 - - [04/Jul/2020 13:04:23] "[37mGET /hostedzone HTTP/1.1[0m" 200 -
+INFO:werkzeug:127.0.0.1 - - [04/Jul/2020 13:08:40] "[37mGET /admin/ HTTP/1.1[0m" 200 -
+INFO:werkzeug:127.0.0.1 - - [04/Jul/2020 13:08:45] "[37mGET /admin/users/ HTTP/1.1[0m" 200 -
+INFO:werkzeug: * Detected change in '/mnt/c/Users/LP-0220/Documents/Desarrollos/flask/DNS_Server/app/view/dashboard.py', reloading
+INFO:werkzeug: * Restarting with stat
+INFO:root:Comenzando la aplicacion...
+INFO:root:Comenzando la aplicacion...
+INFO:root:Comenzando la aplicacion...
+INFO:root:Comenzando la aplicacion...
+INFO:root:Comenzando la aplicacion...
+INFO:root:Comenzando la aplicacion...
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 193-244-297
+INFO:root:User authentication
+INFO:werkzeug:127.0.0.1 - - [04/Jul/2020 13:10:08] "[35m[1mGET / HTTP/1.1[0m" 500 -
+INFO:werkzeug:127.0.0.1 - - [04/Jul/2020 13:10:08] "[37mGET /?__debugger__=yes&cmd=resource&f=style.css HTTP/1.1[0m" 200 -
+INFO:werkzeug:127.0.0.1 - - [04/Jul/2020 13:10:08] "[37mGET /?__debugger__=yes&cmd=resource&f=debugger.js HTTP/1.1[0m" 200 -
+INFO:werkzeug:127.0.0.1 - - [04/Jul/2020 13:10:08] "[37mGET /?__debugger__=yes&cmd=resource&f=jquery.js HTTP/1.1[0m" 200 -
+INFO:werkzeug:127.0.0.1 - - [04/Jul/2020 13:10:09] "[37mGET /?__debugger__=yes&cmd=resource&f=ubuntu.ttf HTTP/1.1[0m" 200 -
+INFO:werkzeug:127.0.0.1 - - [04/Jul/2020 13:10:09] "[37mGET /?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1[0m" 200 -
+INFO:werkzeug:127.0.0.1 - - [04/Jul/2020 13:10:09] "[37mGET /?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1[0m" 200 -
+INFO:werkzeug: * Detected change in '/mnt/c/Users/LP-0220/Documents/Desarrollos/flask/DNS_Server/app/view/dashboard.py', reloading
+INFO:werkzeug: * Restarting with stat
+INFO:root:Comenzando la aplicacion...
+INFO:root:Comenzando la aplicacion...
+INFO:root:Comenzando la aplicacion...
+INFO:root:Comenzando la aplicacion...
+INFO:root:Comenzando la aplicacion...
+INFO:root:Comenzando la aplicacion...
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 193-244-297
+INFO:root:User authentication
+INFO:werkzeug:127.0.0.1 - - [04/Jul/2020 13:11:08] "[35m[1mGET / HTTP/1.1[0m" 500 -
+INFO:werkzeug:127.0.0.1 - - [04/Jul/2020 13:11:09] "[37mGET /?__debugger__=yes&cmd=resource&f=jquery.js HTTP/1.1[0m" 200 -
+INFO:werkzeug:127.0.0.1 - - [04/Jul/2020 13:11:09] "[37mGET /?__debugger__=yes&cmd=resource&f=style.css HTTP/1.1[0m" 200 -
+INFO:werkzeug:127.0.0.1 - - [04/Jul/2020 13:11:09] "[37mGET /?__debugger__=yes&cmd=resource&f=debugger.js HTTP/1.1[0m" 200 -
+INFO:werkzeug:127.0.0.1 - - [04/Jul/2020 13:11:09] "[37mGET /?__debugger__=yes&cmd=resource&f=ubuntu.ttf HTTP/1.1[0m" 200 -
+INFO:werkzeug:127.0.0.1 - - [04/Jul/2020 13:11:09] "[37mGET /?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1[0m" 200 -
+INFO:werkzeug:127.0.0.1 - - [04/Jul/2020 13:11:09] "[37mGET /?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1[0m" 200 -
+INFO:werkzeug: * Detected change in '/mnt/c/Users/LP-0220/Documents/Desarrollos/flask/DNS_Server/app/view/dashboard.py', reloading
+INFO:werkzeug: * Restarting with stat
+INFO:root:Comenzando la aplicacion...
+INFO:root:Comenzando la aplicacion...
+INFO:root:Comenzando la aplicacion...
+INFO:root:Comenzando la aplicacion...
+INFO:root:Comenzando la aplicacion...
+INFO:root:Comenzando la aplicacion...
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 193-244-297
+INFO:root:User authentication
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): 127.0.0.1:8292
+INFO:werkzeug:127.0.0.1 - - [04/Jul/2020 13:11:36] "[37mGET /core/v1.0/hostedzone HTTP/1.1[0m" 200 -
+DEBUG:urllib3.connectionpool:http://127.0.0.1:8292 "GET /core/v1.0/hostedzone HTTP/1.1" 200 202
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): 127.0.0.1:8292
+INFO:werkzeug:127.0.0.1 - - [04/Jul/2020 13:11:36] "[37mGET /core/v1.0/hostedzone HTTP/1.1[0m" 200 -
+DEBUG:urllib3.connectionpool:http://127.0.0.1:8292 "GET /core/v1.0/hostedzone HTTP/1.1" 200 202
+INFO:werkzeug:127.0.0.1 - - [04/Jul/2020 13:11:36] "[37mGET / HTTP/1.1[0m" 200 -
+INFO:werkzeug:127.0.0.1 - - [04/Jul/2020 13:11:37] "[37mGET /static/css/materialize.min.css HTTP/1.1[0m" 200 -
+INFO:werkzeug:127.0.0.1 - - [04/Jul/2020 13:11:37] "[37mGET /static/css/style.css HTTP/1.1[0m" 200 -
+INFO:werkzeug:127.0.0.1 - - [04/Jul/2020 13:11:37] "[37mGET /static/js/materialize.min.js HTTP/1.1[0m" 200 -
+INFO:werkzeug:127.0.0.1 - - [04/Jul/2020 13:11:48] "[33mGET /favicon.ico HTTP/1.1[0m" 404 -
+INFO:werkzeug:127.0.0.1 - - [04/Jul/2020 13:11:48] "[37mGET /static/img/logo.png HTTP/1.1[0m" 200 -
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): 127.0.0.1:8292
+INFO:werkzeug:127.0.0.1 - - [04/Jul/2020 13:12:06] "[37mGET /core/v1.0/hostedzone HTTP/1.1[0m" 200 -
+DEBUG:urllib3.connectionpool:http://127.0.0.1:8292 "GET /core/v1.0/hostedzone HTTP/1.1" 200 202
+INFO:root:Access page HostedZone
+INFO:werkzeug:127.0.0.1 - - [04/Jul/2020 13:12:06] "[37mGET /hostedzone HTTP/1.1[0m" 200 -
+INFO:werkzeug: * Detected change in '/mnt/c/Users/LP-0220/Documents/Desarrollos/flask/DNS_Server/app/view/domain.py', reloading
+INFO:werkzeug: * Restarting with stat
+INFO:root:Comenzando la aplicacion...
+INFO:root:Comenzando la aplicacion...
+INFO:root:Comenzando la aplicacion...
+INFO:root:Comenzando la aplicacion...
+INFO:root:Comenzando la aplicacion...
+INFO:root:Comenzando la aplicacion...
+INFO:root:Comenzando la aplicacion...
+INFO:root:Comenzando la aplicacion...
+INFO:root:Comenzando la aplicacion...
+INFO:root:Comenzando la aplicacion...
+INFO:root:Comenzando la aplicacion...
+INFO:root:Comenzando la aplicacion...
+INFO:root:Comenzando la aplicacion...
+INFO:werkzeug: * Running on http://127.0.0.1:8292/ (Press CTRL+C to quit)
+INFO:werkzeug: * Restarting with stat
+INFO:root:Comenzando la aplicacion...
+INFO:root:Comenzando la aplicacion...
+INFO:root:Comenzando la aplicacion...
+INFO:root:Comenzando la aplicacion...
+INFO:root:Comenzando la aplicacion...
+INFO:root:Comenzando la aplicacion...
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 193-244-297
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): 127.0.0.1:8292
+INFO:werkzeug:127.0.0.1 - - [04/Jul/2020 13:27:17] "[37mGET /core/v1.0/hostedzone HTTP/1.1[0m" 200 -
+DEBUG:urllib3.connectionpool:http://127.0.0.1:8292 "GET /core/v1.0/hostedzone HTTP/1.1" 200 202
+INFO:root:Access page HostedZone
+INFO:werkzeug:127.0.0.1 - - [04/Jul/2020 13:27:17] "[37mGET /hostedzone HTTP/1.1[0m" 200 -
+INFO:werkzeug:127.0.0.1 - - [04/Jul/2020 13:27:17] "[37mGET /static/css/style.css HTTP/1.1[0m" 200 -
+INFO:werkzeug:127.0.0.1 - - [04/Jul/2020 13:27:17] "[37mGET /static/css/materialize.min.css HTTP/1.1[0m" 200 -
+INFO:werkzeug:127.0.0.1 - - [04/Jul/2020 13:27:17] "[37mGET /static/js/materialize.min.js HTTP/1.1[0m" 200 -
+INFO:werkzeug:127.0.0.1 - - [04/Jul/2020 13:27:29] "[33mGET /favicon.ico HTTP/1.1[0m" 404 -
+INFO:werkzeug:127.0.0.1 - - [04/Jul/2020 13:27:29] "[37mGET /static/img/logo.png HTTP/1.1[0m" 200 -
+INFO:werkzeug:127.0.0.1 - - [04/Jul/2020 13:28:20] "[37mGET /named HTTP/1.1[0m" 200 -
+INFO:root:logout
+INFO:werkzeug:127.0.0.1 - - [04/Jul/2020 13:28:27] "[32mGET /logout HTTP/1.1[0m" 302 -
+INFO:root:User trying access to page
+INFO:werkzeug:127.0.0.1 - - [04/Jul/2020 13:28:27] "[37mGET / HTTP/1.1[0m" 200 -
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): 127.0.0.1:8292
+INFO:root:Verification user user on api users
+INFO:root:user user is correct
+INFO:werkzeug:127.0.0.1 - - [04/Jul/2020 13:28:47] "[37mPOST /core/v1.0/apiuser HTTP/1.1[0m" 200 -
+DEBUG:urllib3.connectionpool:http://127.0.0.1:8292 "POST /core/v1.0/apiuser HTTP/1.1" 200 175
+INFO:root:Correct user user
+INFO:werkzeug:127.0.0.1 - - [04/Jul/2020 13:28:47] "[32mPOST /login HTTP/1.1[0m" 302 -
+INFO:root:User authentication
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): 127.0.0.1:8292
+INFO:werkzeug:127.0.0.1 - - [04/Jul/2020 13:28:47] "[37mGET /core/v1.0/hostedzone HTTP/1.1[0m" 200 -
+DEBUG:urllib3.connectionpool:http://127.0.0.1:8292 "GET /core/v1.0/hostedzone HTTP/1.1" 200 202
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): 127.0.0.1:8292
+INFO:werkzeug:127.0.0.1 - - [04/Jul/2020 13:28:48] "[37mGET /core/v1.0/hostedzone HTTP/1.1[0m" 200 -
+DEBUG:urllib3.connectionpool:http://127.0.0.1:8292 "GET /core/v1.0/hostedzone HTTP/1.1" 200 202
+INFO:werkzeug:127.0.0.1 - - [04/Jul/2020 13:28:48] "[37mGET / HTTP/1.1[0m" 200 -

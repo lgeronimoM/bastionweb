@@ -58,10 +58,12 @@ def users():
     if request.args.get('statususer'):
         statususer=request.args.get('statususer')
     query=db.session.query(Users).filter().all()
+    user = current_user.username
+    queryuser = db.session.query(Users).filter(Users.username==user).first()
+    mail = queryuser.email
     db.session.commit()
     logging.info('Access page user')
-    user = current_user.username
-    return render_template('users.html', user = user, names=query, statususer=statususer)
+    return render_template('users.html', user=user, mail=mail, names=query, statususer=statususer)
 
 @app.route('/core/adduser', methods=['POST'])
 @login_required

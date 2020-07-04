@@ -48,9 +48,11 @@ def named():
         exist=False
     acls = db.session.query(Acls).filter().all()
     forwards = db.session.query(Forwards).filter().all()
-    db.session.commit()
     user = current_user.username
-    return render_template('named.html', forwards=forwards, master=master, user=user, exist=exist, acls=acls, statusacl=statusacl, statusforward=statusforward)
+    queryuser = db.session.query(Users).filter(Users.username==user).first()
+    mail = queryuser.email
+    db.session.commit()
+    return render_template('named.html', forwards=forwards, master=master, user=user, mail=mail, exist=exist, acls=acls, statusacl=statusacl, statusforward=statusforward)
 
 @app.route('/core/addforward', methods=['POST'])
 @login_required

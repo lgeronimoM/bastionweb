@@ -54,9 +54,11 @@ def masterslaves():
         logging.warning('There are not master server configuration')
     slaves = db.session.query(Slaves).filter().all()
     acls = db.session.query(Acls).filter().all()
-    db.session.commit()
     user = current_user.username
-    return render_template('master-slaves.html', ipslaves=slaves, master=master, user=user, exist=exist, acls=acls, statuslave=statuslave, statusmaster=statusmaster, statusacl=statusacl)
+    queryuser = db.session.query(Users).filter(Users.username==user).first()
+    mail = queryuser.email
+    db.session.commit()
+    return render_template('master-slaves.html', ipslaves=slaves, master=master, user=user, mail=mail, exist=exist, acls=acls, statuslave=statuslave, statusmaster=statusmaster, statusacl=statusacl)
 
 @app.route('/core/addmaster', methods=['POST'])
 @login_required
