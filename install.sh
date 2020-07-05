@@ -18,13 +18,11 @@ sudo usermod -G dnsweb udnsweb
 
 sudo mkdir -p /etc/dnsweb
 
-sudo chown udnsweb.dnsweb /etc/dnsweb
+sudo chown udnsweb.dnsweb /etc/dnsweb -R
 
 sudo mkdir -p /var/log/dnsweb
 
-sudo chown udnsweb.dnsweb /var/log/dnsweb
-
-sudo python3 -m virtualenv /etc/dnsweb/venv
+sudo chown udnsweb.dnsweb /var/log/dnsweb -R
 
 sudo cp main.py /etc/dnsweb/
 sudo cp wsgi.py /etc/dnsweb/
@@ -32,8 +30,6 @@ sudo cp -r app /etc/dnsweb/
 sudo cp properties.py /etc/dnsweb/
 sudo cp README.md /etc/dnsweb/
 sudo cp requirements.txt /etc/dnsweb/
-
-source /etc/dnsweb/venv/bin/activate
 
 sudo pip3 install -r /etc/dnsweb/requirements.txt
 
@@ -46,8 +42,8 @@ After=network.target
 User=udnsweb
 Group=dnsweb
 WorkingDirectory=/etc/dnsweb
-Environment="PATH=/etc/dnsweb/venv/bin"
-ExecStart=/etc/dnsweb/venv/bin/gunicorn --workers 3 --bind 0.0.0.0:4000 main:app
+Environment=PATH=/usr/local/bin
+ExecStart=/usr/local/bin/gunicorn --workers 3 --bind 0.0.0.0:4000 main:app
 
 [Install]
 WantedBy=multi-user.target" > /etc/systemd/system/dnsweb.service
