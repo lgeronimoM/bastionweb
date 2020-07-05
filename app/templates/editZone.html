@@ -3,11 +3,12 @@
 {% block content %}
     <main class="container">
        <div class="row">
+            <br>
             <form action="/updatedomainzone" method="POST">
             <div class="row">
                 <div class="input-field col s12 m6 l3">
                     <input placeholder="value" id="value" value="{{value}}" type="text" class="validate" name="value" required>
-                    <label for="value">Name</label>
+                    <label for="value">Zona de dominio</label>
                 </div>
             </div>
             <div class="row">
@@ -18,7 +19,7 @@
             </div>
             <div class="row">
                 <div class="form-field">
-                    <button class="btn waves-effect waves-green green darken-2" type="submit" name="edit" required>Edit
+                    <button class="btn waves-effect waves-green green darken-2" type="submit" name="edit" required>Editar
                         <i class="material-icons left">edit</i>
                     </button>
                 </div>

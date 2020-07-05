@@ -172,14 +172,15 @@ def domain(page_num):
     name=""
     headers = {'Content-type': 'application/json'}
     hosting = requests.get(url, headers=headers, verify=False).json()
-    #search = False
-    #data = db.session.query(Domain).filter().all()
     if value:
         query = db.session.query(Hosting).filter(Hosting.id == int(value)).first()
         name=query.zone+'.'+query.domain
         logging.info('Consult Domain and show on table')
         domain=db.session.query(Domain).filter(Domain.host==int(value)).paginate(per_page=10, page=page_num, error_out=True)
     logging.info('Access page Domain')
+    user = current_user.username
+    queryuser = db.session.query(Users).filter(Users.username==user).first()
+    mail = queryuser.email
     return render_template('domain.html', user = user, mail=mail, zone=hosting, data=domain, name=name, mess=mess, valueres=value)
 
 @app.route('/core/adddomain', methods=['POST'])

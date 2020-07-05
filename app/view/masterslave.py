@@ -69,12 +69,12 @@ def addmaster():
     statusmaster=''
     if masterserver:
         logging.warning(master+' exist')
-        validate='You have already this server master'
-        return redirect(url_for('config', statusmaster=validate))
+        validate='Ya esta registrado'
+        return redirect(url_for('masterslaves', statusmaster=validate))
     elif slaveserver:
-        logging.warning('This server is slave')
-        validate='This server is slave'
-        return redirect(url_for('config', statusmaster=validate))
+        logging.warning(master+' This server is slave')
+        validate='Este es un servidor esclavo'
+        return redirect(url_for('masterslaves', statusmaster=validate))
     user = str(request.form['user'])
     password = str(request.form['password'])
     insertQuery = Master(master,user,password)
@@ -114,7 +114,7 @@ def addslave():
     db.session.add(insertQuery)
     db.session.commit()
     logging.info('Add slave '+slave+' '+user)
-    return redirect(url_for('config'))
+    return redirect(url_for('masterslaves'))
 
 @app.route('/core/deleteslave', methods=['POST'])
 @login_required

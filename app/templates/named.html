@@ -1,22 +1,22 @@
 {% extends 'base/base.html' %}
-{% block title %} DNSWEBADMIN Config {% endblock title%}
+{% block title %} dnsweb master/slaves {% endblock title%}
 {% block content %}
     <main class="container">
        <div class="row">
             <div class="card">
                 <div class="card-content">
-                <span class="card-title">Before to click on commit you must have one zone and a server master <a href="/masterslaves">here</a>.</span>
+                <span class="card-title"><b class="yellow">Advertencia</b>: antes de presionar en "cometer" agrega por lo menos un servidor maestro<a href="/masterslaves"> aquí</a></span>
                 {% if exist==False %}
                     <form method="POST" action="/core/allowquery">
-                        <p>Allow-query defines an match list of IP address(es) which are allowed to issue queries to the server. 
-                           If not specified all hosts are allowed to make queries (defaults to allow-query {any;};).</p><br>
+                        <p>Define una lista de IP address(es) clientes permitidas para consultar DNS.
+                           Si no espeficas alguna IP por default permite que cualquier segmento de red consulte</p><br>
                         <div class="form-field">
-                            <button class="btn waves-effect waves-green indigo darken-1" id="sendNewSms" type="submit" name="crearFile">commit
+                            <button class="btn waves-effect waves-green indigo darken-1" id="sendNewSms" type="submit" name="crearFile">cometer
                             </button>
                         </div>
                     </form><br>
                     <form method="POST">
-                    <P>Allow-query added:</p>
+                    <P>Lista IPs y segmentos de red permitas para realizar consultas:</p><br>
                     {% for acl in acls %}
                         <span class="green-text"><b>{{acl['ipacl']}}</b></span>
                         <button class="btn white" type="submit" name="delete_button" onclick="return confirm('Are you sure to delete?')" formaction="/core/deleteacl" value="{{acl['id']}}">
@@ -27,13 +27,13 @@
                     <form method="POST" action="/core/addacl"><br>
                     <div class="row">
                         <p class="red-text">{{ statusacl }}</p>
-                        <p>You can add IP client allow-queries.</p>
+                        <p>Agrega segemento de red por ejemplo 10.10.0.0/24 o IP 10.10.4.10</p><br>
                         <div class="input-field col s12 m6 l3">
                             <input placeholder="IPs allow-queries" id="acl" type="text" value="" class="validate" name="acl" required>
-                            <label for="acl">acls</label>
+                            <label for="acl">IP o segmento de red</label>
                         </div>
                         <div class="form-field">
-                            <button class="btn waves-effect waves-green green darken-2" type="submit" name="submit">add
+                            <button class="btn waves-effect waves-green green darken-2" type="submit" name="submit">Agregar
                             </button>
                         </div>
                     </div>
@@ -44,16 +44,19 @@
             <div class="card">
                 <div class="card-content">
                 {% if exist==False %}
+                    <span class="card-title"><b class="orange">Aviso</b>: Presionar en "cometer" si agregaste un nuevo servidor o servidores dns para configurarlos</span>
                     <form method="POST" action="/core/forwadcommit">
-                        <p>Configuration "forward".</p>
-                        <p>Forwards all requests to an outside resolving server and then caches the results to use for later queries.</p><br>
+                        <p>Con el forward configurado podras resolver todo lo que no definas por ejemplo paginas hacia internet,
+                        configurando otro servidor de dominio publico por ejemplo dns-google con el 8.8.8.8 o 8.8.4.4. Si no se
+                        configura esto no podra resolver dominios de paginas internet.
+                        </p><br>
                         <div class="form-field">
-                            <button class="btn waves-effect waves-green indigo darken-1" id="sendNewSms" type="submit" name="crearFile">commit
+                            <button class="btn waves-effect waves-green indigo darken-1" id="sendNewSms" type="submit" name="crearFile">cometer
                             </button>
                         </div>
                     </form><br>
                     <form method="POST">
-                    <P>Forwards added:</p>
+                    <P>DNS server externos:</p><br>
                     {% for forward in forwards %}
                         <span class="green-text"><b>{{forward['ipforward']}}</b></span>
                         <button class="btn white" type="submit" name="delete_button" onclick="return confirm('Are you sure to delete?')" formaction="/core/deleteforward" value="{{forward['id']}}">
@@ -64,13 +67,13 @@
                     <form method="POST" action="/core/addforward"><br>
                     <div class="row">
                         <p class="red-text">{{ statusforward }}</p>
-                        <p>You can add a new "forward".</p>
+                        <p>Agregar nuevo servidor DNS externo</p><br>
                         <div class="input-field col s12 m6 l3">
                             <input placeholder="Exemple 8.8.8.8 dns-google" id="forward" type="text" class="validate" name="forward" required>
-                            <label for="acl">forward</label>
+                            <label for="acl">IP servidor DNS</label>
                         </div>
                         <div class="form-field">
-                            <button class="btn waves-effect waves-green green darken-2" type="submit" name="submit">add
+                            <button class="btn waves-effect waves-green green darken-2" type="submit" name="submit">Agregar
                             </button>
                         </div>
                     </div>

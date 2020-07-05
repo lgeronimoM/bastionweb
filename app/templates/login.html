@@ -9,16 +9,17 @@
             <div class="col s12 m6 l6 white center-align cardbg" style="height: 300px;">
                     <img class="responsive-img" src="{{ url_for('static', filename='img/logo.png' ) }}" style="width: 230px; margin-top: 30px;">
             </div>
-            <div class="col s12 m6 l6 white cardbgLog" style="height: 300px;">
+            <div class="col s12 m6 l6 white" style="height: 300px;">
                 <form action="/login" method="POST">
                     <div class="row">
-                        <div class="input-field col s10 l10 m10" style="margin-top: 70px">
+                        <h6 class="center">Autentificate para acceder</h6>
+                        <div class="input-field col s10 l10 m10" style="margin-top: 15px">
                             <i class="material-icons prefix">account_circle</i>
-                            <input id="icon_prefix" placeholder="Username" type="text" data-length="15" name="username" required>
+                            <input id="icon_prefix" placeholder="Usuario" type="text" data-length="15" name="username" required>
                         </div>
                         <div class="input-field col s10 l10 m10">
                             <i class="material-icons prefix">settings_ethernet</i>
-                            <input id="icon_prefix" placeholder="Password" type="password" data-length="25" name="password" required>
+                            <input id="icon_prefix" placeholder="Contraseña" type="password" data-length="25" name="password" required>
                         </div>
                     </div>
                     <div class="form-field center-align">
@@ -29,12 +30,12 @@
                             {% if messages %}
                                 <ul class=flashes>
                                 {% for message in messages %}
-                                    <li class="center white-text">Error: {{ message }}.</li>
+                                    <li class="center red-text">Error: {{ message }}.</li>
                                 {% endfor %}
                                 </ul>
                             {% endif %}
-                        {% endwith %} 
-                    </div>               
+                        {% endwith %}
+                    </div>
                 </form>
             </div>  
         </div>

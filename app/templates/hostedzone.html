@@ -1,17 +1,17 @@
 {% extends 'base/base.html' %}
-{% block title %} Domain zones {% endblock title%}
+{% block title %} dnsweb {% endblock title%}
 {% block content %}
     <main class="container">
-        <h5>Register your domain zones here</h5>
+        <h5>Administracion y registros de Zonas de dominios</h5><br>
          <div class="row">
             <form method="POST" action="/core/addhostedzone">
                 <div class="input-field col s12 m6 l3">
-                    <input placeholder="name zone" id="value" type="text" class="validate" name="hostedZone" required>
-                    <label for="zone">zone</label>
+                    <input placeholder="zone domain" id="value" type="text" class="validate" name="hostedZone" required>
+                    <label for="zone">Nombre de la nueva Zona de Dominio</label>
                 </div>
                 <div class="input-field col s12 m6 l2">
                     <select class="blue-text text-darken-2" id="select" name="domain" required>
-                            <option value="" disabled selected>Select type domain</option>
+                            <option value="" disabled selected>Tipo de dominio</option>
                             <option value="com">com</option>
                             <option value="org">org</option>
                             <option value="com.mx">com.mx</option>
@@ -22,20 +22,20 @@
                 </div>
                 <div class="form-field">
                     <button class="btn waves-effect waves-green green darken-2" type="submit" name="Submit">
-                        <i class="material-icons left">add</i>
+                        Agregar
                     </button>
                 </div>
             </form>
         </div>
         <div class="row">
-        <h5>Domain Zones</h5>
+        <h5>Zonas de Dominios</h5>
         <form action="/deletedomainzone" method="POST">
             <table class="striped">
                 <thead>
                     <tr>
-                        <th>Zone</th>
-                        <th>Domain</th>
-                        <th>Edit/Remove</th>
+                        <th>Zona de dominio</th>
+                        <th>Tipo de dominio</th>
+                        <th>Editar/Borrar</th>
                     </tr>
                 </thead>
                 <tbody>

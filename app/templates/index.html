@@ -1,12 +1,13 @@
 {% extends 'base/base.html' %}
-{% block title %} DNSWEBADMIN {% endblock title%}
+{% block title %} dnsweb {% endblock title%}
 {% block content %}
     <main class="container">
-        <h4>Domain register stadistic:</h4><br>
         <div class="row">
+            <h5>Estadistica de registros por cambios en los dominios:</h5>
             <embed type="image/svg+xml" src='{{ graph|safe }}' />
         </div>
         <div class="row">
+            <h5>Mis dominios:</h5>
             <embed type="image/svg+xml" src='{{ pie|safe }}' style='max-width: 400px;' />
         </div>
     </main>    

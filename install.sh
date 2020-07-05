@@ -33,6 +33,8 @@ sudo cp properties.py /etc/dnsweb/
 sudo cp README.md /etc/dnsweb/
 sudo cp requirements.txt /etc/dnsweb/
 
+source /etc/dnsweb/venv/bin/activate
+
 sudo pip3 install -r /etc/dnsweb/requirements.txt
 
 sudo echo -e "
@@ -45,7 +47,7 @@ User=udnsweb
 Group=dnsweb
 WorkingDirectory=/etc/dnsweb
 Environment="PATH=/etc/dnsweb/venv/bin"
-ExecStart=/etc/dnsweb/venv/bin/gunicorn --workers 3 --bind 0.0.0.0:4000 wsgi:app
+ExecStart=/etc/dnsweb/venv/bin/gunicorn --workers 3 --bind 0.0.0.0:4000 main:app
 
 [Install]
 WantedBy=multi-user.target" > /etc/systemd/system/dnsweb.service
