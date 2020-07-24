@@ -322,7 +322,7 @@ def install_dns_playbook():
     file.close()
     loader = DataLoader()
     context.CLIARGS = ImmutableDict(tags={tagsexc}, listtags=False, listtasks=False, listhosts=False, syntax=False, connection='ssh',
-                    module_path=None, forks=10, remote_user='ansadmin', private_key_file=None,
+                    module_path=None, forks=10, remote_user=user, private_key_file=None,
                     ssh_common_args=None, ssh_extra_args=None, sftp_extra_args=None, scp_extra_args=None, become=True,
                     become_method='sudo', become_user='root', verbosity=True, check=False, start_at_task=None,
                     extra_vars={'ansible_ssh_user='+user+'', 'ansible_ssh_pass='+passwd+'', 'ansible_become_pass='+passwd+''})
