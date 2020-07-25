@@ -22,7 +22,8 @@
     mode: '640'
   notify: restart named
   tags: 
-    - configmaster 
+    - configmaster
+    - subdomain 
 
 - name: Configurar DNS esclavo
   template: 
@@ -43,7 +44,8 @@
     group: named
     mode: 0750
   tags: 
-    - configmaster 
+    - configmaster
+    - subdomain
 
 - name: Crear dominio {{ zoneDomain }}
   template:
@@ -55,7 +57,8 @@
   with_items: '{{ zoneDomain }}'
   notify: restart named
   tags: 
-    - configmaster 
+    - configmaster
+    - subdomain
 
 - name: Crear directorio de Zonas
   file:
@@ -84,7 +87,7 @@
     mode: 0640
   notify: restart named
   tags: 
-    - subdomain 
+    - subdomain
 
 - name: Empezar servicio de firewall.
   service:
@@ -117,6 +120,7 @@
   notify: restart named
   tags: 
     - allowquerymaster
+    - configmaster
 
 - name: Configurar named DNS esclavo
   template: 
@@ -128,3 +132,4 @@
   notify: restart named
   tags: 
     - allowqueryslave
+    - configslave

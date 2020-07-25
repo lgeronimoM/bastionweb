@@ -30,7 +30,9 @@ sudo cp requirements.txt /etc/dnsweb/
 sudo chown udnsweb.dnsweb /var/log/dnsweb -R
 sudo chown udnsweb.dnsweb /etc/dnsweb -R
 
-python3 -m venv /etc/dnsweb/env
+sudo python3 -m venv /etc/dnsweb/env
+
+sudo /etc/dnsweb/env/bin/activate
 
 sudo pip3 install -r /etc/dnsweb/requirements.txt
 
@@ -40,13 +42,15 @@ Description=Gunicorn instance to serve myproject
 After=network.target
 
 [Service]
-User=udnsweb
-Group=dnsweb
+User=root
+Group=root
 WorkingDirectory=/etc/dnsweb
 #Environment=PATH=/usr/local/bin
-ExecStart=/usr/local/bin/gunicorn --workers 3 --bind 0.0.0.0:4000 main:app
+ExecStart=/etc/dnsweb/env/bin/uwsgi --http-socket :4000 --plugin python3 --module main:app --processes 2 --threads 2
 
 [Install]
 WantedBy=multi-user.target" > /etc/systemd/system/dnsweb.service
+
+sudo deactivate
 
 sudo systemctl daemon-reload

@@ -1,18 +1,18 @@
-License
+Licencia
 -------
 BSD
 
-Author Information
+Autor
 ------------------
 Luis Manuel Geronimo Sandoval 
 
-#SysAdminOne 
+Canal de youtube #SysAdminOne
 
-Title
+Titulo
 ------------------
-DNSPOWERADMIN
+DNS Web
 
-Description
+Descripción
 ------------------
 Service BIND.
 
@@ -20,19 +20,22 @@ Aplicacion web con flask en python version 3 para la administracion de nombres d
 
 It is programmed in python version 3 and uses the flask micro framework for web development, its main configuration engine is the ansible automation tool and a Sqlite 3 database.
 
-Operation System DNS
+Sistema Operativo
 ------------------
-master: Centos7/8
+Para el maestro: Centos7/8 
+ 
+Para el esclavo: Centos7/8
 
-slave: Centos7/8
-
-Installation process
+Recursos
 ------------------
-#Dependencie:
+2 cpu
+2GB RAM
+10GB HDD
+internet
 
+Procesos de instalación
+------------------
 sudo yum install git
-
-#Install application:
 
 sudo cd /tmp
 
@@ -51,4 +54,3 @@ sudo systemctl start dnsweb
 sudo firewall-cmd --permanent --add-port=4000/tcp
 
 sudo firewall-cmd --reload
-
