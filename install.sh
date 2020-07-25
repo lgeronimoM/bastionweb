@@ -31,9 +31,9 @@ sudo cp -r env /etc/dnsweb/
 sudo chown udnsweb.dnsweb /var/log/dnsweb -R
 sudo chown udnsweb.dnsweb /etc/dnsweb -R
 
-#sudo python3 -m venv /etc/dnsweb/env
+sudo python3 -m venv /etc/dnsweb/env
 #sudo source /etc/dnsweb/env/bin/activate
-#sudo pip3 install -r /etc/dnsweb/requirements.txt
+sudo pip3 install -r /etc/dnsweb/requirements.txt -t /etc/dnsweb/env/bin/
 
 sudo echo -e "
 [Unit]
