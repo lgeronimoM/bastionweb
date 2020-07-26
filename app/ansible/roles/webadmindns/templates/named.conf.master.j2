@@ -6,7 +6,6 @@ acl "allowed" {
         10.190.0.0/16;
 };
 acl "slaves" {
-        192.168.3.101;
 };
 options {
         directory "/etc/named";
@@ -25,8 +24,8 @@ zone "mydomain.org" {
         file "/etc/named/zones/mydomain.org.zone";
         allow-transfer { slaves; };
 };
-zone "ejemplo2.com" {
+zone "ejemplo.com" {
         type master;
-        file "/etc/named/zones/ejemplo2.com.zone";
+        file "/etc/named/zones/ejemplo.com.zone";
         allow-transfer { slaves; };
 };
