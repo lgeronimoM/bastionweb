@@ -49,6 +49,4 @@ ExecStart=/usr/local/bin/uwsgi --http-socket :4000 --plugin python3 --module mai
 [Install]
 WantedBy=multi-user.target" > /etc/systemd/system/dnsweb.service
 
-sudo deactivate
-
 sudo systemctl daemon-reload
