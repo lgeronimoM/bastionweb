@@ -47,10 +47,10 @@ sudo chmod u+x install.sh
 
 sudo ./install.sh
 
-sudo systemctl start dnsweb
-
-#Enable port 4000 firewalld:
+#Habilitar puerto 4000 en el firewall
 
 sudo firewall-cmd --permanent --add-port=4000/tcp
 
 sudo firewall-cmd --reload
+
+sudo systemctl start dnsweb

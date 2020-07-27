@@ -15,13 +15,9 @@
     </header>
         <div class="navbar-fixed">
             <nav class="white">
-            <a href="#menu" class="sidenav-trigger" data-target="menu-side">
-                <li class="material-icons">menu</li>
-            </a>
                 <div class="nav-wrapper container">
-                <a href="/" class="brand-logo"><img class="responsive-img" src="{{ url_for('static', filename='img/logo.png' ) }}" style="width: 60px; margin-top: 10px;"></a>
+                <a href="#menu" class="brand-logo sidenav-trigger show-on-large" data-target="menu-side"><i class="material-icons black-text">menu</i></a><b style="margin-left: 50px;" class="black-text left">Menu</b>
                 <ul id="nav-mobile" class="right hide-on-med-and-down">
-                    <li style="margin-right: 50px;"><a href="#menu" class="sidenav-trigger show-on-large" data-target="menu-side"><i class="material-icons black-text">menu</i></a></li>
                     <li style="margin-right: 50px;"><a class="black-text" href="https://github.com/lgeronimoM/DNSPOWERADMIN">Proyecto Github</a></li>
                     <li><i class="material-icons grey-text">account_circle</i></li>
                     <li class="black-text" style="margin-right: 50px;">{{user}}</li>
@@ -51,9 +47,8 @@
             </ul>
         </div>   
         <div class="container section">
-            <a href="#menu" class="sidenav-trigger" data-target="menu-side">
-                <li class="material-icons">menu</li>
-            </a><b class="">Menu</b>
+            <img class="responsive-img" src="{{ url_for('static', filename='img/logo.png' ) }}" style="width: 60px; margin-top: 10px;">
+            dnsWEB
         </div>
         {% block content %} 
         
