@@ -1,0 +1,253 @@
+---
+# tasks file for roles/addCustomUsers
+
+######################### agregar usuario con PEM file y google  ############################
+
+- name: crear directorio de respaldos tipo cliente
+  file:
+    path: "{{ dirfile }}"
+    owner: root
+    group: root
+    state: directory
+  delegate_to: localhost
+  tags: adduser-mfa
+
+- name: Crear el grupo {{ grupo }} si no existe tipo cliente
+  group:
+    name: "{{ grupo }}"
+    state: present
+  tags: adduser-mfa
+
+- name: Creando el nuevo usuario {{ usuario }} con ssh-keygen tipo cliente
+  user:
+    name: "{{ usuario }}"
+    group: "{{ grupo }}"
+    comment: encontrack sa de cv
+    generate_ssh_key: yes
+    ssh_key_comment: encontrack
+    #ssh_key_passphrase: "{{ usuario }}"
+    ssh_key_type: rsa
+    ssh_key_bits: 4096
+    ssh_key_file: "/home/{{ usuario }}/.ssh/{{ namekey }}_{{ usuario }}.pem"
+  tags: adduser-mfa
+
+- name: Respaldar archivo a mi servidor local private key tipo cliente
+  fetch:
+    src: "/home/{{ usuario }}/.ssh/{{ namekey }}_{{ usuario }}.pem"
+    dest: "{{ dirfile }}/{{ namekey }}_{{ usuario }}.pem"
+    flat: yes
+    owner: ansadmin
+    group: sysadmin
+    mode: 0600
+  tags: adduser-mfa
+
+- name: Respaldar archivo a mi servidor Local public key tipo cliente
+  fetch:
+    src: "/home/{{ usuario }}/.ssh/{{ namekey }}_{{ usuario }}.pem.pub"
+    dest: "{{ dirfile }}/{{ namekey }}_{{ usuario }}.ppk"
+    flat: yes
+    owner: ansadmin
+    group: sysadmin
+    mode: 0600
+  tags: adduser-mfa
+
+- name: Gerando la autenticacion de archivo certificado bastion_hosts_{{ usuario }}.pem. tipo cliente
+  authorized_key:
+    user: "{{ usuario }}"
+    state: present
+    key: "{{ lookup('file', '{{ dirfile }}/{{ namekey }}_{{ usuario }}.ppk') }}"
+  tags: adduser-mfa
+
+- name: Generar Google-authenticator para {{ usuario }} tipo cliente
+  command: "runuser -l {{ usuario }} -c 'echo $(google-authenticator -t -d -f -r 3 -R 30 -W) > /tmp/google-auth-{{ usuario }}.txt'"
+  tags: adduser-mfa
+
+- name: Respaldar archivo google-auth-{{ usuario }} en {{ dirgoogle }}
+  fetch:
+    src: "/tmp/google-auth-{{ usuario }}.txt"
+    dest: "{{ dirgoogle }}/google-auth-{{ usuario }}.txt"
+    owner: ansadmin
+    group: ansadmin
+    flat: yes
+  tags: adduser-mfa
+
+- name: Eliminar archivo /tmp/google-auth-{{ usuario }}.txt en remote host tipo cliente
+  file:
+    path: "/tmp/google-auth-{{ usuario }}.txt"
+    state: absent
+  tags: adduser-mfa
+
+- name: Enviar archivo pem al usuario por mail tipo cliente
+  mail:
+    host: "{{ host_smtp }}"
+    port: "{{ port_smtp }}"
+    secure: starttls
+    username: "{{ user_smtp }}"
+    password: "{{ pass_smtp }}"
+    from: "{{ user_smtp }}"
+    to: "{{ usuario }}@encontrack.com, {{ email }}"
+    subject: Archivo PEM Bastion host.
+    body:  "Este es un correo para informarte que tu usuario {{ usuario }} fue dado de alta en el servidor bastion host con IP {{ ipbastion }} y su DNS publico {{ dnsbastion }}."
+    attach: 
+      - "{{ dirfile }}/{{ namekey }}_{{ usuario }}.pem"
+      - "{{ dirgoogle }}/google-auth-{{ usuario }}.txt"
+  delegate_to: localhost
+  tags: adduser-mfa
+
+######################### Eliminar usuario cliente ############################
+
+- name: Eliminar usuario {{ usuario }} 
+  user:
+    name: "{{ usuario }}"
+    state: absent
+    remove: yes
+  tags: deluser-mfa
+
+- name: Eliminar archivo private key
+  delegate_to: localhost
+  command: "rm -rf {{ dirfile }}/{{ namekey }}_{{ usuario }}.pem && {{ dirfile }}/{{ namekey }}_{{ usuario }}.ppk && {{ dirgoogle }}/google-auth-{{ usuario }}.txt"
+  args:
+    warn: false # set warn=false to prevent warning
+  tags: deluser-mfa
+
+- name: Enviar confirmacion de baja de usuario 
+  mail:
+    host: "{{ host_smtp }}"
+    port: "{{ port_smtp }}"
+    secure: starttls
+    username: "{{ user_smtp }}"
+    password: "{{ pass_smtp }}"
+    from: "{{ user_smtp }}"
+    to: luis.geronimo@encontrack.com
+    subject: Baja de usuarios.
+    body:  "Se elimina el siguiente usuario {{ usuario }} tipo cliente-bastionHosts con IP {{ ipbastion }} y su DNS publico {{ dnsbastion }}."
+  delegate_to: localhost
+  tags: deluser-mfa
+
+  ######################### Eliminar usuario Server ############################
+
+- name: Eliminar usuario {{ usuario }} 
+  user:
+    name: "{{ usuario }}"
+    state: absent
+    remove: yes
+  tags: deluser-server
+
+- name: Eliminar archivo private key
+  delegate_to: localhost
+  command: "rm -rf {{ dirfile }}/{{ namekey }}_{{ ipserver }}.pem && {{ dirfile }}/{{ namekey }}_{{ ipserver }}.ppk"
+  args:
+    warn: false # set warn=false to prevent warning
+  tags: deluser-server
+
+- name: Enviar confirmacion de baja de usuario
+  mail:
+    host: "{{ host_smtp }}"
+    port: "{{ port_smtp }}"
+    secure: starttls
+    username: "{{ user_smtp }}"
+    password: "{{ pass_smtp }}"
+    from: "{{ user_smtp }}"
+    to: luis.geronimo@encontrack.com
+    subject: Baja de usuarios.
+    body:  "Se elimina el siguiente usuario {{ usuario }} tipo server-bastionHosts con IP {{ ipbastion }} y su DNS publico {{ dnsbastion }}."
+  delegate_to: localhost
+  tags: deluser-server
+
+######################### Eliminar permisos de usuarios ############################
+
+- name:  Eliminar archivo private key remote server 
+  file:
+    path: "/home/{{ usuario }}/{{ namekey }}_{{ ipserver }}.pem"
+    state: absent
+  tags: delacces
+
+######################### Agregar permisos de usuarios ############################
+
+- name: Copia archivo private key
+  copy:
+    src: "{{ dirfile }}/{{ namekey }}_{{ ipserver }}.pem"
+    dest: "/home/{{ usuario }}/{{ namekey }}_{{ ipserver }}.pem"
+    owner: "{{ usuario }}"
+    group: root
+    mode: '600'
+  tags: permissions
+
+######################### Eliminar permisos de usuarios ############################
+
+- name: Eliminar archivo private key
+  file:
+    path: "/home/{{ usuario }}/{{ namekey }}_{{ ipserver }}.pem"
+    state: absent
+  tags: delete-permission
+
+######################### Solo agregar usuario con PEM file  ############################
+
+- name: Crear el grupo {{ grupo }} si no existe tipo server
+  group:
+    name: "{{ grupo }}"
+    state: present
+  tags: adduser-host
+
+- name: Creando el nuevo usuario {{ usuario }} con ssh-keygen tipo server
+  user:
+    name: "{{ usuario }}"
+    group: "{{ grupo }}"
+    comment: encontrack sa de cv
+    generate_ssh_key: yes
+    ssh_key_comment: encontrack
+    #ssh_key_passphrase: "{{ usuario }}"
+    ssh_key_type: rsa
+    ssh_key_bits: 4096
+    ssh_key_file: "/home/{{ usuario }}/.ssh/{{ namekey }}_{{ ipserver }}.pem"
+  tags: adduser-host
+
+- name: Respaldar archivo a mi servidor local private key tipo server
+  fetch:
+    src: "/home/{{ usuario }}/.ssh/{{ namekey }}_{{ ipserver }}.pem"
+    dest: "{{ dirfile }}/{{ namekey }}_{{ ipserver }}.pem"
+    flat: yes
+    owner: ansadmin
+    group: sysadmin
+    mode: 0600
+  tags: adduser-host
+
+- name: Respaldar archivo a mi servidor local public key tipo server
+  fetch:
+    src: "/home/{{ usuario }}/.ssh/{{ namekey }}_{{ ipserver }}.pem.pub"
+    dest: "{{ dirfile }}/{{ namekey }}_{{ ipserver }}.ppk"
+    flat: yes
+    owner: ansadmin
+    group: sysadmin
+    mode: 0600
+  tags: adduser-host
+
+- name: Gerando la autenticacion de archivo certificado bastion_hosts_{{ usuario }}.pem. tipo server
+  authorized_key:
+    user: "{{ usuario }}"
+    state: present
+    key: "{{ lookup('file', '{{ dirfile }}/{{ namekey }}_{{ ipserver }}.ppk') }}"
+  tags: adduser-host
+
+- name: Agregar permisos sudoes al grupo {{ grupo }}. tipo server
+  lineinfile:
+    path: /etc/sudoers
+    regexp: '^%{{ grupo }}	ALL=(ALL)       NOPASSWD: ALL'
+    line: '%{{ grupo }}      ALL=(ALL)       NOPASSWD: ALL'
+  tags: adduser-host
+
+- name: Enviar archivo pem al usuario por mail tipo server
+  mail:
+    host: "{{ host_smtp }}"
+    port: "{{ port_smtp }}"
+    secure: starttls
+    username: "{{ user_smtp }}"
+    password: "{{ pass_smtp }}"
+    from: "{{ user_smtp }}"
+    to: "{{ email }}"
+    subject: "Archivo PEM Bastion host".
+    body:  "Este es un correo para informarte que el usuario {{ usuario }} fue creado en el servidor {{ namekey }} con \nIP privada {{ ipserver }}"
+    attach:
+      - "{{ dirfile }}/{{ namekey }}_{{ ipserver }}.pem"
+  delegate_to: localhost
+  tags: adduser-host

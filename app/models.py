@@ -6,42 +6,49 @@ from flask_login import  UserMixin, current_user
 
 from app import db, cf
 
-class Domain(db.Model):
-    __tablename__ = "domain"
+class Servers(db.Model):
+    __tablename__ = "servers"
     id =  db.Column(db.Integer, primary_key=True, autoincrement=True)
-    name =  db.Column(db.String(50), nullable=False)
-    typevalue =  db.Column(db.String(50), nullable=False)
-    value =  db.Column(db.String(50), nullable=False)
+    hostname =  db.Column(db.String(50), nullable=False)
+    namekey = db.Column(db.String(50), nullable=False)
+    description =  db.Column(db.String(50), nullable=False)
+    dns =  db.Column(db.String(50), nullable=False)
+    tipe =  db.Column(db.String(50), nullable=False)
+    department =  db.Column(db.String(50), nullable=False)
+    localation =  db.Column(db.String(50), nullable=False)
+    ipadmin =  db.Column(db.String(50), nullable=False)
+    ipprod =  db.Column(db.String(50), nullable=False)
+    service =  db.Column(db.String(50), nullable=False)
+    hypervisor =  db.Column(db.String(50), nullable=False)
+    os =  db.Column(db.String(50), nullable=False)
+    ram =  db.Column(db.String(50), nullable=False)
+    cpu =  db.Column(db.String(50), nullable=False)
+    storage =  db.Column(db.String(50), nullable=False)
     active =  db.Column(db.Boolean, default=False, nullable=False)
-    host =  db.Column(db.Integer, db.ForeignKey('hosting.id'), nullable=False)
-    #host =  db.Column(db.String(50), db.ForeignKey('hosting.zone'), nullable=False)
-    zone =  db.relationship('Hosting', backref=db.backref('hosting', lazy=True))
-
+    
     def get_id(self):
         return self.id
 
-    def __init__(self, name=None, typevalue=None, value=None, active=None, host=None):
-        self.name = name
-        self.typevalue = typevalue
-        self.value = value
+    def __init__(self, hostname=None, namekey=None, description=None, dns=None, tipe=None, department=None, localation=None, ipadmin=None, ipprod=None, service=None, hypervisor=None, os=None, ram=None, cpu=None, storage=None, active=None):
+        self.hostname = hostname
+        self.namekey = namekey
+        self.description = description
+        self.dns = dns
+        self.tipe = tipe
+        self.department = department
+        self.localation = localation
+        self.ipadmin = ipadmin
+        self.ipprod = ipprod
+        self.service = service
+        self.hypervisor = hypervisor
+        self.os = os
+        self.ram = ram
+        self.cpu = cpu
+        self.storage = storage
         self.active = active
-        self.host = host
 
     def __repr__(self):
-        return  self.name  
-
-class Hosting(db.Model):
-    __tablename__ = "hosting"
-    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    zone = db.Column(db.String(50), nullable=False)
-    domain =  db.Column(db.String(50), nullable=False)
-
-    def __init__(self, zone=None, domain=None):
-        self.zone = zone
-        self.domain = domain
-
-    def __repr__(self):
-        return self.zone
+        return  self.username
 
 class Users(UserMixin, db.Model):
     __tablename__ = "users"
@@ -50,116 +57,77 @@ class Users(UserMixin, db.Model):
     password =  db.Column(db.String(50), nullable=False)
     email =  db.Column(db.String(50), nullable=False)
     area =  db.Column(db.String(50), nullable=False)
-    admin =  db.Column(db.Boolean, default=False, nullable=False)
-    id_rol =  db.Column(db.Integer, db.ForeignKey('rols.id'), nullable=False)
-    rol =  db.relationship('Rols', backref=db.backref('user', lazy=True))
+    group =  db.Column(db.String(50), nullable=False)
+    status =  db.Column(db.Boolean, default=False, nullable=False)
+    web =  db.Column(db.Boolean, default=False, nullable=False)
 
-    def __init__(self, username=None, password=None, email=None, area=None, admin=None, id_rol=None):
+    def get_id(self):
+        return self.id
+   
+    def __init__(self, username=None, password=None, email=None, area=None, group=None, status=None, web=None):
         self.username = username
         self.password = password
         self.email = email
         self.area = area
-        self.admin = admin
-        self.id_rol = id_rol
+        self.group = group
+        self.status = status
+        self.web = web
 
-    def is_authenticated(self):
-        return True
-    
-    def is_active(self):
-        return True
-    
-    def is_anonymous(self):
-        return False
+    def __repr__(self):
+        return  self.username
+
+class Access(db.Model):
+    __tablename__ = "access"
+    id =  db.Column(db.Integer, primary_key=True, autoincrement=True)
+    tipe =  db.Column(db.String(50), nullable=False)
+    keypair =  db.Column(db.String(50), nullable=False)
+    keyqr =  db.Column(db.String(50), nullable=False)
+    server =  db.Column(db.String(50), nullable=False)
+    user =  db.Column(db.String(50), nullable=False)
+    serverid =  db.Column(db.Integer, nullable=False)
+    userid =  db.Column(db.Integer, nullable=False)
     
     def get_id(self):
         return self.id
-    
-    def is_admin(self):
-        return self.admin
 
-    def __repr__(self):
-        return '<Usuario %r>' % self.username
-#----------------------------------------------------------------------
-class Rols(db.Model):
-    __tablename__ = "rols"
-    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    rolname = db.Column(db.String(50), nullable=False)
-
-    def __repr__(self):
-        return self.rolname
-
-class Register(db.Model):
-    __tablename__ = "register"
-    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    register = db.Column(db.Integer, nullable=False)
-    registerdate = db.Column(db.String(50), nullable=False)
-    registertype = db.Column(db.String(50), nullable=False)
-    registerdomain = db.Column(db.String(50), nullable=False)
-
-    def __init__(self, register=None, registerdate=None, registertype=None, registerdomain=None):
-        self.register = register
-        self.registerdate = registerdate
-        self.registertype = registertype
-        self.registerdomain = registerdomain
-
-    def __repr__(self):
-        return self.register
-
-class Master(db.Model):
-    __tablename__ = "master"
-    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    ipmaster = db.Column(db.String(50), nullable=False)
-    user = db.Column(db.String(50), nullable=False)
-    password = db.Column(db.String(50), nullable=False)
-
-    def __init__(self, ipmaster=None, user=None, password=None):
-        self.ipmaster = ipmaster
+    def __init__(self, tipe=None, keypair=None, keyqr=None, server=None, user=None,serverid=None, userid=None):
+        self.tipe = tipe
+        self.keypair = keypair
+        self.keyqr = keyqr
+        self.server = server
         self.user = user
-        self.password = password
+        self.serverid = serverid
+        self.userid = userid
 
     def __repr__(self):
-        return self.ipmaster
+        return  self.tipe
 
-class Slaves(db.Model):
-    __tablename__ = "slave"
-    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    ipslave = db.Column(db.String(50), nullable=False)
-    user = db.Column(db.String(50), nullable=False)
-    password = db.Column(db.String(50), nullable=False)
+class Bastion(db.Model):
+    __tablename__ = "bastion"
+    id =  db.Column(db.Integer, primary_key=True, autoincrement=True)
+    dns =  db.Column(db.String(50), nullable=False)
+    bastion =  db.Column(db.String(50), nullable=False)
+    idbastion =  db.Column(db.String(50), nullable=False)
+    location =  db.Column(db.String(50), nullable=False)
+    ip= db.Column(db.String(50), nullable=False)
 
-    def __init__(self, ipslave=None, user=None, password=None):
-        self.ipslave = ipslave
-        self.user = user
-        self.password = password
+    def get_id(self):
+        return self.id
 
-    def __repr__(self):
-        return self.ipslave
-
-class Acls(db.Model):
-    __tablename__ = "acl"
-    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    ipacl = db.Column(db.String(50), nullable=False)
-
-    def __init__(self, ipacl=None):
-        self.ipacl = ipacl
+    def __init__(self, dns=None, bastion=None, idbastion=None, location=None, ip=None):
+        self.dns = dns
+        self.bastion = bastion
+        self.idbastion = idbastion
+        self.location = location
+        self.ip = ip
+       
 
     def __repr__(self):
-        return self.ipacl
-
-class Forwards(db.Model):
-    __tablename__ = "forward"
-    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    ipforward = db.Column(db.String(50), nullable=False)
-
-    def __init__(self, ipforward=None):
-        self.ipforward = ipforward
-
-    def __repr__(self):
-        return self.ipforward
+        return  self.bastion
 
 class AdminView(AdminIndexView):
     def is_accessible(self):
         return current_user.is_authenticated
     def inaccessible_callback(self, username, **kwargs):
-        # redirect to login page if user doesn't have access
+        #redirect to login page if user doesn't have access
         return redirect(url_for('home'))

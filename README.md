@@ -14,9 +14,9 @@ DNS Web
 
 Descripción
 ------------------
-Servicio de dns a instalar "BIND".
+Servicio de dns a instalar "ansible".
 
-Aplicacion web con flask en python version 3 para la administracion de nombres de dominio en una red de intranet. 
+Aplicacion web con flask en python version 3 para la administracion de accesos de usuarios. 
 
 Sistema Operativo
 ------------------
@@ -45,9 +45,9 @@ sudo chmod u+x install.sh
 
 sudo ./install.sh
 
-#Habilitar puerto 4000 en el firewall
+#Habilitar puerto 5000 en el firewall
 
-sudo firewall-cmd --permanent --add-port=4000/tcp
+sudo firewall-cmd --permanent --add-port=5000/tcp
 
 sudo firewall-cmd --reload
 

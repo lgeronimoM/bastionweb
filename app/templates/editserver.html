@@ -1,0 +1,134 @@
+{% extends 'base/base.html' %}
+{% block title %} bastion editserver {% endblock title%}
+{% block content %}
+    <main class="container">
+        <div class="row">
+            <form method="POST" action="/updateserver">
+                <p>Editar servidor</p>
+                <input id="idf" type="hidden" value="{{apiservers.id}}" class="validate" name="idf" required>
+                <div class="row">
+                    <div class="input-field col s12 m5 l5">
+                        <input placeholder="nuevo hostname" id="value" type="text" value="{{apiservers.hostname}}" class="validate" name="hostname" required>
+                        <label for="hostname">Hostname</label>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="input-field col s12 m7 l7">
+                        <input placeholder="name" id="value" type="text" value="{{apiservers.namekey}}" class="validate" name="name" required>
+                        <label for="name clave">Nombre clave</label>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="input-field col s12 m7 l7">
+                        <input placeholder="descripcion" id="value" type="text"  value="{{apiservers.descripcion}}" class="validate" name="descripcion" required>
+                        <label for="descripcion">Descripción</label>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="input-field col s12 m7 l7">
+                        <input placeholder="dns" id="value" type="text"  value="{{apiservers.dns}}" class="validate" name="dns" required>
+                        <label for="dns">DNS</label>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="input-field col s12 m4 l4">
+                        <select class="blue-text text-darken-2" id="select"  value="{{apiservers.tipo}}" name="tipe" required>
+                                <option value="{{apiservers.tipo}}"  selected>{{apiservers.tipo}}</option>
+                                <option value="virtual">virtual</option>
+                                <option value="fisico">fisico</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="input-field col s12 m4 l4">
+                        <input placeholder="departamento" id="value" type="text"  value="{{apiservers.departamento}}" class="validate" name="departamento" required>
+                        <label for="departamento">Departamento</label>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="input-field col s12 m4 l4">
+                        <select class="blue-text text-darken-2" id="select"  value="{{apiservers.ubicacion}}" name="localidad" required>
+                                <option value="{{apiservers.ubicacion}}" selected>{{apiservers.ubicacion}}</option>
+                                <option value="miami">miami</option>
+                                <option value="aws">aws</option>
+                                <option value="qro">qro</option>
+                                <option value="cdmx-cua">cdmx-cua</option>
+                                <option value="cdmx-chi">cdmx-chi</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="input-field col s12 m6 l6">
+                        <input placeholder="ipadmin" id="value" type="text"  value="{{apiservers.ipadmin}}" class="validate" name="ipadmin" required>
+                        <label for="ipadmin">IP Administración server</label>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="input-field col s12 m6 l6">
+                        <input placeholder="ippro" id="value" type="text"  value="{{apiservers.ipprod}}" class="validate" name="ippro" required>
+                        <label for="ippro">IP producción server</label>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="input-field col s12 m5 l5">
+                        <input placeholder="servicio" id="value" type="text" value="{{apiservers.servicio}}" class="validate" name="servicio" required>
+                        <label for="servicio">Servicio</label>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="input-field col s12 m4 l4">
+                        <input placeholder="Hipervisor" id="value" type="text" value="{{apiservers.hypervisor}}" class="validate" name="hipervisor" required>
+                        <label for="Hipervisor">Hipervisor</label>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="input-field col s12 m6 l6">
+                        <input placeholder="sistema" id="value" type="text" value="{{apiservers.sistema}}" class="validate" name="sistema" required>
+                        <label for="sistema">Sistema Operativo</label>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="input-field col s12 m3 l3">
+                        <input placeholder="ram" id="value" type="text" value="{{apiservers.ram}}" class="validate" name="ram" required>
+                        <label for="ram">RAM en GB</label>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="input-field col s12 m3 l3">
+                        <input placeholder="cpu" id="value" type="text" value="{{apiservers.cpu}}" class="validate" name="cpu" required>
+                        <label for="cpu">CPU cantidad</label>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="input-field col s12 m3 l3">
+                        <input placeholder="disco" id="value" type="text" value="{{apiservers.almacenamiento}}" class="validate" name="disco" required>
+                        <label for="disco">Espacio en GB de disco </label>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="input-field col s12 m6 l3">
+                        <select class="blue-text text-darken-2" id="select" name="estatus" required>
+                            {% if apiservers.estado == True %}
+                                <option value="1" selected>activo</option>
+                            {% else %}
+                                <option value="0" selected>desactivo</option>
+                            {% endif %}
+                            <option value="1">activo</option>
+                            <option value="0">desactivo</option>
+                        </select>
+                    </div>
+                </div>
+               <div class="row">
+                    <div class="form-field">
+                        <button class="btn waves-effect waves-green green darken-2" type="submit" name="edit_button">Modificar
+                        </button>
+                        <button class="btn red" type="submit" formmethod="get" formnovalidate="novalidate" formaction="/servers" name="cancelar" >cancelar
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </main>    
+    <!-- Compiled and minified JavaScript -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+{% endblock content %}

@@ -1,0 +1,209 @@
+{% extends 'base/base.html' %}
+{% block title %} bastion web {% endblock title%}
+{% block content %}
+    <main class="container">
+        {% if exist==False %}
+        <div class="row">
+            <form method="POST" action="/addbastion">
+                <p>Selecciona tu servidor BastionHost. Si aun no has agregado servidor<a href="/servers"> click aquí</a></p>
+                <div class="input-field col s16 m3 l3">
+                    <select class="blue-text text-darken-2" id="select" name="server" required>
+                        <option value="" disabled selected>Seleccion el servidor</option>
+                        {% for res in apiservers %}
+                        <option value="{{res['id']}}">{{ res['hostname'] }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="form-field">
+                    <button class="btn waves-effect waves-green blue darken-2" type="submit" name="Submit">
+                        Agregar
+                    </button>
+                </div>
+            </form>
+        </div>
+        {% endif %}
+        {% if exist==True %}
+        <div class="row">
+            <div class="col s12 m6 l6">
+                <form method="POST" action="/deletebastion">
+                    <p>Servidor seleccionado como bastion <b class="green-text">{{apibastion['bastion']}}</b></p>
+                    <input type="hidden" value="{{apibastion['id']}}" class="validate" name="idf" required>
+                    <button class="btn red" type="submit" name="submit" >Eliminar
+                    </button>
+                </form>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col s12 m12 l6">
+                <div class="card white">
+                    <form method="POST" action="/addbastionclient">
+                        <p class="center">Generar acceso Cliente-BationHost + MFA</p>
+                        <div class="input-field col s12 m10 l10">
+                            <select class="blue-text text-darken-2" id="select" name="user" required>
+                                <option value="" disabled selected>Seleccion el usuario</option>
+                                {% for res in apiusers %}
+                                <option value="{{res['id']}}">{{ res['username'] }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="card-action">
+                            <div class="form-field">
+                                <button class="btn waves-effect waves-green blue darken-2" type="submit" name="Submit">
+                                    Generar
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="col s12 m12 l6">
+                <div class="card white">
+                    <form method="POST" action="/addbastionserver">
+                        <p class="center"> Generar acceso BationHost-Servidor</p>
+                        <div class="input-field col s12 m6 l6">
+                            <select class="blue-text text-darken-2" id="select" name="server" required>
+                                <option value="" disabled selected>Seleccion el servidor</option>
+                                {% for res in apiservers %}
+                                <option value="{{res['id']}}">{{ res['hostname'] }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="input-field col s12 m6 l6">
+                            <select class="blue-text text-darken-2" id="select" name="user" required>
+                                <option value="" disabled selected>Seleccion el usuario</option>
+                                {% for res in apiusers %}
+                                <option value="{{res['id']}}">{{ res['username'] }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="card-action">
+                            <div class="form-field">
+                                <button class="btn waves-effect waves-green blue darken-2" type="submit" name="Submit">
+                                    Generar
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            {% with messages = get_flashed_messages() %}
+                    {% if messages %}
+                        <ul class=flashes>
+                        {% for message in messages %}
+                            <li class="center red-text">Error: {{ message }}.</li>
+                        {% endfor %}
+                        </ul>
+                    {% endif %}
+                {% endwith %}
+        </div>
+        <div class="row">
+            <form method="GET" action="/bastion">
+            <h5>Filtrar accesos de usuario</h5>
+                <div class="input-field col s12 m6 l6">
+                    <select class="blue-text text-darken-2" id="select" name="filteruser" required>
+                        <option value="" disabled selected>Selecciona el usuario aquí</option>
+                        {% for res in apiusers %}
+                            <option value="{{res['id']}}">{{res['username']}}</option>
+                        {% endfor %}
+                    </select>
+                    <div class="form-field">
+                        <button class="btn waves-effect waves-green green darken-2" type="submit">filtrar
+                        </button>
+                    </div>
+                </div>
+            </form>
+            {% if name %}
+                <h6>Usuario: <b class="green-text text-darken-2">{{name}}</b>
+                <a href="/bastion" class="waves-effect waves-light btn red darken-2">Remover filtro</a></h6>
+            {% endif %}
+        </div>
+        {% endif %}
+        <div class="row">
+            <h5>Alta de accesos</h5>
+            <table class="striped">
+                <thead>
+                    <tr>
+                        <th>Usuario</th>
+                        <th>Servidor</th>
+                        <th>Tipo Acceso</th>
+                        <th>Archivo Key</th>
+                        <th>Archivo QR</th>
+                        <th>Regenerar</th>
+                        <th>Reenviar</th>
+                        <th>Borrar</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for res in data.items %}
+                    <tr>
+                        <td>{{res['user']}}</td>
+                        <td>{{res['server']}}</td>
+                        <td>{{res['tipe']}}</td>
+                        <td>{{res['keypair']}}</td>
+                        <td>{{res['keyqr']}}</td>
+                        <td>
+                            <form action="/combastion" method="POST">
+                                <input id="tipe" type="hidden" value="{{res['tipe']}}" class="validate" name="tipe" required>
+                                <input id="user" type="hidden" value="{{res['userid']}}" class="validate" name="user" required>
+                                <input id="server" type="hidden" value="{{res['serverid']}}" class="validate" name="server" required>
+                                <input id="server" type="hidden" value="{{res['id']}}" class="validate" name="idf" required>
+                                <button class="btn white" type="submit" name="submit" >
+                                    <i class="material-icons black-text">settings</i>
+                                </button>
+                            </form>
+                        </td>
+                        <td> 
+                            <form action="/message" method="POST">
+                                <input id="idaccess" type="hidden" value="{{res['id']}}" class="validate" name="idaccess" required>
+                                <input id="iduser" type="hidden" value="{{res['userid']}}" class="validate" name="iduser" required>
+                                <button class="btn white" type="submit" name="submit">
+                                        <i class="material-icons black-text">send</i>
+                                </button>
+                            </form>
+                        </td>
+                        <td>
+                            <form action="/deleteaccess" method="POST">
+                                <input id="tipe" type="hidden" value="{{res['tipe']}}" class="validate" name="tipe" required>
+                                <input id="user" type="hidden" value="{{res['userid']}}" class="validate" name="user" required>
+                                <input id="server" type="hidden" value="{{res['serverid']}}" class="validate" name="server" required>
+                                <input id="server" type="hidden" value="{{res['id']}}" class="validate" name="idf" required>
+                                <button class="btn white" type="submit" name="submit" onclick="return confirm('Are you sure to delete?')">
+                                    <i class="material-icons black-text">delete</i>
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                    
+                </tbody>
+            </table>
+            <div class="center">
+                <ul class="pagination">
+
+                {% if data.has_prev %}
+                    <li class="waves-effect"><a class="page-link" href="{{ url_for('bastion', page_num=data.prev_num) }}"><i class="material-icons">chevron_left</i></a></li>
+                {% else %}
+                    <li class="disabled"><span><i class="material-icons">chevron_left</i></span>
+                {% endif %}
+                    </li>
+
+                {% for page in data.iter_pages(left_edge=3, right_edge=3) %}
+                {% if page %}
+                <li class="waves-effect"><a href="{{ url_for('bastion', page_num=page) }}">{{ page }}</a></li>
+                {% else %}
+                <li class="disabled"><a href="#">…</a></li> 
+                {% endif %}
+                {% endfor %}
+
+                {% if data.has_next %}
+                    <li class="waves-effect"><a href="{{ url_for('bastion', page_num=data.next_num) }}"><i class="material-icons">chevron_right</i></a></li>
+                {% else %}
+                    <li class="disabled"><span><i class="material-icons">chevron_right</i></span>
+                {% endif %}
+                        
+                </ul>
+            </div>
+        </div>
+    </main>    
+
+{% endblock content %}  

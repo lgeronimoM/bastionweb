@@ -1,7 +1,27 @@
 {% extends 'base/base.html' %}
-{% block title %} dnsweb users {% endblock title%}
+{% block title %} bastion users {% endblock title%}
 {% block content %}
     <main class="container">
+        <div class="row"><br>
+            {% with messages = get_flashed_messages() %}
+                {% if messages %}
+                    <ul class=flashes>
+                    {% for message in messages %}
+                        <li class="center red-text">Error: {{ message }}.</li>
+                    {% endfor %}
+                    </ul>
+                {% endif %}
+            {% endwith %}
+            <form method="POST" action="/adduser">
+                <p class="red-text">{{statususer}}</p>
+                <div class="row">
+                    <div class="form-field">
+                        <button class="btn waves-effect waves-green green darken-2" type="submit" name="edit_button">Agregar usuario 
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
         <div class="row">
             <div class="card">
                 <div class="card-content">
@@ -13,24 +33,64 @@
                                 <th>Usuario</th>
                                 <th>Correo</th>
                                 <th>Area</th>
+                                <th>Grupo</th>
+                                <th>Activo</th>
+                                <th>Acceso Web</th>
+                                <th>Editar</th>
                                 <th>Borrar</th>
                             </tr>
                         </thead>
                         <tbody>
-                            {% for name in names%}
+                            {% for user in data.items %}
                             <tr>
                                 <td>
-                                    {{name['username']}}
+                                    {{user['username']}}
                                 </td>
                                 <td>
-                                    {{name['email']}}
+                                    {{user['email']}}
                                 </td>
                                 <td>
-                                    {{name['area']}}
+                                    {{user['area']}}
                                 </td>
                                 <td>
-                                    <form method="POST" action="/core/deleteuser">
-                                        <button class="btn white" type="submit" name="delete_button" onclick="return confirm('Are you sure to delete?')" value="{{name['id']}}">
+                                    {{user['group']}}
+                                </td>
+                                <form method="POST" action="/updateuser">
+                                <td>
+                                    <div class="switch">
+                                        <label>no
+                                        {% if user['status'] == True %}
+                                            <input type="checkbox" checked="checked" name="checkactive" value="1">
+                                            <span class="lever"></span>
+                                        {% else %}
+                                            <input type="checkbox" name="checkactive" value="0">
+                                            <span class="lever"></span>
+                                        {% endif %}
+                                        si</label>
+                                    </div>  
+                                </td>
+                                <td>
+                                    <div class="switch">
+                                        <label>no
+                                        {% if user['web'] == True %}
+                                            <input type="checkbox" checked="checked" name="checkweb" value="on">
+                                            <span class="lever"></span>
+                                        {% else %}
+                                            <input type="checkbox" name="checkweb" value="off">
+                                            <span class="lever"></span>
+                                        {% endif %}
+                                        si</label>
+                                    </div>
+                                </td>
+                                <td>
+                                    <button class="btn white" type="submit" name="conf"  value="{{user['id']}}">
+                                        <i class="material-icons black-text">settings</i>
+                                    </button>
+                                </td>
+                                </form>
+                                <td>
+                                    <form method="POST" action="/deleteuser">
+                                        <button class="btn white" type="submit" name="id" onclick="return confirm('Are you sure to delete?')" value="{{user['id']}}">
                                             <i class="material-icons black-text">delete</i>
                                         </button>
                                     </form>
@@ -39,40 +99,47 @@
                             {% endfor %}
                         </tbody>
                     </table>
+                        <div class="center">
+                            <ul class="pagination">
+
+                            {% if data.has_prev %}
+                                <li class="waves-effect"><a class="page-link" href="{{ url_for('users', page_num=data.prev_num) }}"><i class="material-icons">chevron_left</i></a></li>
+                            {% else %}
+                                <li class="disabled"><span><i class="material-icons">chevron_left</i></span>
+                            {% endif %}
+                                </li>
+
+                            {% for page in data.iter_pages(left_edge=3, right_edge=3) %}
+                            {% if page %}
+                            <li class="waves-effect"><a href="{{ url_for('users', page_num=page) }}">{{ page }}</a></li>
+                            {% else %}
+                            <li class="disabled"><a href="#">…</a></li> 
+                            {% endif %}
+                            {% endfor %}
+
+                            {% if data.has_next %}
+                                <li class="waves-effect"><a href="{{ url_for('users', page_num=data.next_num) }}"><i class="material-icons">chevron_right</i></a></li>
+                            {% else %}
+                                <li class="disabled"><span><i class="material-icons">chevron_right</i></span>
+                            {% endif %}
+                                    
+                            </ul>
+                        </div>
                     </div>
-                    <div class="row"><br>
-                    <form method="POST" action="/core/adduser">
-                    <p class="red-text">{{statususer}}</p>
-                    <p>Crear nuevo usuario acceso web</p><br>
-                    <div class="input-field col s12 m6 l3">
-                            <input placeholder="username" id="username" type="text" class="validate" name="username" required>
-                            <label for="username">Usuario</label>
-                        </div>
-                        <div class="input-field col s12 m6 l3">
-                            <input placeholder="password" id="password" type="password" class="validate" name="password" required>
-                            <label for="password">Contraseña</label>
-                        </div>
-                        <div class="input-field col s12 m6 l3">
-                            <input placeholder="email" id="email_inline" type="email" class="validate" name="email" required>
-                            <label for="email_inline">Correo</label>
-                        </div>
-                        <div class="input-field col s12 m6 l3">
-                            <input placeholder="area" id="area" type="text" class="validate" name="area" required>
-                            <label for="area">Area de trabajo</label>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="form-field">
-                            <button class="btn waves-effect waves-green green darken-2" type="submit" name="edit_button">Agregar
-                            </button>
-                        </div>
-                    </div>
-                    </form>
                 </div>
             </div>
         </div>
     </main>    
     <!-- Compiled and minified JavaScript -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
-
+    <script>
+    function toggle_check(checkweb) {
+      if (checkweb.value=="on") {
+        checkweb.value="off";
+      }
+      else {
+        checkweb.value="on";
+      }
+    }
+    </script>
 {% endblock content %}

@@ -1,0 +1,20 @@
+---
+# vars file for roles/addCustomUsers
+
+usuario: "luis.geronimo"
+grupo: "GroupTI"
+email: "luis.geronimo@encontrack.com"
+dirfile: "/mnt/c/Users/LP-0220/Documents/Desarrollos/flask/bastionWEB/app/ansible/PEMFiles/luis.geronimo"
+dirgoogle: "/mnt/c/Users/LP-0220/Documents/Desarrollos/flask/bastionWEB/app/ansible/google-auth"
+
+# SERVER ACCESS
+
+namekey: "ansible_sis"
+ipserver: "192.168.3.106"
+
+# vars config smtp server
+
+host_smtp: "smtp.office365.com"
+port_smtp: "587"
+user_smtp: ""
+pass_smtp: ""

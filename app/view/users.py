@@ -3,7 +3,7 @@ import os, requests, json, sys
 
 # APP MVC
 from app import app, cf, login_manager, db
-from app.models import Users, Hosting, Domain, Register, Master, Slaves, Acls, Forwards
+from app.models import Servers, Users
 
 # MAIL
 import email, smtplib, ssl
@@ -11,15 +11,6 @@ from email import encoders
 from email.mime.base import MIMEBase
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
-
-#packages ansible
-from ansible import context
-from ansible.cli import CLI
-from ansible.module_utils.common.collections import ImmutableDict
-from ansible.executor.playbook_executor import PlaybookExecutor
-from ansible.parsing.dataloader import DataLoader
-from ansible.inventory.manager import InventoryManager
-from ansible.vars.manager import VariableManager
 
 # Files yaml
 import yaml
@@ -42,7 +33,7 @@ import os, requests, json
 from flask_login import UserMixin, login_user, login_required, logout_user, current_user
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy import desc
-from sqlalchemy import and_
+from sqlalchemy import and_, or_
 
 LOG_FILENAME = datetime.now().strftime(cf.LOG_DIR)
 for handler in logging.root.handlers[:]:
@@ -51,71 +42,127 @@ logging.basicConfig(filename=LOG_FILENAME,level=cf.LOG_LEVEL)
 logging.info('Comenzando la aplicacion...')
 
 ############################################# manage users ####################################
-@app.route('/users')
+
+url_api_ansible = "http://"+cf.SERVER+":"+str(cf.PRTO)+"/core/v1.0/ansible"
+headers = {"Content-type": "application/json"}
+urlservers = cf.APISERVERS
+urlusers = cf.APIUSERS
+urlbastion = cf.APIBASTION
+urlaccess = cf.APIACCESS
+
+@app.route('/users', methods=['GET'], defaults={"page_num": 1})
+@app.route('/users/<int:page_num>', methods=['GET'])
 @login_required
-def users():
+def users(page_num):
     statususer = ''
     if request.args.get('statususer'):
         statususer=request.args.get('statususer')
-    query=db.session.query(Users).filter().all()
+    logging.info('Access page users')
+    user = current_user.username
+    apiusers=db.session.query(Users).paginate(per_page=5, page=page_num, error_out=True)
+    queryuser = db.session.query(Users).filter(Users.username==user).first()
+    mail = queryuser.email
+    return render_template('users.html', user=user, data=apiusers, mail=mail)
+
+@app.route('/adduser', methods=['POST'])
+@login_required
+def adduser():
     user = current_user.username
     queryuser = db.session.query(Users).filter(Users.username==user).first()
     mail = queryuser.email
-    db.session.commit()
-    logging.info('Access page user')
-    return render_template('users.html', user=user, mail=mail, names=query, statususer=statususer)
+    return render_template('adduser.html', user=user, mail=mail)
 
-@app.route('/core/adduser', methods=['POST'])
+@app.route('/comadduser', methods=['POST'])
 @login_required
-def adduser():
-    name = str(request.form['username'])
-    user = db.session.query(Users).filter(Users.username == name).first()
-    validate=''
-    if user:
-        validate='This user already exist'
-        return redirect(url_for('users', statususer=validate))
-    password = str(request.form['password'])
-    email = str(request.form['email'])
-    area = str(request.form['area'])
-    insertQuery = Users(name,password,email,area,True,1)
-    db.session.add(insertQuery)
-    db.session.commit()
-    logging.info('Add user '+name+' '+area)
-    return redirect(url_for('users'))
-
-@app.route('/core/deleteuser', methods=['POST'])
-@login_required
-def deleteuser():
-    if request.form['delete_button']:
-        logging.info('delete user')
-        idf = int(request.form['delete_button'])
-        db.session.query(Users).filter(Users.id == idf).delete(synchronize_session=False)
+def comadduser():
+    user = str(request.form['username'])
+    passwd = str(request.form['password'])
+    mail = str(request.form['email'])
+    dep = str(request.form['area'])
+    groups = str(request.form['group'])
+    active = request.form.get('useractive')
+    accessweb = request.form.get('webaccess')
+    queryuser =  db.session.query(Users).filter(or_(Users.username==user, Users.email==mail)).first()
+    if queryuser:
+        flash('Ya existe '+user+' o el '+mail+' verificalo')
+        logging.warning('Ya tiene acceso a bastion '+user)
+        return redirect(url_for('users'))
+    else:
+        if active:
+            active=True
+        else:
+            active=False
+        if accessweb:
+            accessweb=True
+        else:
+            accessweb=False
+        insertQuery = Users(user,passwd,mail,dep,groups,active,accessweb)
+        db.session.add(insertQuery)
+        logging.info('Add user'+' '+user)
         db.session.commit()
         return redirect(url_for('users'))
+
+@app.route('/deleteuser', methods=['POST'])
+@login_required
+def deleteuser():
+    idf = int(request.form['id'])
+    url = cf.APIUSERS
+    hosting = requests.get(url, headers=headers, verify=False).json()
+    db.session.query(Users).filter(Users.id == idf).delete(synchronize_session=False)
+    db.session.commit()
+    return redirect(url_for('users'))
+"""
+@app.route('/edituser', methods=['POST'])
+@login_required
+def edituser():
+    idf = request.form['update_button']
+    url = cf.APIUSERS+'/'+idf
+    apiusers = requests.get(url, headers=headers, verify=False).json()
+    user = current_user.username
+    queryuser = db.session.query(Users).filter(Users.username==user).first()
+    mail = queryuser.email
+    return render_template('edituser.html', user=user, mail=mail, apiusers=apiusers)
+"""
+@app.route('/updateuser', methods=['POST'])
+@login_required
+def updateuser():
+    idf=int(request.form['conf'])
+    active = request.form.get('checkactive')
+    webaccess = request.form.get('checkweb')
+    if active:
+        active=True
+    else:
+        active=False
+    if webaccess:
+        webaccess=True
+    else:
+        webaccess=False
+    db.session.query(Users).filter(Users.id == idf).update({'status':active, 'web': webaccess})
+    db.session.commit()
+    logging.info('Edit user')
+    return redirect(url_for('users'))
 
 ######################################### Login ############################3########
 
 @app.route('/login', methods=['POST'])
 def login():
-    POST_USERNAME = str(request.form['username'])
-    POST_PASSWORD = str(request.form['password'])
-    url = cf.APIUSER
-    content = {
-            "username": POST_USERNAME,
-            "password": POST_PASSWORD }
-    headers = {'Content-type': 'application/json'}
-    result = requests.post(url, json=content, headers=headers, verify=False)
-    c = result.json()
-    userdata=c['data']['username']
-    if c['success']==True:
-        logging.info('Correct user '+userdata)
-        actUser = Users.query.filter_by(username=userdata).first()
-        login_user(actUser)
-        return redirect(url_for('home')) 
+    post_user = str(request.form['username'])
+    post_pass = str(request.form['password'])
+    validateUser = Users.query.filter(and_(Users.username==post_user, Users.password==post_pass)).first()
+    if validateUser:
+        if validateUser.web:
+            logging.info('User '+post_user+' ok')
+            getUser = Users.query.filter_by(username=post_user).first()
+            login_user(getUser, remember=False)
+            return redirect(url_for('home'))
+        else:
+            flash(post_user+' no tienen permisos suficientes')
+            logging.warning('No es un usuario autorizado '+post_user)
+            return redirect(url_for('home'))
     else:
-        flash(c['error'])
-        logging.warning('Error to authentication user '+userdata)
-        return render_template('login.html')
+        flash('Usuario o contraseña incorrectos')
+        logging.warning('Error to authentication user '+post_user)
+        return redirect(url_for('home'))
 
 @app.route("/logout")
 @login_required
@@ -124,73 +171,23 @@ def logout():
     logout_user()
     return redirect(url_for('home'))
 
-#######################d############## Messages ##############################################
-"""
-@app.route("/message", methods=['POST'])
-def message():
-    user = str(request.form['username'])        
-    telefono = str(request.form['telefono'])
-    email = str(request.form['email'])
-    descli = str(request.form['descripcion'])
+######################## API ##################################
 
-    port = cf.PMAIL
-    smtp_server = cf.SMTP
-    sender_email = cf.SEMAIL
-    receiver_email = cf.REMAIL
-    password = cf.EPASS
-    subject = "Notificación cliente"
-    body = "El usario "+user+" con telefono "+telefono+" y su email "+email+"\nSe contacto con usted por el siguiente problema: "+descli
-    # Create a multipart message and set headers
-    message = MIMEMultipart()
-    message["From"] = sender_email
-    message["To"] = receiver_email
-    message["Subject"] = subject
-    message["Bcc"] = receiver_email  # Recommended for mass emails
-    # Add body to email
-    message.attach(MIMEText(body, "plain"))
-    text = message.as_string()
-    # Log in to server using secure context and send email
-    context = ssl.create_default_context()
-    with smtplib.SMTP(smtp_server, port) as server:
-        server.starttls(context=context)
-        server.login(sender_email, password)
-        server.sendmail(sender_email, receiver_email, text)
-    return redirect(url_for('home')) """
+@app.route('/core/v1.0/users')
+def apiuser():
+    query = db.session.query(Users).all()
+    art=[]
+    for res in query:
+        data ={'username': res.username, 'group': res.group, 'email': res.email, 'area': res.area, 'web': res.web, 'estatus':res.status, 'id':res.id }
+        art.append(data)
+    db.session.commit()
+    return jsonify(art), 200
 
-################# API Restfull ######################
-
-@app.route('/core/v1.0/apiuser', methods=['POST'])
-def api_user():
-    user_request = request.json
-    veri_username = user_request['username']
-    veri_password = user_request['password']
-    logging.info('Verification user '+veri_username+' on api users')
-    query = db.session.query(Users).filter(and_(Users.username==veri_username,Users.password==veri_password)).first()
-    if query: 
-        logging.info('user '+veri_username+' is correct')
-        response_body = {
-            "success": True,
-            "error" : None,
-            "data": {
-                "username": query.username,
-                "id_rol": query.id_rol,
-                "email": query.email,
-                "area": query.area,
-                "activo": query.admin
-            }
-        }
-        db.session.commit()
-        return jsonify(response_body), 200
-    else:
-        logging.info('user '+veri_username+' is incorrect')
-        response_body = {
-            "success": False,
-            "error" : "User or password incorrect",
-            "data": {
-                "username": veri_username,
-                "password": veri_password           
-            }
-        }   
-        db.session.commit()
-        return jsonify(response_body), 404
-
+@app.route('/core/v1.0/users/<id>')
+def apiuserfilt(id):
+    art=[]
+    query = db.session.query(Users).filter(Users.id.in_([id])).all()
+    for res in query:
+        data = {'username': res.username, 'group': res.group, 'email': res.email, 'area': res.area, 'estatus':res.status, 'web': res.web, 'id':res.id }
+    db.session.commit()
+    return jsonify(data), 200

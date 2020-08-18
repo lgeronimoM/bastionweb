@@ -1,0 +1,97 @@
+{% extends 'base/base.html' %}
+{% block title %} bastion servers {% endblock title%}
+{% block content %}
+    <main>
+        <div class="row">
+            <div class="container">
+                <h5>Administración y registros de servidores en bastion</h5><br>
+                <form method="POST" action="/addserver">
+                    <div class="form-field">
+                        <button class="btn waves-effect waves-green green darken-2" type="submit" name="Submit">
+                            Agregar server
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="row" style="margin: 35px;">
+            <div class="card">
+                <div class="card-content">
+                    <span class="card-title">Registros de servidores</span>
+                    <form action="/deleteserver" method="POST">
+                        <table class="striped">
+                            <thead>
+                                <tr>
+                                    <th>Hostname</th>
+                                    <th>nombre clave</th>
+                                    <th>Descripción</th>
+                                    <th>DNS</th>
+                                    <th>Tipo</th>
+                                    <th>Departamento</th>
+                                    <th>Localidad</th>
+                                    <th>IP_Admin</th>
+                                    <th>Servicio</th>
+                                    <th>SistemaO.</th>
+                                    <th>Estatus</th>
+                                    <th>Editar Borrar</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for res in data.items %}
+                                <tr>
+                                    <td>{{res['hostname']}}</td>
+                                    <td>{{res['namekey']}}</td>
+                                    <td>{{res['description']}}</td>
+                                    <td>{{res['dns']}}</td>
+                                    <td>{{res['tipe']}}</td>
+                                    <td>{{res['department']}}</td>
+                                    <td>{{res['localation']}}</td>
+                                    <td>{{res['ipadmin']}}</td>
+                                    <td>{{res['service']}}</td>
+                                    <td>{{res['os']}}</td>
+                                    <td>{{res['active']}}</td>
+                                    <td>
+                                        <button class="btn white" type="submit"  formmethod="post" formaction="/editserver" name="update_button"  value="{{res['id']}}" >
+                                            <i class="material-icons black-text">edit</i>
+                                        </button>
+                                        <button class="btn white" type="submit" name="id" onclick="return confirm('Are you sure to delete?')" value="{{res['id']}}">
+                                            <i class="material-icons black-text">delete</i>
+                                        </button>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </form>
+                    <div class="center">
+                        <ul class="pagination">
+
+                        {% if data.has_prev %}
+                            <li class="waves-effect"><a class="page-link" href="{{ url_for('servers', page_num=data.prev_num) }}"><i class="material-icons">chevron_left</i></a></li>
+                        {% else %}
+                            <li class="disabled"><span><i class="material-icons">chevron_left</i></span>
+                        {% endif %}
+                            </li>
+
+                        {% for page in data.iter_pages(left_edge=3, right_edge=3) %}
+                        {% if page %}
+                        <li class="waves-effect"><a href="{{ url_for('servers', page_num=page) }}">{{ page }}</a></li>
+                        {% else %}
+                        <li class="disabled"><a href="#">…</a></li> 
+                        {% endif %}
+                        {% endfor %}
+
+                        {% if data.has_next %}
+                            <li class="waves-effect"><a href="{{ url_for('servers', page_num=data.next_num) }}"><i class="material-icons">chevron_right</i></a></li>
+                        {% else %}
+                            <li class="disabled"><span><i class="material-icons">chevron_right</i></span>
+                        {% endif %}
+                                
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>    
+
+{% endblock content %}

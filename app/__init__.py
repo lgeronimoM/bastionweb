@@ -23,23 +23,32 @@ else:
     app.config.from_object("properties.TestingConfig")
 
 #Inicializacion de Flask admin
-app.config['SECRET_KEY'] = 'mysecret'
+app.config['SECRET_KEY'] = 'b4st10nW3B'
 
 class cf():
     SERVER=app.config["SERVER"]
     PRTO=app.config["PRTO"]
-    #PMAIL=app.config["PMAIL"]
-    #SMTP=app.config["SMTP"]
-    #SEMAIL=app.config["SEMAIL"]
-    #REMAIL=app.config["REMAIL"]
-    #EPASS=app.config["EPASS"]
+    PORT_SMTP=app.config["PORT_SMTP"]
+    HOST_SMTP=app.config["HOST_SMTP"]
+    USER_SMTP=app.config["USER_SMTP"]
+    PASS_SMTP=app.config["PASS_SMTP"]
+    RECIVE_MAILS=app.config["RECIVE_MAILS"]
+    DIRFILEQR=app.config["DIRFILEQR"]
+    DIRFILEPEM=app.config["DIRFILEPEM"]
     DB_DIR=app.config["DB_DIR"]
     LINK=app.config["LINK"]
     TEM=app.config["TEM"]
+    USERANS=app.config["USERANS"]
+    PASSWDANS=app.config["PASSWDANS"]
+    PRIVATEKEY=app.config["PRIVATEKEY"]
+    HOSTANS=app.config["HOSTANS"]
+    MAINAPP=app.config["MAINAPP"]
     NAMEAPP=app.config["NAMEAPP"]
     APIUSER=app.config["APIUSER"]
-    APIHOSETD=app.config["APIHOSETD"]
-    APIDOMAIN=app.config["APIDOMAIN"]
+    APISERVERS=app.config["APISERVERS"]
+    APIUSERS=app.config["APIUSERS"]
+    APIBASTION=app.config["APIBASTION"]
+    APIACCESS=app.config["APIACCESS"]
     LOG_DIR=app.config["LOG_DIR"]
     LOG_LEVEL=app.config["LOG_LEVEL"]
     DEBUG=app.config["DEBUG"]
@@ -52,8 +61,7 @@ db = SQLAlchemy(app)
 login_manager = LoginManager()
 login_manager.init_app(app)
 
-from app.view import dashboard
-from app.view import domain
-from app.view import named
-from app.view import masterslave
+from app.view import home
+from app.view import servers
+from app.view import bastion
 from app.view import users

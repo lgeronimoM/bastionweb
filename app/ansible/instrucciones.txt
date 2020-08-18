@@ -1,0 +1,23 @@
+#### nuevo usuario para acceso al bastion. ####################################################################################
+
+1.- En el archivo inventory ya se encuentra agregado el servidor bastion_hosts.
+2.- En el archivo de vars edita el usuario y grupo que deseas agregar.
+3.- Correr el siguiente comando:
+
+ansible-playbook manageCustomUsers.yml -e "host=bastion_hosts" -t adduser-mfa --private-key PEMFiles/bastion_hosts_ansadmin.pem
+
+#### nuevo usuario administrador server de produccion. #########################################################################
+
+1.- Editar el archivo de inventario y agregar el servidor.
+2.- En el archivo de vars agrega el usuario que deseas agregar.
+3.- Correr el siguiente comando:
+
+ansible-playbook manageCustomUsers.yml -e "host=ksql-aws2" -t adduser-host --private-key PEMFiles/bastion_hosts_ansadmin.pem
+
+#### Agregar permisos acceso a servidores para usuario bastion. #################################################################
+
+1.- En el archivo inventory ya se encuentra agregado el servidor bastion_hosts
+2.- En el archivo de vars editar usuario y files permissions
+3.- Correr el siguiente comando:
+
+ansible-playbook manageCustomUsers.yml -e "host=bastion_hosts" -t permissions --private-key PEMFiles/bastion_hosts_ansadmin.pem

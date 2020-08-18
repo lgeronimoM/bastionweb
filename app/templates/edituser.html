@@ -1,0 +1,65 @@
+{% extends 'base/base.html' %}
+{% block title %} bastion edituser {% endblock title%}
+{% block content %}
+    <main class="container">
+        <div class="row">
+            <form method="POST" action="/updateuser">
+                <p>Editar usuario</p>
+                <input id="idf" type="hidden" value="{{apiusers.id}}" class="validate" name="idf" required>
+                <div class="row">
+                    <div class="input-field col s12 m4 l4">
+                        <input placeholder="username" id="username" type="text" value="{{apiusers.username}}" class="validate" name="username" required>
+                        <label for="username">Usuario</label>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="input-field col s12 m5 l5">
+                        <input placeholder="password" id="password" type="password" value="{{apiusers.password}}"class="validate" name="password" required>
+                        <label for="password">Contraseña</label>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="input-field col s12 m5 l5">
+                        <input placeholder="email" id="email_inline" type="email" value="{{apiusers.email}}" class="validate" name="email" required>
+                        <label for="email_inline">Correo</label>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="input-field col s12 m4 l4">
+                        <input placeholder="area" id="area" type="text" class="validate" value="{{apiusers.area}}" name="area" required>
+                        <label for="area">Area de trabajo</label>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="input-field col s12 m6 l3">
+                        <select class="blue-text text-darken-2" id="estatus" name="estatus" required>
+                            <option value="" disabled selected>Estatus</option>
+                            <option value="1">activar</option>
+                            <option value="0">inactivar</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="input-field col s12 m6 l3">
+                        <select class="blue-text text-darken-2" id="webaccess" name="webaccess" required>
+                            <option value="" disabled selected>Acceso web</option>
+                            <option value="1">si</option>
+                            <option value="0">no</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-field">
+                        <button class="btn waves-effect waves-green green darken-2" type="submit" name="edit_button">Modificar
+                        </button>
+                        <button class="btn red" type="submit" formmethod="get" formnovalidate="novalidate" formaction="/users" name="cancelar" >cancelar
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </main>    
+    <!-- Compiled and minified JavaScript -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+
+{% endblock content %}

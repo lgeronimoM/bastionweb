@@ -14,14 +14,15 @@
   <header>
     </header>
         <div class="navbar-fixed">
-            <nav class="white">
+            <nav class="navmain">
                 <div class="nav-wrapper container">
-                <a href="#menu" class="brand-logo sidenav-trigger show-on-large" data-target="menu-side"><i class="material-icons black-text">menu</i></a><b style="margin-left: 50px;" class="black-text left">Menu</b>
+                <a href="#menu" class="brand-logo sidenav-trigger show-on-large" data-target="menu-side"><i class="material-icons">menu</i></a><b style="margin-left: 50px;" class="left">Menu</b>
                 <ul id="nav-mobile" class="right hide-on-med-and-down">
-                    <li style="margin-right: 50px;"><a class="black-text" href="https://github.com/lgeronimoM/DNSPOWERADMIN">Proyecto Github</a></li>
+                    <li style="margin-right: 50px;"><a href="https://github.com/lgeronimoM/bastionweb">Proyecto Github</a></li>
                     <li><i class="material-icons grey-text">account_circle</i></li>
-                    <li class="black-text" style="margin-right: 50px;">{{user}}</li>
-                    <li><a href="/logout"><i class="material-icons red-text darken-4"><b>exit_to_app</b></i></a></li>
+                    <li style="margin-right: 50px;">{{user}}</li>
+                    <li><a href="/logout"><i class="material-icons darken-4"><b>exit_to_app</b></i></a></li>
+                    <li style="margin-right: 50px;" class="left">Salir</li>
                 </ul>
                 </div>
             </nav>
@@ -30,25 +31,22 @@
             <ul id="menu-side" class="sidenav">
                 <li>
                     <div class="user-view">
-                        <div class="background blue darken-4">
-                            
+                        <div class="background menunav">
                         </div>
-                        <a href="/users"><i class="material-icons" style="font-size: 50px;">account_circle</i></a>
+                        <a href="/users"><i class="material-icons white-text" style="font-size: 50px;">account_circle</i></a>
                         <a href="/" class="name white-text">{{user}}</a>
                         <a href="/" class="email white-text">{{mail}}</a>
                     </div>
                 </li>
-                <li><a href="/">Dashbord</a></a></li>
-                <li><a href="/hostedzone">Zonas de dominio</a></a></li>
-                <li><a href="/domain/1">Subdominios</a></li>
-                <li><a href="/users">Control de acceso</a></li>
-                <li><a href="/masterslaves">Servidores DNS</a></li>
-                <li><a href="/named">Configuraciones DNS</a></li>
+                <li><a href="/">Home</a></a></li>
+                <li><a href="/users">Usuarios</a></a></li>
+                <li><a href="/servers">Servidores</a></li>
+                <li><a href="/bastion">Control de acceso</a></li>
             </ul>
         </div>   
         <div class="container section">
-            <img class="responsive-img" src="{{ url_for('static', filename='img/logo.png' ) }}" style="width: 60px; margin-top: 10px;">
-            dnsWEB
+            <h5><img class="responsive-img" src="{{ url_for('static', filename='img/logo.png' ) }}" style="width: 60px; margin-top: 10px;">
+            Aplicación de administración de usuarios BastionWEB</h5>
         </div>
         {% block content %} 
         
