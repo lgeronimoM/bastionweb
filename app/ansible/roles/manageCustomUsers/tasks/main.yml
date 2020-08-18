@@ -85,9 +85,9 @@
     username: "{{ user_smtp }}"
     password: "{{ pass_smtp }}"
     from: "{{ user_smtp }}"
-    to: "{{ usuario }}@encontrack.com, {{ email }}"
-    subject: Archivo PEM Bastion host.
-    body:  "Este es un correo para informarte que tu usuario {{ usuario }} fue dado de alta en el servidor bastion host con IP {{ ipbastion }} y su DNS publico {{ dnsbastion }}."
+    to: "{{ email }}"
+    subject: "Notificacion de alta cliente-bastion"
+    body:  "Este es un correo para informarte que tu usuario {{ usuario }} fue dado de alta en el servidor bastion host con IP {{ ipbastion }} y su DNS publico {{ dnsbastion }}"
     attach: 
       - "{{ dirfile }}/{{ namekey }}_{{ usuario }}.pem"
       - "{{ dirgoogle }}/google-auth-{{ usuario }}.txt"
@@ -118,8 +118,8 @@
     username: "{{ user_smtp }}"
     password: "{{ pass_smtp }}"
     from: "{{ user_smtp }}"
-    to: luis.geronimo@encontrack.com
-    subject: Baja de usuarios.
+    to: "{{ email }}"
+    subject: "Baja de usuario."
     body:  "Se elimina el siguiente usuario {{ usuario }} tipo cliente-bastionHosts con IP {{ ipbastion }} y su DNS publico {{ dnsbastion }}."
   delegate_to: localhost
   tags: deluser-mfa
@@ -148,8 +148,8 @@
     username: "{{ user_smtp }}"
     password: "{{ pass_smtp }}"
     from: "{{ user_smtp }}"
-    to: luis.geronimo@encontrack.com
-    subject: Baja de usuarios.
+    to: "{{ email }}"
+    subject: "Baja de usuario."
     body:  "Se elimina el siguiente usuario {{ usuario }} tipo server-bastionHosts con IP {{ ipbastion }} y su DNS publico {{ dnsbastion }}."
   delegate_to: localhost
   tags: deluser-server
@@ -245,9 +245,7 @@
     password: "{{ pass_smtp }}"
     from: "{{ user_smtp }}"
     to: "{{ email }}"
-    subject: "Archivo PEM Bastion host".
-    body:  "Este es un correo para informarte que el usuario {{ usuario }} fue creado en el servidor {{ namekey }} con \nIP privada {{ ipserver }}"
-    attach:
-      - "{{ dirfile }}/{{ namekey }}_{{ ipserver }}.pem"
+    subject: "Notificacion de alta bastion-server"
+    body:  "Este es un correo para informarte que el usuario {{ usuario }} fue creado en el servidor {{ namekey }} con IP privada {{ ipserver }} \n\nEjecuta el siguiente comando desde tu home en en el server BastionHost:\n ssh -i {{ namekey }}_{{ ipserver }}.pem {{ ipserver }} "
   delegate_to: localhost
   tags: adduser-host

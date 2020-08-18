@@ -7,6 +7,13 @@ class Config(object):
     LINK='/admin'
     TEM='bootstrap3'
     NAMEAPP= 'Bastion'
+    # properties for Email
+    USER_SMTP= 'notificacionesti@encontrack.com'
+    HOST_SMTP= 'smtp.office365.com'
+    PORT_SMTP= 587
+    PASS_SMTP= 'Das52564'
+    RECIVE_MAILS='luis.geronimo@encontrack.com, samuel.resendiz@encontrack.com'
+    #Level log
     LOG_LEVEL = logging.DEBUG
 
 class ProductionConfig(Config):
@@ -21,11 +28,6 @@ class ProductionConfig(Config):
     MAINAPP='/etc/bastion/bastionWEB/app/ansible/manageCustomUsers.yml'
     DIRFILEPEM= '/etc/bastion/bastionWEB/app/ansible/PEMFiles'
     DIRFILEQR= '/etc/bastion/bastionWEB/app/ansible/google-auth'
-    USER_SMTP= ''
-    HOST_SMTP= 'smtp.office365.com'
-    PORT_SMTP= 587
-    PASS_SMTP= ''
-    RECIVE_MAILS=''
     # properties SQlite
     DB_DIR = 'sqlite:///db/data.db'
     # Log
@@ -59,11 +61,6 @@ class DevelopmentConfig(Config):
     MAINAPP='/mnt/c/Users/LP-0220/Documents/Desarrollos/flask/bastionWEB/app/ansible/manageCustomUsers.yml'
     DIRFILEPEM= '/mnt/c/Users/LP-0220/Documents/Desarrollos/flask/bastionWEB/app/ansible/PEMFiles'
     DIRFILEQR= '/mnt/c/Users/LP-0220/Documents/Desarrollos/flask/bastionWEB/app/ansible/google-auth'
-    USER_SMTP= ''
-    HOST_SMTP= 'smtp.office365.com'
-    PORT_SMTP= 587
-    PASS_SMTP= ''
-    RECIVE_MAILS=''
     # properties SQlite
     DB_DIR = 'sqlite:///db/des-data.db'
     # Log

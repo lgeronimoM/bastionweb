@@ -35,11 +35,11 @@ Procesos de instalación
 ------------------
 sudo yum install git
 
-sudo cd /tmp
+cd /tmp
 
-sudo git clone https://github.com/lgeronimoM/DNSPOWERADMIN.git
+sudo git clone https://github.com/lgeronimoM/bastionweb.git
 
-sudo cd DNSPOWERADMIN
+cd /tmp/bastionweb
 
 sudo chmod u+x install.sh
 
@@ -51,9 +51,9 @@ sudo firewall-cmd --permanent --add-port=5000/tcp
 
 sudo firewall-cmd --reload
 
-sudo systemctl start dnsweb
+sudo systemctl start bastion
 
 acceso web
 ------------------
 usuario: admin
-contraseña: dnsadmin# bastionweb
+contraseña: bastion

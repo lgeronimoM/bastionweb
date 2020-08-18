@@ -294,7 +294,7 @@ def var_ansible(user, grupo, email, ipserver, namekey):
     file.write('\n')
     file.write('usuario: "'+user+'"\n')
     file.write('grupo: "'+grupo+'"\n')
-    file.write('email: "'+email+'"\n')
+    file.write('email: "'+email+', '+reception_mails+'"\n')
     file.write('dirfile: "'+dirfilepem+'/'+user+'"\n')
     file.write('dirgoogle: "'+dirfileqr+'"\n')
     file.write('\n')

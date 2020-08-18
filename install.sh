@@ -12,9 +12,7 @@ sudo pip3 install virtualenv
 
 sudo groupadd bastion
 
-sudo useradd -s /usr/sbin/nologin bastion
-
-sudo usermod -G bastion bastion
+sudo useradd bastion -s /usr/sbin/nologin -g bastion
 
 sudo mkdir -p /etc/bastion
 
@@ -47,7 +45,7 @@ User=root
 Group=root
 WorkingDirectory=/etc/bastion
 #Environment=PATH=/usr/local/bin
-ExecStart=/usr/local/bin/uwsgi --http-socket :5000 --plugin python3 --module main:app --processes 2 --threads 2
+ExecStart=/usr/local/bin/uwsgi --http-socket :5000 --plugin python3 --module main:app --processes 4 --threads 4
 
 [Install]
 WantedBy=multi-user.target" > /etc/systemd/system/bastion.service
