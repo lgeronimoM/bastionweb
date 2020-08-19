@@ -1,11 +1,11 @@
 ---
 # vars file for roles/addCustomUsers
 
-usuario: "samuel.resendiz"
+usuario: ""
 grupo: "GroupTI"
-email: "samuel.resendiz@encontrack.com, luis.geronimo@encontrack.com, samuel.resendiz@encontrack.com"
-dirfile: "/mnt/c/Users/LP-0220/Documents/Desarrollos/flask/bastionWEB/app/ansible/PEMFiles/samuel.resendiz"
-dirgoogle: "/mnt/c/Users/LP-0220/Documents/Desarrollos/flask/bastionWEB/app/ansible/google-auth"
+email: ""
+dirfile: ""
+dirgoogle: ""
 
 # SERVER ACCESS
 
@@ -16,10 +16,10 @@ ipserver: "192.168.3.106"
 
 host_smtp: "smtp.office365.com"
 port_smtp: "587"
-user_smtp: "notificacionesti@encontrack.com"
-pass_smtp: "Das52564"
+user_smtp: ""
+pass_smtp: ""
 
 # Config bastion host
 ipbastion: "192.168.3.101"
-dnsbastion: "bastion.eps-encontrack.com"
+dnsbastion: ""
 

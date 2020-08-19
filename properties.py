@@ -8,11 +8,11 @@ class Config(object):
     TEM='bootstrap3'
     NAMEAPP= 'Bastion'
     # properties for Email
-    USER_SMTP= 'notificacionesti@encontrack.com'
+    USER_SMTP= ''
     HOST_SMTP= 'smtp.office365.com'
     PORT_SMTP= 587
-    PASS_SMTP= 'Das52564'
-    RECIVE_MAILS='luis.geronimo@encontrack.com, samuel.resendiz@encontrack.com'
+    PASS_SMTP= ''
+    RECIVE_MAILS=''
     #Level log
     LOG_LEVEL = logging.DEBUG
 
@@ -23,11 +23,11 @@ class ProductionConfig(Config):
     #ANSIBLE datos
     USERANS='ansadmin'
     PASSWDANS=''
-    PRIVATEKEY='/etc/bastion/bastionWEB/app/ansible/bastion_hosts_ansadmin.pem'
-    HOSTANS='/etc/bastion/bastionWEB/app/ansible/inventory'
-    MAINAPP='/etc/bastion/bastionWEB/app/ansible/manageCustomUsers.yml'
-    DIRFILEPEM= '/etc/bastion/bastionWEB/app/ansible/PEMFiles'
-    DIRFILEQR= '/etc/bastion/bastionWEB/app/ansible/google-auth'
+    PRIVATEKEY='/etc/bastion/app/ansible/bastion_hosts_ansadmin.pem'
+    HOSTANS='/etc/bastion/app/ansible/inventory'
+    MAINAPP='/etc/bastion/app/ansible/manageCustomUsers.yml'
+    DIRFILEPEM= '/etc/bastion/app/ansible/PEMFiles'
+    DIRFILEQR= '/etc/bastion/app/ansible/google-auth'
     # properties SQlite
     DB_DIR = 'sqlite:///db/data.db'
     # Log
@@ -36,12 +36,8 @@ class ProductionConfig(Config):
     PRTO = 5000
     #local
     _SERLOCAL=str('http://'+SERVER+':'+str(PRTO))
-    #Service
-    _SER=str('http://10.190.5.42:'+str(PRTO))
     # Api servers
     APISERVERS=_SERLOCAL+'/core/v1.0/servers'
-    # Api User
-    APIUSER=_SER+'/core/v1.0/apiuser' 
     # Api user
     APIUSERS=_SERLOCAL+'/core/v1.0/users'
     # Api bastion
@@ -69,12 +65,8 @@ class DevelopmentConfig(Config):
     PRTO = 8292
     #local
     _SERLOCAL=str('http://'+SERVER+':'+str(PRTO))
-    #service
-    _SER='http://10.190.5.42:4000'
     # Api servers
     APISERVERS=_SERLOCAL+'/core/v1.0/servers'
-    # Api User
-    APIUSER=_SER+'/core/v1.0/apiuser' 
     # Api user
     APIUSERS=_SERLOCAL+'/core/v1.0/users'
     # Api bastion

@@ -53,6 +53,10 @@ sudo firewall-cmd --reload
 
 sudo systemctl start bastion
 
+-# Tenemos que generar una llave private key para acceder a los servidores con un usario de permisos sudo
+-# en este ejemplo yo tengo al usuario ansadmin y tengo esta llave bastion_hosts_ansadmin.pem
+-# Generar llave
+
 acceso web
 ------------------
 usuario: admin

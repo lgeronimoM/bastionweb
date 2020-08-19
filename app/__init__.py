@@ -44,7 +44,6 @@ class cf():
     HOSTANS=app.config["HOSTANS"]
     MAINAPP=app.config["MAINAPP"]
     NAMEAPP=app.config["NAMEAPP"]
-    APIUSER=app.config["APIUSER"]
     APISERVERS=app.config["APISERVERS"]
     APIUSERS=app.config["APIUSERS"]
     APIBASTION=app.config["APIBASTION"]

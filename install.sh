@@ -31,8 +31,6 @@ export FLASK_ENV=production
 
 echo "host_key_checking = False" >> /etc/ansible/ansible.cfg
 
-#sudo python3 -m venv /etc/bastion/env
-#sudo source /etc/bastion/env/bin/activate
 sudo pip3 install -r /etc/bastion/requirements.txt
 
 sudo echo -e "

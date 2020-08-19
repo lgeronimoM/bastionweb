@@ -1,4 +1,4 @@
-dns/
 env/
 bastion_*
 properties*
+__pycache__/
