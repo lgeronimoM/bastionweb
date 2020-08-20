@@ -1,25 +1,4 @@
 ---
 # vars file for roles/addCustomUsers
 
-usuario: ""
-grupo: "GroupTI"
-email: ""
-dirfile: ""
-dirgoogle: ""
-
-# SERVER ACCESS
-
-namekey: "ansible_sis"
-ipserver: "192.168.3.106"
-
-# vars config smtp server
-
-host_smtp: "smtp.office365.com"
-port_smtp: "587"
-user_smtp: ""
-pass_smtp: ""
-
-# Config bastion host
-ipbastion: "192.168.3.101"
-dnsbastion: ""
 

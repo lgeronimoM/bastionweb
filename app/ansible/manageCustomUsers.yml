@@ -1,6 +1,5 @@
 ---
 - hosts: hostexec
-  become: true
   name: 'Crear usuario con ssh-keygen para el servidor Bastion HOST'
   roles:
-    - manageCustomUsers
+    - roles/manageCustomUsers

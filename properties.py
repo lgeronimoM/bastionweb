@@ -16,7 +16,7 @@ class Config(object):
     #Level log
     LOG_LEVEL = logging.DEBUG
     SECRETKEY= 'des'
-
+    
 class ProductionConfig(Config):
     DEBUG=False
     # properties host
@@ -24,13 +24,13 @@ class ProductionConfig(Config):
     #ANSIBLE datos
     USERANS='ansadmin'
     PASSWDANS=''
-    PRIVATEKEY='/etc/bastion/app/ansible/bastion_hosts_ansadmin.pem'
+    PRIVATEKEY='/etc/bastion/PEMFiles/bastion_hosts_ansadmin.pem'
     HOSTANS='/etc/bastion/app/ansible/inventory'
     MAINAPP='/etc/bastion/app/ansible/manageCustomUsers.yml'
-    DIRFILEPEM= '/etc/bastion/app/ansible/PEMFiles'
-    DIRFILEQR= '/etc/bastion/app/ansible/google-auth'
+    DIRFILEPEM= '/etc/bastion/PEMFiles'
+    DIRFILEQR= '/etc/bastion/google-auth'
     # properties SQlite
-    DB_DIR = 'sqlite:////etc/bastion/db/data.db'
+    DB_DIR = 'sqlite:///db/data.db'
     # Log
     LOG_DIR='/var/log/bastion/bastion_%d_%m_%Y.log'
     # Port
@@ -53,15 +53,15 @@ class DevelopmentConfig(Config):
     #ANSIBLE datos
     USERANS='ansadmin'
     PASSWDANS=''
-    PRIVATEKEY='/mnt/c/Users/LP-0220/Documents/Desarrollos/flask/bastionWEB/app/ansible/bastion_hosts_ansadmin.pem'
+    PRIVATEKEY='/mnt/c/Users/LP-0220/Documents/Desarrollos/flask/bastionWEB/files/PEMFiles/bastion_hosts_ansadmin.pem'
     HOSTANS='/mnt/c/Users/LP-0220/Documents/Desarrollos/flask/bastionWEB/app/ansible/inventory'
     MAINAPP='/mnt/c/Users/LP-0220/Documents/Desarrollos/flask/bastionWEB/app/ansible/manageCustomUsers.yml'
-    DIRFILEPEM= '/mnt/c/Users/LP-0220/Documents/Desarrollos/flask/bastionWEB/app/ansible/PEMFiles'
-    DIRFILEQR= '/mnt/c/Users/LP-0220/Documents/Desarrollos/flask/bastionWEB/app/ansible/google-auth'
+    DIRFILEPEM= '/mnt/c/Users/LP-0220/Documents/Desarrollos/flask/bastionWEB/files/PEMFiles'
+    DIRFILEQR= '/mnt/c/Users/LP-0220/Documents/Desarrollos/flask/bastionWEB/files/google-auth'
     # properties SQlite
-    DB_DIR = 'sqlite:///db/des-data.db'
+    DB_DIR = 'sqlite:////mnt/c/Users/LP-0220/Documents/Desarrollos/flask/bastionWEB/db/des-data.db'
     # Log
-    LOG_DIR='bastion_%d_%m_%Y.log'
+    LOG_DIR='logs/bastion_%d_%m_%Y.log'
     # Port
     PRTO = 8292
     #local

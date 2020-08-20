@@ -18,6 +18,10 @@ sudo mkdir -p /etc/bastion
 
 sudo mkdir -p /etc/bastion/db
 
+sudo mkdir -p /etc/bastion/PEMFiles
+
+sudo mkdir -p /etc/bastion/google-auth
+
 sudo mkdir -p /var/log/bastion
 
 sudo cp app/db/data.db /etc/bastion/db/

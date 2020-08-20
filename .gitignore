@@ -1,4 +1,7 @@
 env/
 bastion_*
-__pycache__/
-properties.py
+__pycache__*
+properties.py*
+logs/
+files/
+db/

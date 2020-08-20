@@ -8,7 +8,9 @@ read -p "Preciona enter para continuar o ctrol 'C' para cancelar: " opcion
 
 sudo yum install python3-pip python3-devel gcc -y
 
-git clone https://github.com/lgeronimoM/bastionweb.git update
+sudo rm -rf update
+
+sudo git clone https://github.com/lgeronimoM/bastionweb.git update
 
 sudo cp -f -a  update/main.py /etc/bastion/
 sudo cp -f -a -r update/app /etc/bastion/

@@ -77,6 +77,8 @@ def bastion(page_num):
     exist = db.session.query(Bastion).filter().first()
     apibastion=""
     name=False
+    filterserver=False
+    filteruser=False
     if exist:
         exist=True
         apibastion = requests.get(urlbastion, headers=headers, verify=False).json()
@@ -91,10 +93,9 @@ def bastion(page_num):
         if filterserver:
             search = "%{}%".format(filterserver)
             apiaccess=db.session.query(Access).filter(and_(Access.userid==int(filteruser), Access.keypair.like(search))).paginate(per_page=10, page=page_num, error_out=True)
-            filtroserver=True
+            filterserver=True
     apiservers = requests.get(urlservers, headers=headers, verify=False).json()
     apiusers = requests.get(urlusers, headers=headers, verify=False).json()
-    #apiaccess = requests.get(urlaccess, headers=headers, verify=False).json()
     logging.info('Access page Bastion')
     user = current_user.username
     queryuser = db.session.query(Users).filter(Users.username==user).first()
@@ -141,7 +142,7 @@ def addbastionclient():
     apibastion = requests.get(urlbastion, headers=headers, verify=False).json()
     apiusers = requests.get(urlusers+'/'+iduser, headers=headers, verify=False).json()
     idserver=str(apibastion['id'])
-    apiservers = requests.get(urlservers+'/'+idserver, headers=headers, verify=False).json()    
+    apiservers = requests.get(urlservers+'/'+idserver, headers=headers, verify=False).json()
     server=apiservers['hostname']
     user=apiusers['username']
     email=apiusers['email']
@@ -376,7 +377,7 @@ def install_dns_playbook():
         context.CLIARGS = ImmutableDict(tags={tagsexc}, listtags=False, listtasks=False, listhosts=False, syntax=False, connection='ssh',
                         module_path=None, forks=10, remote_user=user, private_key_file=None,
                         ssh_common_args=None, ssh_extra_args=None, sftp_extra_args=None, scp_extra_args=None, become=True,
-                        become_method=None, become_user=None, verbosity=True, check=False, start_at_task=None,
+                        become_method='sudo', become_user='root', verbosity=True, check=False, start_at_task=None,
                         extra_vars={'ansible_ssh_user='+user+'', 'ansible_ssh_private_key_file='+keyfile+''})
     inventory = InventoryManager(loader=loader, sources=(inventory))
     variable_manager = VariableManager(loader=loader, inventory=inventory, version_info=CLI.version_info(gitinfo=False))
