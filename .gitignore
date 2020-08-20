@@ -1,4 +1,4 @@
 env/
 bastion_*
-properties*
 __pycache__/
+properties.py

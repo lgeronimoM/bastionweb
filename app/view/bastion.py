@@ -72,21 +72,26 @@ reception_mails=cf.RECIVE_MAILS
 @app.route('/bastion/<int:page_num>', methods=['GET'])
 @login_required
 def bastion(page_num):
-    filtro=request.args.get('filteruser')
+    filteruser=request.args.get('filteruser')
+    filterserver=request.args.get('findserver')
     exist = db.session.query(Bastion).filter().first()
     apibastion=""
-    name=""
+    name=False
     if exist:
         exist=True
         apibastion = requests.get(urlbastion, headers=headers, verify=False).json()
     else:
         exist=False
     apiaccess=db.session.query(Access).paginate(per_page=10, page=page_num, error_out=True)
-    if filtro:
-        queryuser = db.session.query(Users).filter(Users.id==int(filtro)).first()
+    if filteruser:
+        queryuser = db.session.query(Users).filter(Users.id==int(filteruser)).first()
         name=queryuser.username
         logging.info('Filter user on page bastion')
-        apiaccess=db.session.query(Access).filter(Access.userid==int(filtro)).paginate(per_page=10, page=page_num, error_out=True)
+        apiaccess=db.session.query(Access).filter(Access.userid==int(filteruser)).paginate(per_page=10, page=page_num, error_out=True)
+        if filterserver:
+            search = "%{}%".format(filterserver)
+            apiaccess=db.session.query(Access).filter(and_(Access.userid==int(filteruser), Access.keypair.like(search))).paginate(per_page=10, page=page_num, error_out=True)
+            filtroserver=True
     apiservers = requests.get(urlservers, headers=headers, verify=False).json()
     apiusers = requests.get(urlusers, headers=headers, verify=False).json()
     #apiaccess = requests.get(urlaccess, headers=headers, verify=False).json()
@@ -94,7 +99,7 @@ def bastion(page_num):
     user = current_user.username
     queryuser = db.session.query(Users).filter(Users.username==user).first()
     mail = queryuser.email
-    return render_template('bastion.html', user=user, name=name, apiservers=apiservers, apiusers=apiusers, apibastion=apibastion, data=apiaccess, mail=mail, exist=exist)
+    return render_template('bastion.html', filteruser=filteruser, user=user, name=name, apiservers=apiservers, apiusers=apiusers, apibastion=apibastion, data=apiaccess, mail=mail, exist=exist)
 
 @app.route('/addbastionserver', methods=['POST'])
 @login_required

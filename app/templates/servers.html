@@ -4,14 +4,38 @@
     <main>
         <div class="row">
             <div class="container">
-                <h5>Administración y registros de servidores en bastion</h5><br>
-                <form method="POST" action="/addserver">
-                    <div class="form-field">
-                        <button class="btn waves-effect waves-green green darken-2" type="submit" name="Submit">
-                            Agregar server
-                        </button>
+                <div class="col s12 m6 l6">
+                    <div class="card white"><br>
+                        <p class="center">Realizar nuevo registro de servidor</p>
+                        <div class="card-action">
+                        <form method="POST" action="/addserver">
+                            <div class="form-field">
+                                <button class="btn waves-effect waves-green green darken-2" type="submit" name="Submit">
+                                    Agregar server
+                                </button>
+                            </div>
+                        </form>
+                        </div>
                     </div>
-                </form>
+                </div>
+                <div class="col s12 m6 l6">
+                    <form method="GET" action="/servers">
+                        <div class="input-field col s12 m12 l12">
+                            <input placeholder="nombre clave" id="" type="text" class="validate" name="findserver" required>
+                            <label for="nombre clave">Buscar Server</label>
+                        </div>
+                        <div class="card-action">
+                            <div class="form-field">
+                                <button class="btn waves-effect waves-green green darken-2" type="submit" name="Submit">
+                                    Buscar
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                    {% if findservers %}
+                        <a href="/servers" class="waves-effect waves-light btn red darken-2">Remover filtro</a>
+                    {% endif %}
+                </div>
             </div>
         </div>
         <div class="row" style="margin: 35px;">

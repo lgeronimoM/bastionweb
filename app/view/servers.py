@@ -53,12 +53,18 @@ urlaccess = cf.APIACCESS
 @app.route('/servers/<int:page_num>', methods=['GET'])
 @login_required
 def servers(page_num):
-    apiservers=db.session.query(Servers).paginate(per_page=10, page=page_num, error_out=True)    
+    apiservers=db.session.query(Servers).paginate(per_page=10, page=page_num, error_out=True)
+    filtro=request.args.get('findserver')
+    findservers=False
+    if filtro:
+        search = "%{}%".format(filtro)
+        apiservers=db.session.query(Servers).filter(Servers.namekey.like(search)).paginate(per_page=10, page=page_num, error_out=True)
+        findservers=True
     logging.info('Access page servers')
     user = current_user.username
     queryuser = db.session.query(Users).filter(Users.username==user).first()
     mail = queryuser.email
-    return render_template('servers.html', user=user, data=apiservers, mail=mail)
+    return render_template('servers.html', user=user, data=apiservers, mail=mail, findservers=findservers)
 
 @app.route('/addserver', methods=['POST'])
 @login_required
