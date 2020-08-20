@@ -15,6 +15,7 @@ class Config(object):
     RECIVE_MAILS=''
     #Level log
     LOG_LEVEL = logging.DEBUG
+    SECRETKEY= 'des'
 
 class ProductionConfig(Config):
     DEBUG=False
@@ -29,7 +30,7 @@ class ProductionConfig(Config):
     DIRFILEPEM= '/etc/bastion/app/ansible/PEMFiles'
     DIRFILEQR= '/etc/bastion/app/ansible/google-auth'
     # properties SQlite
-    DB_DIR = 'sqlite:///db/data.db'
+    DB_DIR = 'sqlite:////etc/bastion/db/data.db'
     # Log
     LOG_DIR='/var/log/bastion/bastion_%d_%m_%Y.log'
     # Port

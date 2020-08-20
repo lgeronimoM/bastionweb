@@ -16,7 +16,11 @@ sudo useradd bastion -s /usr/sbin/nologin -g bastion
 
 sudo mkdir -p /etc/bastion
 
+sudo mkdir -p /etc/bastion/db
+
 sudo mkdir -p /var/log/bastion
+
+sudo cp app/db/data.db /etc/bastion/db/
 
 sudo cp main.py /etc/bastion/
 sudo cp -r app /etc/bastion/

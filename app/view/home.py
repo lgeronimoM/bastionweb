@@ -69,9 +69,8 @@ def home():
         bastion = db.session.query(Bastion).all()
         if bastion:
             pass
-
         mail = query.email
-        return render_template('index.html',user=user,mail=mail,servers=servers,client=client,clientweb=clientweb,serversotros=serversotros,serversmiami=serversmiami,serversaws=serversaws,accessclient=accessserver,accessserver=accessserver,bastion=bastion )
+        return render_template('index.html',user=user,mail=mail,servers=servers,client=client,clientweb=clientweb,serversotros=serversotros,serversmiami=serversmiami,serversaws=serversaws,accessclient=accessclient,accessserver=accessserver,bastion=bastion )
     else:
         logging.info('User trying access to page')
         return render_template('login.html')
