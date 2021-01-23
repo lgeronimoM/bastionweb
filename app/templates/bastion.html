@@ -32,9 +32,45 @@
                     </button>
                 </form>
             </div>
+            {% if name %}
+            <form method="GET" action="/bastion">
+                <input id="filteruser" type="hidden" value="{{filteruser}}" class="validate" name="filteruser" required>
+                <div class="col s12 m6 l6">
+                    <h6>Usuario: <b class="green-text text-darken-2">{{name}}</b>
+                    <a href="/bastion" class="waves-effect waves-light btn red darken-2">Remover filtro</a></h6>
+                </div>
+                <div class="input-field col s12 m4 l4">
+                    <input placeholder="nombre clave" id="" type="text" class="validate" name="findserver" required>
+                    <label for="nombre clave">Buscar Server</label>
+                </div>
+                <div class="card-action">
+                    <div class="form-field">
+                        <button class="btn waves-effect waves-green green darken-2" type="submit" name="Submit">
+                            Buscar
+                        </button>
+                    </div>
+                </div>
+            </form>
+            {% else %}
+            <form method="GET" action="/bastion">
+            <h5>Filtrar accesos de usuario</h5>
+                <div class="input-field col s12 m4 l4">
+                    <select class="blue-text text-darken-2" id="select" name="filteruser" required>
+                        <option value="" disabled selected>Selecciona el usuario aquí</option>
+                        {% for res in apiusers %}
+                            <option value="{{res['id']}}">{{res['username']}}</option>
+                        {% endfor %}
+                    </select>
+                    <div class="form-field">
+                        <button class="btn waves-effect waves-green green darken-2" type="submit">filtrar
+                        </button>
+                    </div>
+                </div>
+            </form>
+            {% endif %}
         </div>
         <div class="row">
-            <div class="col s12 m12 l6">
+            <div class="col s12 m12 l5">
                 <div class="card white">
                     <form method="POST" action="/addbastionclient">
                         <p class="center">Generar acceso Cliente-BationHost + MFA</p>
@@ -56,7 +92,7 @@
                     </form>
                 </div>
             </div>
-            <div class="col s12 m12 l6">
+            <div class="col s12 m12 l7">
                 <div class="card white">
                     <form method="POST" action="/addbastionserver">
                         <p class="center"> Generar acceso BationHost-Servidor</p>
@@ -64,7 +100,7 @@
                             <select class="blue-text text-darken-2" id="select" name="server" required>
                                 <option value="" disabled selected>Seleccion el servidor</option>
                                 {% for res in apiservers %}
-                                <option value="{{res['id']}}">{{ res['hostname'] }}</option>
+                                <option value="{{res['id']}}">{{ res['hostname'] }}_{{ res['ipadmin'] }}</option>
                                 {% endfor %}
                             </select>
                         </div>
@@ -96,47 +132,9 @@
                 {% endif %}
             {% endwith %}
         </div>
-        <div class="row">
-            {% if name==False %}
-            <form method="GET" action="/bastion">
-            <h5>Filtrar accesos de usuario</h5>
-                <div class="input-field col s12 m4 l4">
-                    <select class="blue-text text-darken-2" id="select" name="filteruser" required>
-                        <option value="" disabled selected>Selecciona el usuario aquí</option>
-                        {% for res in apiusers %}
-                            <option value="{{res['id']}}">{{res['username']}}</option>
-                        {% endfor %}
-                    </select>
-                    <div class="form-field">
-                        <button class="btn waves-effect waves-green green darken-2" type="submit">filtrar
-                        </button>
-                    </div>
-                </div>
-            </form>
-            {% else %}
-            <form method="GET" action="/bastion">
-                <input id="filteruser" type="hidden" value="{{filteruser}}" class="validate" name="filteruser" required>
-                <div class="col s12 m6 l6">
-                    <h6>Usuario: <b class="green-text text-darken-2">{{name}}</b>
-                    <a href="/bastion" class="waves-effect waves-light btn red darken-2">Remover filtro</a></h6>
-                </div>
-                <div class="input-field col s12 m4 l4">
-                    <input placeholder="nombre clave" id="" type="text" class="validate" name="findserver" required>
-                    <label for="nombre clave">Buscar Server</label>
-                </div>
-                <div class="card-action">
-                    <div class="form-field">
-                        <button class="btn waves-effect waves-green green darken-2" type="submit" name="Submit">
-                            Buscar
-                        </button>
-                    </div>
-                </div>
-            </form>
-            {% endif %}
         {% endif %}
-        </div>
         <div class="row">
-            <h5>Alta de accesos</h5>
+            <h5 class="center">Alta de accesos</h5>
             <table class="striped">
                 <thead>
                     <tr>
@@ -198,7 +196,7 @@
                 <ul class="pagination">
 
                 {% if data.has_prev %}
-                    <li class="waves-effect"><a class="page-link" href="{{ url_for('bastion', page_num=data.prev_num) }}"><i class="material-icons">chevron_left</i></a></li>
+                    <li class="waves-effect"><a class="page-link" href="{{ url_for('bastion', page_num=data.prev_num, filteruser=filteruser) }}"><i class="material-icons">chevron_left</i></a></li>
                 {% else %}
                     <li class="disabled"><span><i class="material-icons">chevron_left</i></span>
                 {% endif %}
@@ -206,14 +204,14 @@
 
                 {% for page in data.iter_pages(left_edge=3, right_edge=3) %}
                 {% if page %}
-                <li class="waves-effect"><a href="{{ url_for('bastion', page_num=page) }}">{{ page }}</a></li>
+                <li class="waves-effect"><a href="{{ url_for('bastion', page_num=page, filteruser=filteruser) }}">{{ page }}</a></li>
                 {% else %}
                 <li class="disabled"><a href="#">…</a></li> 
                 {% endif %}
                 {% endfor %}
 
                 {% if data.has_next %}
-                    <li class="waves-effect"><a href="{{ url_for('bastion', page_num=data.next_num) }}"><i class="material-icons">chevron_right</i></a></li>
+                    <li class="waves-effect"><a href="{{ url_for('bastion', page_num=data.next_num, filteruser=filteruser) }}"><i class="material-icons">chevron_right</i></a></li>
                 {% else %}
                     <li class="disabled"><span><i class="material-icons">chevron_right</i></span>
                 {% endif %}

@@ -66,6 +66,7 @@ pass_smtp=cf.PASS_SMTP
 dirfilepem=cf.DIRFILEPEM
 dirfileqr=cf.DIRFILEQR
 reception_mails=cf.RECIVE_MAILS
+serverlocal=cf.SERVER
 ####################### Endpoints #############################
 
 @app.route('/bastion', methods=['GET'], defaults={"page_num": 1})
@@ -75,10 +76,8 @@ def bastion(page_num):
     filteruser=request.args.get('filteruser')
     filterserver=request.args.get('findserver')
     exist = db.session.query(Bastion).filter().first()
-    apibastion=""
+    apibastion=''
     name=False
-    filterserver=False
-    filteruser=False
     if exist:
         exist=True
         apibastion = requests.get(urlbastion, headers=headers, verify=False).json()
@@ -320,6 +319,7 @@ def var_ansible(user, grupo, email, ipserver, namekey):
     file.write('ipbastion: "'+ipbastion+'"\n')
     file.write('dnsbastion: "'+dnsbastion+'"\n')
     file.write('\n')
+    file.write('serverlocal: "'+serverlocal+'"\n')
     file.close()
 
 ######################## API ##################################
@@ -383,5 +383,5 @@ def install_dns_playbook():
     variable_manager = VariableManager(loader=loader, inventory=inventory, version_info=CLI.version_info(gitinfo=False))
     pbex = PlaybookExecutor(playbooks=[play], inventory=inventory, variable_manager=variable_manager, loader=loader, passwords={})
     results = pbex.run()
-    db.session.commit() 
+    db.session.commit()
     return jsonify({'status': results })

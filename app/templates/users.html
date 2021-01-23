@@ -25,7 +25,7 @@
         <div class="row">
             <div class="card">
                 <div class="card-content">
-                    <span class="card-title">Administración y registro de usuarios</span>
+                    <h5 class="card-title center">Administración y registro de usuarios</h5>
                     <div class="row">
                     <table>
                         <thead>
@@ -36,7 +36,7 @@
                                 <th>Grupo</th>
                                 <th>Activo</th>
                                 <th>Acceso Web</th>
-                                <th>Editar</th>
+                                <th>Contraseña</th>
                                 <th>Borrar</th>
                             </tr>
                         </thead>
@@ -57,39 +57,27 @@
                                 </td>
                                 <form method="POST" action="/updateuser">
                                 <td>
-                                    <div class="switch">
-                                        <label>no
-                                        {% if user['status'] == True %}
-                                            <input type="checkbox" checked="checked" name="checkactive" value="1">
-                                            <span class="lever"></span>
-                                        {% else %}
-                                            <input type="checkbox" name="checkactive" value="0">
-                                            <span class="lever"></span>
-                                        {% endif %}
-                                        si</label>
-                                    </div>  
+                                    {% if user['status'] == True %}
+                                        <i class="material-icons green-text">check_circle</i>
+                                    {% else %}
+                                        <i class="material-icons grey-text">check_circle</i>
+                                    {% endif %} 
                                 </td>
                                 <td>
-                                    <div class="switch">
-                                        <label>no
-                                        {% if user['web'] == True %}
-                                            <input type="checkbox" checked="checked" name="checkweb" value="on">
-                                            <span class="lever"></span>
-                                        {% else %}
-                                            <input type="checkbox" name="checkweb" value="off">
-                                            <span class="lever"></span>
-                                        {% endif %}
-                                        si</label>
-                                    </div>
+                                    {% if user['web'] == True %}
+                                        <i class="material-icons green-text">check_circle</i>
+                                    {% else %}
+                                        <i class="material-icons grey-text">check_circle</i>
+                                    {% endif %}
                                 </td>
                                 <td>
-                                    <button class="btn white" type="submit" name="conf"  value="{{user['id']}}">
+                                    <button class="btn white" type="submit" formmethod="post" formaction="/edituser" name="conf"  value="{{user['id']}}">
                                         <i class="material-icons black-text">settings</i>
                                     </button>
                                 </td>
                                 </form>
                                 <td>
-                                    <form method="POST" action="/deleteuser">
+                                    <form method="POST" action="/deleteuser"><br>
                                         <button class="btn white" type="submit" name="id" onclick="return confirm('Are you sure to delete?')" value="{{user['id']}}">
                                             <i class="material-icons black-text">delete</i>
                                         </button>

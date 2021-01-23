@@ -4,7 +4,7 @@
     <main class="container">
         <div class="row">
             <form method="POST" action="/updateuser">
-                <p>Editar usuario</p>
+                <h5>Modificar datos del usuario {{apiusers.username}}</h5><br>
                 <input id="idf" type="hidden" value="{{apiusers.id}}" class="validate" name="idf" required>
                 <div class="row">
                     <div class="input-field col s12 m4 l4">
@@ -13,9 +13,23 @@
                     </div>
                 </div>
                 <div class="row">
-                    <div class="input-field col s12 m5 l5">
-                        <input placeholder="password" id="password" type="password" value="{{apiusers.password}}"class="validate" name="password" required>
-                        <label for="password">Contraseña</label>
+                    <!-- Switch -->
+                    <div class="switch">
+                        <p>¿Deseas cambiar contraseña?</p>
+                        <label for="chkPassport">
+                        <input type="checkbox" id="chkPassport">
+                        <span class="lever"></span>
+                        si
+                        </label>
+                    </div>
+                    <div id="AddPassport"><br>
+                        Preciona el checkbox
+                    </div>
+                <div>
+                <div class="row"><br>
+                    <div class="input-field col s12 m5 l5" id="dvPassport" style="display: none">
+                        <input placeholder="Contrasena" id="txtPassportNumber" type="password" class="validate" name="psswd-new">
+                        <label for="Contraseña">Nueva Contraseña</label>
                     </div>
                 </div>
                 <div class="row">
@@ -32,25 +46,46 @@
                 </div>
                 <div class="row">
                     <div class="input-field col s12 m6 l3">
-                        <select class="blue-text text-darken-2" id="estatus" name="estatus" required>
-                            <option value="" disabled selected>Estatus</option>
-                            <option value="1">activar</option>
-                            <option value="0">inactivar</option>
+                        <select class="blue-text text-darken-2" name="group" required>
+                            <option value="{{apiusers.group}}" selected>{{apiusers.group}}</option>
+                            <option value="GroupTI">GroupTI</option>
+                            <option value="GroupAPS">GroupAPS</option>
+                            <option value="GroupDB">GroupDB</option>
+                            <option value="GroupSIO">GroupSIO</option>
+                            <option value="GroupID">GroupID</option>
+                            <option value="GroupEXT">GroupEXT</option>
                         </select>
                     </div>
                 </div>
                 <div class="row">
                     <div class="input-field col s12 m6 l3">
-                        <select class="blue-text text-darken-2" id="webaccess" name="webaccess" required>
-                            <option value="" disabled selected>Acceso web</option>
-                            <option value="1">si</option>
-                            <option value="0">no</option>
+                        <select class="blue-text text-darken-2" name="status" required>
+                            {% if apiusers.status == True %}
+                                <option value="1" selected>activo</option>
+                            {% else %}
+                                <option value="0" selected>desactivo</option>
+                            {% endif %}
+                            <option value="1">activo</option>
+                            <option value="0">desactivo</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="input-field col s12 m6 l3">
+                        <select class="blue-text text-darken-2" name="webaccess" required>
+                            {% if apiusers.web == True %}
+                                <option value="1" selected>activo</option>
+                            {% else %}
+                                <option value="0" selected>desactivo</option>
+                            {% endif %}
+                            <option value="1">activo</option>
+                            <option value="0">desactivo</option>
                         </select>
                     </div>
                 </div>
                 <div class="row">
                     <div class="form-field">
-                        <button class="btn waves-effect waves-green green darken-2" type="submit" name="edit_button">Modificar
+                        <button class="btn waves-effect waves-green green darken-2" type="submit" name="conf">Modificar
                         </button>
                         <button class="btn red" type="submit" formmethod="get" formnovalidate="novalidate" formaction="/users" name="cancelar" >cancelar
                         </button>

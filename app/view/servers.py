@@ -1,4 +1,4 @@
-from flask import render_template, redirect, url_for, request, jsonify, session, Blueprint
+from flask import render_template, redirect, url_for, request, jsonify, session, Blueprint, flash
 import os, requests, json, sys
 
 # APP MVC
@@ -30,7 +30,7 @@ import os, requests, json
 from flask_login import UserMixin, login_user, login_required, logout_user, current_user
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy import desc
-from sqlalchemy import and_
+from sqlalchemy import and_, or_
 
 LOG_FILENAME = datetime.now().strftime(cf.LOG_DIR)
 for handler in logging.root.handlers[:]:
@@ -56,6 +56,9 @@ def servers(page_num):
     apiservers=db.session.query(Servers).paginate(per_page=10, page=page_num, error_out=True)
     filtro=request.args.get('findserver')
     findservers=False
+    statusserver= ''
+    if request.args.get('statusserver'):
+        statusserver=request.args.get('statusserver')
     if filtro:
         search = "%{}%".format(filtro)
         apiservers=db.session.query(Servers).filter(Servers.namekey.like(search)).paginate(per_page=10, page=page_num, error_out=True)
@@ -64,15 +67,16 @@ def servers(page_num):
     user = current_user.username
     queryuser = db.session.query(Users).filter(Users.username==user).first()
     mail = queryuser.email
-    return render_template('servers.html', user=user, data=apiservers, mail=mail, findservers=findservers)
+    return render_template('servers.html', user=user, data=apiservers, mail=mail, findservers=findservers, statusserver=statusserver, findserver=filtro)
 
-@app.route('/addserver', methods=['POST'])
+@app.route('/addserver', methods=['POST','GET'])
 @login_required
 def addserver():
     user = current_user.username
     queryuser = db.session.query(Users).filter(Users.username==user).first()
     mail = queryuser.email
-    return render_template('addserver.html', user=user, mail=mail)
+    validated = request.args.get('validate', '')
+    return render_template('addserver.html', user=user, mail=mail, validated=validated)
 
 @app.route('/comaddserver', methods=['POST'])
 @login_required
@@ -93,7 +97,13 @@ def comaddserver():
     cpu = str(request.form['cpu'])
     disco = str(request.form['disco'])
     insertQuery = Servers(host,name,descripcion,dns,tipo,departamento,localidad,ipadmin,ippro,servicio,hipervisor,sistema,ram,cpu,disco,True)
-    db.session.add(insertQuery)
+    queryserver =  db.session.query(Servers).filter(or_(Servers.hostname==host, Servers.ipadmin==ipadmin, Servers.namekey==name)).first()
+    if queryserver:
+        #statusadd='Ya existe '+host+' o ip '+ipadmin+' verificalo'
+        logging.warning('Ya tiene acceso a bastion '+host)
+        return redirect(url_for('addserver', validate='Ya existe host o ip favor de validar'))
+    else:
+        db.session.add(insertQuery)
     logging.info('Add server'+' '+name)
     db.session.commit()
     return redirect(url_for('servers'))

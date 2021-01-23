@@ -91,7 +91,7 @@
                         <ul class="pagination">
 
                         {% if data.has_prev %}
-                            <li class="waves-effect"><a class="page-link" href="{{ url_for('servers', page_num=data.prev_num) }}"><i class="material-icons">chevron_left</i></a></li>
+                            <li class="waves-effect"><a class="page-link" href="{{ url_for('servers', page_num=data.prev_num, findserver=findserver) }}"><i class="material-icons">chevron_left</i></a></li>
                         {% else %}
                             <li class="disabled"><span><i class="material-icons">chevron_left</i></span>
                         {% endif %}
@@ -99,14 +99,14 @@
 
                         {% for page in data.iter_pages(left_edge=3, right_edge=3) %}
                         {% if page %}
-                        <li class="waves-effect"><a href="{{ url_for('servers', page_num=page) }}">{{ page }}</a></li>
+                        <li class="waves-effect"><a href="{{ url_for('servers', page_num=page, findserver=findserver) }}">{{ page }}</a></li>
                         {% else %}
                         <li class="disabled"><a href="#">…</a></li> 
                         {% endif %}
                         {% endfor %}
 
                         {% if data.has_next %}
-                            <li class="waves-effect"><a href="{{ url_for('servers', page_num=data.next_num) }}"><i class="material-icons">chevron_right</i></a></li>
+                            <li class="waves-effect"><a href="{{ url_for('servers', page_num=data.next_num, findserver=findserver) }}"><i class="material-icons">chevron_right</i></a></li>
                         {% else %}
                             <li class="disabled"><span><i class="material-icons">chevron_right</i></span>
                         {% endif %}

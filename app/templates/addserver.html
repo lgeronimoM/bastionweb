@@ -5,6 +5,7 @@
          <div class="row">
             <h5>Registro de nuevo servidor</h5>
             <form method="POST" action="/comaddserver">
+                <p class="red-text">{{ validated }}</p>
                 <div class="row">
                     <div class="input-field col s12 m5 l5">
                         <input placeholder="nuevo hostname" id="value" type="text" class="validate" name="hostname" required>

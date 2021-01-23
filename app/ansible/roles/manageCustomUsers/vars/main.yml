@@ -1,4 +1,25 @@
 ---
 # vars file for roles/addCustomUsers
 
+usuario: "luis.geronimo"
+grupo: "GroupTI"
+email: "luis.geronimo@encontrack.com, luis.geronimo@encontrack.com"
+dirfile: "/mnt/c/Users/LP-0220/Documents/Desarrollos/flask/bastionWEB/files/PEMFiles/luis.geronimo"
+dirgoogle: "/mnt/c/Users/LP-0220/Documents/Desarrollos/flask/bastionWEB/files/google-auth"
+
+# SERVER ACCESS
+
+namekey: "bastion_aws"
+ipserver: "192.168.3.101"
+
+# vars config smtp server
+
+host_smtp: "smtp.office365.com"
+port_smtp: "587"
+user_smtp: "notificacionesti@encontrack.com"
+pass_smtp: "Das52564"
+
+# Config bastion host
+ipbastion: "192.168.3.101"
+dnsbastion: "bastion.eps-encontrack.com"
 

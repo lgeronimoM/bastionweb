@@ -57,6 +57,7 @@ def users(page_num):
     statususer = ''
     if request.args.get('statususer'):
         statususer=request.args.get('statususer')
+        print(statususer)
     logging.info('Access page users')
     user = current_user.username
     apiusers=db.session.query(Users).paginate(per_page=5, page=page_num, error_out=True)
@@ -111,35 +112,43 @@ def deleteuser():
     db.session.query(Users).filter(Users.id == idf).delete(synchronize_session=False)
     db.session.commit()
     return redirect(url_for('users'))
-"""
+
 @app.route('/edituser', methods=['POST'])
 @login_required
 def edituser():
-    idf = request.form['update_button']
+    idf = request.form['conf']
     url = cf.APIUSERS+'/'+idf
     apiusers = requests.get(url, headers=headers, verify=False).json()
     user = current_user.username
     queryuser = db.session.query(Users).filter(Users.username==user).first()
     mail = queryuser.email
     return render_template('edituser.html', user=user, mail=mail, apiusers=apiusers)
-"""
+
 @app.route('/updateuser', methods=['POST'])
 @login_required
 def updateuser():
-    idf=int(request.form['conf'])
-    active = request.form.get('checkactive')
-    webaccess = request.form.get('checkweb')
-    if active:
+    idf=int(request.form['idf'])
+    username=request.form['username']
+    queryuser = db.session.query(Users).filter(Users.id == idf).first()
+    psswd=queryuser.password
+    email=request.form['email']
+    group=request.form['group']
+    area=request.form['area']
+    active = request.form['status']
+    webaccess = request.form['webaccess']
+    if request.form['psswd-new']:
+        psswd=request.form['psswd-new']
+    if active == "1":
         active=True
     else:
         active=False
-    if webaccess:
+    if webaccess == "1":
         webaccess=True
     else:
         webaccess=False
-    db.session.query(Users).filter(Users.id == idf).update({'status':active, 'web': webaccess})
+    db.session.query(Users).filter(Users.id == idf).update({'username':username,'password':psswd,'email':email,'area':area,'group':group,'status':active, 'web': webaccess})
     db.session.commit()
-    logging.info('Edit user')
+    logging.info('Edit user '+username)
     return redirect(url_for('users'))
 
 ######################################### Login ############################3########
@@ -178,7 +187,7 @@ def apiuser():
     query = db.session.query(Users).all()
     art=[]
     for res in query:
-        data ={'username': res.username, 'group': res.group, 'email': res.email, 'area': res.area, 'web': res.web, 'estatus':res.status, 'id':res.id }
+        data ={'username': res.username, 'group': res.group, 'email': res.email, 'area': res.area, 'web': res.web, 'status':res.status, 'id':res.id }
         art.append(data)
     db.session.commit()
     return jsonify(art), 200
@@ -188,6 +197,6 @@ def apiuserfilt(id):
     art=[]
     query = db.session.query(Users).filter(Users.id.in_([id])).all()
     for res in query:
-        data = {'username': res.username, 'group': res.group, 'email': res.email, 'area': res.area, 'estatus':res.status, 'web': res.web, 'id':res.id }
+        data = {'username': res.username, 'group': res.group, 'email': res.email, 'area': res.area, 'status':res.status, 'web': res.web, 'id':res.id }
     db.session.commit()
     return jsonify(data), 200

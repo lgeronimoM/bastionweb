@@ -9,7 +9,7 @@
     owner: root
     group: root
     state: directory
-  delegate_to: localhost
+  delegate_to:"{{ serverlocal }}"
   tags: adduser-mfa
 
 - name: Crear el grupo {{ grupo }} si no existe tipo cliente
@@ -37,7 +37,7 @@
     dest: "{{ dirfile }}/{{ namekey }}_{{ usuario }}.pem"
     flat: yes
     owner: ansadmin
-    group: sysadmin
+    group: root
     mode: 0600
   tags: adduser-mfa
 
@@ -47,7 +47,7 @@
     dest: "{{ dirfile }}/{{ namekey }}_{{ usuario }}.ppk"
     flat: yes
     owner: ansadmin
-    group: sysadmin
+    group: root
     mode: 0600
   tags: adduser-mfa
 
@@ -91,7 +91,7 @@
     attach: 
       - "{{ dirfile }}/{{ namekey }}_{{ usuario }}.pem"
       - "{{ dirgoogle }}/google-auth-{{ usuario }}.txt"
-  delegate_to: localhost
+  delegate_to:"{{ serverlocal }}"
   tags: adduser-mfa
 
 ######################### Eliminar usuario cliente ############################
@@ -104,7 +104,7 @@
   tags: deluser-mfa
 
 - name: Eliminar archivo private key
-  delegate_to: localhost
+  delegate_to:"{{ serverlocal }}"
   command: "rm -rf {{ dirfile }}/{{ namekey }}_{{ usuario }}.pem && {{ dirfile }}/{{ namekey }}_{{ usuario }}.ppk && {{ dirgoogle }}/google-auth-{{ usuario }}.txt"
   args:
     warn: false # set warn=false to prevent warning
@@ -121,7 +121,7 @@
     to: "{{ email }}"
     subject: "Baja de usuario."
     body:  "Se elimina el siguiente usuario {{ usuario }} tipo cliente-bastionHosts con IP {{ ipbastion }} y su DNS publico {{ dnsbastion }}."
-  delegate_to: localhost
+  delegate_to:"{{ serverlocal }}"
   tags: deluser-mfa
 
   ######################### Eliminar usuario Server ############################
@@ -134,7 +134,7 @@
   tags: deluser-server
 
 - name: Eliminar archivo private key
-  delegate_to: localhost
+  delegate_to:"{{ serverlocal }}"
   command: "rm -rf {{ dirfile }}/{{ namekey }}_{{ ipserver }}.pem && {{ dirfile }}/{{ namekey }}_{{ ipserver }}.ppk"
   args:
     warn: false # set warn=false to prevent warning
@@ -151,7 +151,7 @@
     to: "{{ email }}"
     subject: "Baja de usuario."
     body:  "Se elimina el siguiente usuario {{ usuario }} tipo server-bastionHosts con IP {{ ipbastion }} y su DNS publico {{ dnsbastion }}."
-  delegate_to: localhost
+  delegate_to:"{{ serverlocal }}"
   tags: deluser-server
 
 ######################### Eliminar permisos de usuarios ############################
@@ -208,7 +208,7 @@
     dest: "{{ dirfile }}/{{ namekey }}_{{ ipserver }}.pem"
     flat: yes
     owner: ansadmin
-    group: sysadmin
+    group: ansadmin
     mode: 0600
   tags: adduser-host
 
@@ -218,7 +218,7 @@
     dest: "{{ dirfile }}/{{ namekey }}_{{ ipserver }}.ppk"
     flat: yes
     owner: ansadmin
-    group: sysadmin
+    group: root
     mode: 0600
   tags: adduser-host
 
@@ -247,5 +247,5 @@
     to: "{{ email }}"
     subject: "Notificacion de alta bastion-server"
     body:  "Este es un correo para informarte que el usuario {{ usuario }} fue creado en el servidor {{ namekey }} con IP privada {{ ipserver }} \n\nEjecuta el siguiente comando desde tu home en en el server BastionHost:\n ssh -i {{ namekey }}_{{ ipserver }}.pem {{ ipserver }} "
-  delegate_to: localhost
+  delegate_to:"{{ serverlocal }}"
   tags: adduser-host

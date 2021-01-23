@@ -1,6 +1,7 @@
 <html>
   <head>
         <title>{% block title %}{% endblock title %}</title>
+        <link rel="shortcut icon" type="image/x-icon" href="{{ url_for('static', filename='img/logo.png' ) }}" /> 
         <!--Import Google Icon Font-->
         <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
         <!--Import materialize.css-->
@@ -10,7 +11,7 @@
         <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css' ) }}">
         <meta charset="utf-8">
   </head>
-  <body>
+  <body class="">
   <header>
     </header>
         <div class="navbar-fixed">
@@ -48,8 +49,9 @@
             </ul>
         </div>   
         <div class="container section">
-            <h5><img class="responsive-img" src="{{ url_for('static', filename='img/logo.png' ) }}" style="width: 60px; margin-top: 10px;">
-            Aplicación de administración de usuarios BastionWEB</h5>
+            <h6><img class="responsive-img" src="{{ url_for('static', filename='img/logo.png' ) }}" style="width: 60px; margin-top: 10px;">
+            Administración de acceso remoto a usuarios "BastionHost" WEB.</h6>
+            <p>BastionHost versión 1.2.0 pahu.</p>
         </div>
         {% block content %} 
         
@@ -73,6 +75,18 @@
 
         var elems = document.querySelectorAll('.sidenav');
         var instances = M.Sidenav.init(elems);
+    });
+
+    $(function () {
+        $("#chkPassport").click(function () {
+            if ($(this).is(":checked")) {
+                $("#dvPassport").show();
+                $("#AddPassport").hide();
+            } else {
+                $("#dvPassport").hide();
+                $("#AddPassport").show();
+            }
+        });
     });
     </script>
   </body>

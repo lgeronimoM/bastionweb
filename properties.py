@@ -8,11 +8,11 @@ class Config(object):
     TEM='bootstrap3'
     NAMEAPP= 'Bastion'
     # properties for Email
-    USER_SMTP= ''
+    USER_SMTP= 'notificacionesti@encontrack.com'
     HOST_SMTP= 'smtp.office365.com'
     PORT_SMTP= 587
-    PASS_SMTP= ''
-    RECIVE_MAILS=''
+    PASS_SMTP= 'Das52564'
+    RECIVE_MAILS='luis.geronimo@encontrack.com'
     #Level log
     LOG_LEVEL = logging.DEBUG
     SECRETKEY= 'des'
@@ -53,13 +53,13 @@ class DevelopmentConfig(Config):
     #ANSIBLE datos
     USERANS='ansadmin'
     PASSWDANS=''
-    PRIVATEKEY='/mnt/c/Users/LP-0220/Documents/Desarrollos/flask/bastionWEB/files/PEMFiles/bastion_hosts_ansadmin.pem'
-    HOSTANS='/mnt/c/Users/LP-0220/Documents/Desarrollos/flask/bastionWEB/app/ansible/inventory'
-    MAINAPP='/mnt/c/Users/LP-0220/Documents/Desarrollos/flask/bastionWEB/app/ansible/manageCustomUsers.yml'
-    DIRFILEPEM= '/mnt/c/Users/LP-0220/Documents/Desarrollos/flask/bastionWEB/files/PEMFiles'
-    DIRFILEQR= '/mnt/c/Users/LP-0220/Documents/Desarrollos/flask/bastionWEB/files/google-auth'
+    PRIVATEKEY='/home/lgeronimo/Documents/Desarrollos/flask/bastionWEB/files/PEMFiles/bastion_hosts_ansadmin.pem'
+    HOSTANS='/home/lgeronimo/Documents/Desarrollos/flask/bastionWEB/app/ansible/inventory'
+    MAINAPP='/home/lgeronimo/Documents/Desarrollos/flask/bastionWEB/app/ansible/manageCustomUsers.yml'
+    DIRFILEPEM= '/home/lgeronimo/Documents/Desarrollos/flask/bastionWEB/files/PEMFiles'
+    DIRFILEQR= '/home/lgeronimo/Documents/Desarrollos/flask/bastionWEB/files/google-auth'
     # properties SQlite
-    DB_DIR = 'sqlite:////mnt/c/Users/LP-0220/Documents/Desarrollos/flask/bastionWEB/db/des-data.db'
+    DB_DIR = 'sqlite:////home/lgeronimo/Documents/Desarrollos/flask/bastionWEB/db/des-data.db'
     # Log
     LOG_DIR='logs/bastion_%d_%m_%Y.log'
     # Port
