@@ -107,8 +107,6 @@ def comadduser():
 @login_required
 def deleteuser():
     idf = int(request.form['id'])
-    url = cf.APIUSERS
-    hosting = requests.get(url, headers=headers, verify=False).json()
     db.session.query(Users).filter(Users.id == idf).delete(synchronize_session=False)
     db.session.commit()
     return redirect(url_for('users'))
@@ -194,7 +192,6 @@ def apiuser():
 
 @app.route('/core/v1.0/users/<id>')
 def apiuserfilt(id):
-    art=[]
     query = db.session.query(Users).filter(Users.id.in_([id])).all()
     for res in query:
         data = {'username': res.username, 'group': res.group, 'email': res.email, 'area': res.area, 'status':res.status, 'web': res.web, 'id':res.id }

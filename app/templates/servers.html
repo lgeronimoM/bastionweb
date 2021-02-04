@@ -9,7 +9,7 @@
                         <p class="center">Realizar nuevo registro de servidor</p>
                         <div class="card-action">
                         <form method="POST" action="/addserver">
-                            <div class="form-field">
+                            <div class="form-field center">
                                 <button class="btn waves-effect waves-green green darken-2" type="submit" name="Submit">
                                     Agregar server
                                 </button>
@@ -18,15 +18,15 @@
                         </div>
                     </div>
                 </div>
-                <div class="col s12 m6 l6">
+                <div class="col s12 m4 l4">
                     <form method="GET" action="/servers">
                         <div class="input-field col s12 m12 l12">
-                            <input placeholder="nombre clave" id="" type="text" class="validate" name="findserver" required>
+                            <input placeholder="nombre clave" id="" type="search" class="validate" name="findserver" required>
                             <label for="nombre clave">Buscar Server</label>
                         </div>
                         <div class="card-action">
                             <div class="form-field">
-                                <button class="btn waves-effect waves-green green darken-2" type="submit" name="Submit">
+                                <button class="btn waves-effect waves-green blue darken-2" type="submit" name="Submit">
                                     Buscar
                                 </button>
                             </div>
@@ -38,80 +38,86 @@
                 </div>
             </div>
         </div>
-        <div class="row" style="margin: 35px;">
-            <div class="card">
-                <div class="card-content">
-                    <span class="card-title">Registros de servidores</span>
-                    <form action="/deleteserver" method="POST">
-                        <table class="striped">
-                            <thead>
-                                <tr>
-                                    <th>Hostname</th>
-                                    <th>nombre clave</th>
-                                    <th>Descripción</th>
-                                    <th>DNS</th>
-                                    <th>Tipo</th>
-                                    <th>Departamento</th>
-                                    <th>Localidad</th>
-                                    <th>IP_Admin</th>
-                                    <th>Servicio</th>
-                                    <th>SistemaO.</th>
-                                    <th>Estatus</th>
-                                    <th>Editar Borrar</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {% for res in data.items %}
-                                <tr>
-                                    <td>{{res['hostname']}}</td>
-                                    <td>{{res['namekey']}}</td>
-                                    <td>{{res['description']}}</td>
-                                    <td>{{res['dns']}}</td>
-                                    <td>{{res['tipe']}}</td>
-                                    <td>{{res['department']}}</td>
-                                    <td>{{res['localation']}}</td>
-                                    <td>{{res['ipadmin']}}</td>
-                                    <td>{{res['service']}}</td>
-                                    <td>{{res['os']}}</td>
-                                    <td>{{res['active']}}</td>
-                                    <td>
-                                        <button class="btn white" type="submit"  formmethod="post" formaction="/editserver" name="update_button"  value="{{res['id']}}" >
-                                            <i class="material-icons black-text">edit</i>
-                                        </button>
-                                        <button class="btn white" type="submit" name="id" onclick="return confirm('Are you sure to delete?')" value="{{res['id']}}">
-                                            <i class="material-icons black-text">delete</i>
-                                        </button>
-                                    </td>
-                                </tr>
-                                {% endfor %}
-                            </tbody>
-                        </table>
-                    </form>
-                    <div class="center">
-                        <ul class="pagination">
+        <div class="container">
+            <div class="row">
+                <div class="card">
+                    <div class="card-content">
+                        <span class="card-title center"><b>Registros de servidores</b></span>
+                        <form action="/deleteserver" method="POST">
+                            <table class="striped">
+                                <thead>
+                                    <tr>
+                                        <th>Hostname</th>
+                                        <th>Nombre clave</th>
+                                        <th>DNS</th>
+                                        <th>Tipo</th>
+                                        <th>Departamento</th>
+                                        <th>Localidad</th>
+                                        <th>IP_Admin</th>
+                                        <th>Servicio</th>
+                                        <th>Sistema Operativo.</th>
+                                        <th>Estatus</th>
+                                        <th>Configurar</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for res in data.items %}
+                                    <tr>
+                                        <td>{{res['hostname']}}</td>
+                                        <td>{{res['namekey']}}</td>
+                                        <td>{{res['dns']}}</td>
+                                        <td>{{res['tipe']}}</td>
+                                        <td>{{res['department']}}</td>
+                                        <td>{{res['localation']}}</td>
+                                        <td>{{res['ipadmin']}}</td>
+                                        <td>{{res['service']}}</td>
+                                        <td>{{res['os']}}</td>
+                                        <td>
+                                            {% if res['active'] == True %}
+                                                <i class="material-icons green-text">check_circle</i>
+                                            {% else %}
+                                                <i class="material-icons grey-text">do_not_disturb_on</i>
+                                            {% endif %} 
+                                        </td>
+                                        <td>
+                                            <button class="btn white" type="submit"  formmethod="post" formaction="/editserver" name="update_button"  value="{{res['id']}}" >
+                                                <i class="material-icons black-text">edit</i>
+                                            </button>
+                                            <button class="btn white" type="submit" name="id" onclick="return confirm('Are you sure to delete?')" value="{{res['id']}}">
+                                                <i class="material-icons black-text">delete</i>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </form>
+                        <div class="center">
+                            <ul class="pagination">
 
-                        {% if data.has_prev %}
-                            <li class="waves-effect"><a class="page-link" href="{{ url_for('servers', page_num=data.prev_num, findserver=findserver) }}"><i class="material-icons">chevron_left</i></a></li>
-                        {% else %}
-                            <li class="disabled"><span><i class="material-icons">chevron_left</i></span>
-                        {% endif %}
-                            </li>
+                            {% if data.has_prev %}
+                                <li class="waves-effect"><a class="page-link" href="{{ url_for('servers', page_num=data.prev_num, findserver=findserver) }}"><i class="material-icons">chevron_left</i></a></li>
+                            {% else %}
+                                <li class="disabled"><span><i class="material-icons">chevron_left</i></span>
+                            {% endif %}
+                                </li>
 
-                        {% for page in data.iter_pages(left_edge=3, right_edge=3) %}
-                        {% if page %}
-                        <li class="waves-effect"><a href="{{ url_for('servers', page_num=page, findserver=findserver) }}">{{ page }}</a></li>
-                        {% else %}
-                        <li class="disabled"><a href="#">…</a></li> 
-                        {% endif %}
-                        {% endfor %}
+                            {% for page in data.iter_pages(left_edge=3, right_edge=3) %}
+                            {% if page %}
+                            <li class="waves-effect"><a href="{{ url_for('servers', page_num=page, findserver=findserver) }}">{{ page }}</a></li>
+                            {% else %}
+                            <li class="disabled"><a href="#">…</a></li> 
+                            {% endif %}
+                            {% endfor %}
 
-                        {% if data.has_next %}
-                            <li class="waves-effect"><a href="{{ url_for('servers', page_num=data.next_num, findserver=findserver) }}"><i class="material-icons">chevron_right</i></a></li>
-                        {% else %}
-                            <li class="disabled"><span><i class="material-icons">chevron_right</i></span>
-                        {% endif %}
-                                
-                        </ul>
+                            {% if data.has_next %}
+                                <li class="waves-effect"><a href="{{ url_for('servers', page_num=data.next_num, findserver=findserver) }}"><i class="material-icons">chevron_right</i></a></li>
+                            {% else %}
+                                <li class="disabled"><span><i class="material-icons">chevron_right</i></span>
+                            {% endif %}
+                                    
+                            </ul>
+                        </div>
                     </div>
                 </div>
             </div>

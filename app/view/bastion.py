@@ -116,6 +116,7 @@ def addbastionserver():
     group=apiusers['group']
     ipserver=apiservers['ipadmin']
     namekey=apiservers['namekey']
+    ipserver=apiservers['ipadmin']
     filekey=namekey+'_'+ipserver+'.pem'
     queryuser =  Access.query.filter(and_(Access.server==server, Access.user==user, Access.tipe=='server' )).first()
     if queryuser:

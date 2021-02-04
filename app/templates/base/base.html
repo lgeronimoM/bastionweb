@@ -21,9 +21,9 @@
                 <ul id="nav-mobile" class="right hide-on-med-and-down">
                     <li><i class="material-icons white-text">account_circle</i></li>
                     <li style="margin-right: 50px;">{{user}}</li>
-                    <li><i class="material-icons white-text">find_in_page </i></li>
+                    <li><i class="material-icons white-text">widgets</i></li>
                     <li style="margin-right: 50px;"><a href="https://github.com/lgeronimoM/bastionweb">Proyecto Github</a></li>
-                    <li><i class="material-icons white-text">perm_data_setting</i></li>
+                    <li><i class="material-icons white-text">storage</i></li>
                     <li style="margin-right: 50px;"> <a href="/admin">adminBD</a></li>
                     <li><i class="material-icons darken-4"><b>exit_to_app</b></i></li>
                     <li style="margin-right: 50px;" class="left"><a href="/logout">Salir</a></li>
@@ -48,10 +48,28 @@
                 <li><a href="/bastion">Control de acceso</a></li>
             </ul>
         </div>   
-        <div class="container section">
-            <h6><img class="responsive-img" src="{{ url_for('static', filename='img/logo.png' ) }}" style="width: 60px; margin-top: 10px;">
-            Administración de acceso remoto a usuarios "BastionHost" WEB.</h6>
-            <p>BastionHost versión 1.2.0 pahu.</p>
+        <div class="container row section">
+            <div class="col s6">
+                <h6><img class="responsive-img" src="{{ url_for('static', filename='img/logo.png' ) }}" style="width: 60px;">
+                Administración de acceso remoto a usuarios "BastionHost" WEB.</h6>
+                <p>BastionHost versión 1.2.0 pahu.</p>
+            </div>
+            <div class="col s6">
+                <div class="row">
+                    <div class="col s3">
+                        <a href="/"><i class="small material-icons darken-4 brown-text text-darken-2"><b>home</b></i></a><p>Home</p> 
+                    </div>
+                    <div class="col s3">
+                        <a href="/users"><i class="small material-icons darken-4 brown-text text-darken-2"><b>supervisor_account</b></i></a><p>Users</p>
+                    </div>
+                    <div class="col s3">
+                        <a href="/servers"><i class="small material-icons darken-4 brown-text text-darken-2"><b>devices</b></i></a><p>Servers</p>
+                    </div>
+                    <div class="col s3">
+                        <a href="/bastion"><i class="small material-icons darken-4 brown-text text-darken-2"><b>vpn_key</b></i></a><p>Access</p>
+                    </div>
+                </div>
+            </div>
         </div>
         {% block content %} 
         
@@ -87,6 +105,18 @@
                 $("#AddPassport").show();
             }
         });
+    });
+
+        //Add a JQuery click event handler onto our checkbox.
+        $('#terms_and_conditions').click(function(){
+        //If the checkbox is checked.
+        if($(this).is(':checked')){
+            //Enable the submit button.
+            $('#submit_button').attr("disabled", false);
+        } else{
+            //If it is not checked, disable the button.
+            $('#submit_button').attr("disabled", true);
+        }
     });
     </script>
   </body>

@@ -96,7 +96,13 @@ def comaddserver():
     ram = str(request.form['ram'])
     cpu = str(request.form['cpu'])
     disco = str(request.form['disco'])
-    insertQuery = Servers(host,name,descripcion,dns,tipo,departamento,localidad,ipadmin,ippro,servicio,hipervisor,sistema,ram,cpu,disco,True)
+    bastion = request.form.get('bastion')
+    if bastion:
+        bastion=True
+    else:
+        bastion=False
+    print(str(bastion)+" esta aqui")
+    insertQuery = Servers(host,name,descripcion,dns,tipo,departamento,localidad,ipadmin,ippro,servicio,hipervisor,sistema,ram,cpu,disco,bastion)
     queryserver =  db.session.query(Servers).filter(or_(Servers.hostname==host, Servers.ipadmin==ipadmin, Servers.namekey==name)).first()
     if queryserver:
         #statusadd='Ya existe '+host+' o ip '+ipadmin+' verificalo'

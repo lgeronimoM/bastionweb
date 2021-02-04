@@ -25,7 +25,7 @@
         <div class="row">
             <div class="card">
                 <div class="card-content">
-                    <h5 class="card-title center">Administración y registro de usuarios</h5>
+                    <h5 class="card-title center"><b>Administración y registro de usuarios</b></h5>
                     <div class="row">
                     <table>
                         <thead>
@@ -36,7 +36,7 @@
                                 <th>Grupo</th>
                                 <th>Activo</th>
                                 <th>Acceso Web</th>
-                                <th>Contraseña</th>
+                                <th>Editar</th>
                                 <th>Borrar</th>
                             </tr>
                         </thead>
@@ -60,14 +60,14 @@
                                     {% if user['status'] == True %}
                                         <i class="material-icons green-text">check_circle</i>
                                     {% else %}
-                                        <i class="material-icons grey-text">check_circle</i>
+                                        <i class="material-icons grey-text">do_not_disturb_on</i>
                                     {% endif %} 
                                 </td>
                                 <td>
                                     {% if user['web'] == True %}
                                         <i class="material-icons green-text">check_circle</i>
                                     {% else %}
-                                        <i class="material-icons grey-text">check_circle</i>
+                                        <i class="material-icons grey-text">do_not_disturb_on</i>
                                     {% endif %}
                                 </td>
                                 <td>
@@ -120,14 +120,4 @@
     </main>    
     <!-- Compiled and minified JavaScript -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
-    <script>
-    function toggle_check(checkweb) {
-      if (checkweb.value=="on") {
-        checkweb.value="off";
-      }
-      else {
-        checkweb.value="on";
-      }
-    }
-    </script>
 {% endblock content %}

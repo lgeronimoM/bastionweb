@@ -28,8 +28,14 @@
                 <form method="POST" action="/deletebastion">
                     <p>Servidor seleccionado como bastion <b class="green-text">{{apibastion['bastion']}}</b></p>
                     <input type="hidden" value="{{apibastion['id']}}" class="validate" name="idf" required>
-                    <button class="btn red" type="submit" name="submit" >Eliminar
+                    <button class="btn red" type="submit"  id="submit_button" disabled>Eliminar
                     </button>
+                    <p>
+                        <label for="terms_and_conditions">
+                          <input type="checkbox" id="terms_and_conditions" value="1" onclick="terms_changed(this)"  />
+                          <span>Check si deseas remover el actual server bastion </span>
+                        </label>
+                      </p>
                 </form>
             </div>
             {% if name %}
@@ -73,7 +79,7 @@
             <div class="col s12 m12 l5">
                 <div class="card white">
                     <form method="POST" action="/addbastionclient">
-                        <p class="center">Generar acceso Cliente-BationHost + MFA</p>
+                        <p class="center"><b>Generar acceso Cliente-BationHost + MFA</b></p>
                         <div class="input-field col s12 m10 l10">
                             <select class="blue-text text-darken-2" id="select" name="user" required>
                                 <option value="" disabled selected>Seleccion el usuario</option>
@@ -95,12 +101,14 @@
             <div class="col s12 m12 l7">
                 <div class="card white">
                     <form method="POST" action="/addbastionserver">
-                        <p class="center"> Generar acceso BationHost-Servidor</p>
+                        <p class="center"><b>Generar acceso BationHost-Servidor</b></p>
                         <div class="input-field col s12 m6 l6">
                             <select class="blue-text text-darken-2" id="select" name="server" required>
                                 <option value="" disabled selected>Seleccion el servidor</option>
                                 {% for res in apiservers %}
-                                <option value="{{res['id']}}">{{ res['hostname'] }}_{{ res['ipadmin'] }}</option>
+                                    {% if res['estado'] %}
+                                        <option value="{{res['id']}}">{{ res['hostname'] }}_{{ res['ipadmin'] }}</option>
+                                    {% endif %}
                                 {% endfor %}
                             </select>
                         </div>
@@ -134,89 +142,93 @@
         </div>
         {% endif %}
         <div class="row">
-            <h5 class="center">Alta de accesos</h5>
-            <table class="striped">
-                <thead>
-                    <tr>
-                        <th>Usuario</th>
-                        <th>Servidor</th>
-                        <th>Tipo Acceso</th>
-                        <th>Archivo Key</th>
-                        <th>Archivo QR</th>
-                        <th>Regenerar</th>
-                        <th>Reenviar</th>
-                        <th>Borrar</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for res in data.items %}
-                    <tr>
-                        <td>{{res['user']}}</td>
-                        <td>{{res['server']}}</td>
-                        <td>{{res['tipe']}}</td>
-                        <td>{{res['keypair']}}</td>
-                        <td>{{res['keyqr']}}</td>
-                        <td>
-                            <form action="/combastion" method="POST">
-                                <input id="tipe" type="hidden" value="{{res['tipe']}}" class="validate" name="tipe" required>
-                                <input id="user" type="hidden" value="{{res['userid']}}" class="validate" name="user" required>
-                                <input id="server" type="hidden" value="{{res['serverid']}}" class="validate" name="server" required>
-                                <input id="server" type="hidden" value="{{res['id']}}" class="validate" name="idf" required>
-                                <button class="btn white" type="submit" name="submit" >
-                                    <i class="material-icons black-text">settings</i>
-                                </button>
-                            </form>
-                        </td>
-                        <td> 
-                            <form action="/message" method="POST">
-                                <input id="idaccess" type="hidden" value="{{res['id']}}" class="validate" name="idaccess" required>
-                                <input id="iduser" type="hidden" value="{{res['userid']}}" class="validate" name="iduser" required>
-                                <button class="btn white" type="submit" name="submit">
-                                        <i class="material-icons black-text">send</i>
-                                </button>
-                            </form>
-                        </td>
-                        <td>
-                            <form action="/deleteaccess" method="POST">
-                                <input id="tipe" type="hidden" value="{{res['tipe']}}" class="validate" name="tipe" required>
-                                <input id="user" type="hidden" value="{{res['userid']}}" class="validate" name="user" required>
-                                <input id="server" type="hidden" value="{{res['serverid']}}" class="validate" name="server" required>
-                                <input id="server" type="hidden" value="{{res['id']}}" class="validate" name="idf" required>
-                                <button class="btn white" type="submit" name="submit" onclick="return confirm('Are you sure to delete?')">
-                                    <i class="material-icons black-text">delete</i>
-                                </button>
-                            </form>
-                        </td>
-                    </tr>
-                    {% endfor %}
-                    
-                </tbody>
-            </table>
-            <div class="center">
-                <ul class="pagination">
+            <div class="card">
+                <div class="card-content">
+                    <span class="card-title center"><b>Alta de accesos</b></span>
+                    <table class="striped">
+                        <thead>
+                            <tr>
+                                <th>Usuario</th>
+                                <th>Servidor</th>
+                                <th>Tipo Acceso</th>
+                                <th>Archivo Key</th>
+                                <th>Archivo QR</th>
+                                <th>Regenerar</th>
+                                <th>Reenviar</th>
+                                <th>Borrar</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for res in data.items %}
+                            <tr>
+                                <td>{{res['user']}}</td>
+                                <td>{{res['server']}}</td>
+                                <td>{{res['tipe']}}</td>
+                                <td>{{res['keypair']}}</td>
+                                <td>{{res['keyqr']}}</td>
+                                <td>
+                                    <form action="/combastion" method="POST">
+                                        <input id="tipe" type="hidden" value="{{res['tipe']}}" class="validate" name="tipe" required>
+                                        <input id="user" type="hidden" value="{{res['userid']}}" class="validate" name="user" required>
+                                        <input id="server" type="hidden" value="{{res['serverid']}}" class="validate" name="server" required>
+                                        <input id="server" type="hidden" value="{{res['id']}}" class="validate" name="idf" required>
+                                        <button class="btn white" type="submit" name="submit" >
+                                            <i class="material-icons black-text">settings</i>
+                                        </button>
+                                    </form>
+                                </td>
+                                <td> 
+                                    <form action="/message" method="POST">
+                                        <input id="idaccess" type="hidden" value="{{res['id']}}" class="validate" name="idaccess" required>
+                                        <input id="iduser" type="hidden" value="{{res['userid']}}" class="validate" name="iduser" required>
+                                        <button class="btn white" type="submit" name="submit">
+                                                <i class="material-icons black-text">send</i>
+                                        </button>
+                                    </form>
+                                </td>
+                                <td>
+                                    <form action="/deleteaccess" method="POST">
+                                        <input id="tipe" type="hidden" value="{{res['tipe']}}" class="validate" name="tipe" required>
+                                        <input id="user" type="hidden" value="{{res['userid']}}" class="validate" name="user" required>
+                                        <input id="server" type="hidden" value="{{res['serverid']}}" class="validate" name="server" required>
+                                        <input id="server" type="hidden" value="{{res['id']}}" class="validate" name="idf" required>
+                                        <button class="btn white" type="submit" name="submit" onclick="return confirm('Are you sure to delete?')">
+                                            <i class="material-icons black-text">delete</i>
+                                        </button>
+                                    </form>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                            
+                        </tbody>
+                    </table>
+                    <div class="center">
+                        <ul class="pagination">
 
-                {% if data.has_prev %}
-                    <li class="waves-effect"><a class="page-link" href="{{ url_for('bastion', page_num=data.prev_num, filteruser=filteruser) }}"><i class="material-icons">chevron_left</i></a></li>
-                {% else %}
-                    <li class="disabled"><span><i class="material-icons">chevron_left</i></span>
-                {% endif %}
-                    </li>
+                        {% if data.has_prev %}
+                            <li class="waves-effect"><a class="page-link" href="{{ url_for('bastion', page_num=data.prev_num, filteruser=filteruser) }}"><i class="material-icons">chevron_left</i></a></li>
+                        {% else %}
+                            <li class="disabled"><span><i class="material-icons">chevron_left</i></span>
+                        {% endif %}
+                            </li>
 
-                {% for page in data.iter_pages(left_edge=3, right_edge=3) %}
-                {% if page %}
-                <li class="waves-effect"><a href="{{ url_for('bastion', page_num=page, filteruser=filteruser) }}">{{ page }}</a></li>
-                {% else %}
-                <li class="disabled"><a href="#">…</a></li> 
-                {% endif %}
-                {% endfor %}
+                        {% for page in data.iter_pages(left_edge=3, right_edge=3) %}
+                        {% if page %}
+                        <li class="waves-effect"><a href="{{ url_for('bastion', page_num=page, filteruser=filteruser) }}">{{ page }}</a></li>
+                        {% else %}
+                        <li class="disabled"><a href="#">…</a></li> 
+                        {% endif %}
+                        {% endfor %}
 
-                {% if data.has_next %}
-                    <li class="waves-effect"><a href="{{ url_for('bastion', page_num=data.next_num, filteruser=filteruser) }}"><i class="material-icons">chevron_right</i></a></li>
-                {% else %}
-                    <li class="disabled"><span><i class="material-icons">chevron_right</i></span>
-                {% endif %}
-                        
-                </ul>
+                        {% if data.has_next %}
+                            <li class="waves-effect"><a href="{{ url_for('bastion', page_num=data.next_num, filteruser=filteruser) }}"><i class="material-icons">chevron_right</i></a></li>
+                        {% else %}
+                            <li class="disabled"><span><i class="material-icons">chevron_right</i></span>
+                        {% endif %}
+                                
+                        </ul>
+                    </div>
+                </div>
             </div>
         </div>
     </main>    
