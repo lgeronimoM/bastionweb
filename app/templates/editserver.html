@@ -1,0 +1,142 @@
+{% extends 'base/base.html' %}
+{% block title %} bastion editserver {% endblock title%}
+{% block content %}
+    <main class="container">
+        <div class="row">
+            <div class="card">
+                <div class="card-content container">
+                    <span class="card-title center"><b>Editar registro del servidor {{apiservers.hostname}}</b></span>
+                    <form method="POST" action="/updateserver">
+                        <p>Editar servidor</p>
+                        <input id="idf" type="hidden" value="{{apiservers.id}}" class="validate" name="idf" required>
+                        <div class="row">
+                            <div class="input-field col s12 m6 l6">
+                                <input placeholder="nuevo hostname" id="value" type="text" value="{{apiservers.hostname}}" class="validate" name="hostname" required>
+                                <label for="hostname">Hostname</label>
+                            </div>
+                            <div class="input-field col s12 m6 l6">
+                                <input placeholder="name" id="value" type="text" value="{{apiservers.namekey}}" class="validate" name="name" required>
+                                <label for="name clave">Nombre clave</label>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="input-field col s12">
+                                <input placeholder="descripcion" id="value" type="text"  value="{{apiservers.descripcion}}" class="validate" name="descripcion" required>
+                                <label for="descripcion">Descripción</label>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="input-field col s12 m6 l6">
+                                <input placeholder="dns" id="value" type="text"  value="{{apiservers.dns}}" class="validate" name="dns" required>
+                                <label for="dns">DNS</label>
+                            </div>
+                            <div class="input-field col s12 m6 l6">
+                                <input placeholder="ipadmin" id="value" type="text"  value="{{apiservers.ipadmin}}" class="validate" name="ipadmin" required>
+                                <label for="ipadmin">IP Administración server</label>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="input-field col s12 m4 l4">
+                                <select class="blue-text text-darken-2" id="select"  value="{{apiservers.ubicacion}}" name="localidad" required>
+                                        <option value="{{apiservers.ubicacion}}" selected>{{apiservers.ubicacion}}</option>
+                                        <option value="miami">miami</option>
+                                        <option value="aws">aws</option>
+                                        <option value="qro">qro</option>
+                                        <option value="cdmx-cua">cdmx-cua</option>
+                                        <option value="cdmx-chi">cdmx-chi</option>
+                                </select>
+                            </div>
+                            <div class="input-field col s12 m4 l4">
+                                <input placeholder="departamento" id="value" type="text"  value="{{apiservers.departamento}}" class="validate" name="departamento" required>
+                                <label for="departamento">Departamento</label>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="input-field col s12 m4 l4">
+                                <select class="blue-text text-darken-2" id="select"  value="{{apiservers.tipo}}" name="tipe" required>
+                                        <option value="{{apiservers.tipo}}"  selected>{{apiservers.tipo}}</option>
+                                        <option value="virtual">virtual</option>
+                                        <option value="fisico">fisico</option>
+                                </select>
+                            </div>
+                            <div class="input-field col s12 m4 l4">
+                                <input placeholder="servicio" id="value" type="text" value="{{apiservers.servicio}}" class="validate" name="servicio" required>
+                                <label for="servicio">Servicio</label>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="input-field col s12 m4 l4">
+                                <select class="blue-text text-darken-2" id="select" name="estatus" required>
+                                    {% if apiservers.estado == True %}
+                                        <option value="1" selected>activo</option>
+                                    {% else %}
+                                        <option value="0" selected>desactivo</option>
+                                    {% endif %}
+                                    <option value="1">activo</option>
+                                    <option value="0">desactivo</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="form-field">
+                                <button class="btn add-button" type="submit" onclick="mostrarPreload()" name="edit_button">Modificar
+                                </button>
+                                <button class="btn del-button" type="submit" formmethod="get" formnovalidate="novalidate" formaction="/servers" name="cancelar" >cancelar
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <!-- Modal Structure -->
+        <div id="miModal" class="modal modalLoad">
+            <div class="modal-content center">
+                <div class="preloader-wrapper big active">
+                    <div class="spinner-layer spinner-blue">
+                      <div class="circle-clipper left">
+                        <div class="circle"></div>
+                      </div><div class="gap-patch">
+                        <div class="circle"></div>
+                      </div><div class="circle-clipper right">
+                        <div class="circle"></div>
+                      </div>
+                    </div>
+              
+                    <div class="spinner-layer spinner-red">
+                      <div class="circle-clipper left">
+                        <div class="circle"></div>
+                      </div><div class="gap-patch">
+                        <div class="circle"></div>
+                      </div><div class="circle-clipper right">
+                        <div class="circle"></div>
+                      </div>
+                    </div>
+              
+                    <div class="spinner-layer spinner-yellow">
+                      <div class="circle-clipper left">
+                        <div class="circle"></div>
+                      </div><div class="gap-patch">
+                        <div class="circle"></div>
+                      </div><div class="circle-clipper right">
+                        <div class="circle"></div>
+                      </div>
+                    </div>
+              
+                    <div class="spinner-layer spinner-green">
+                      <div class="circle-clipper left">
+                        <div class="circle"></div>
+                      </div><div class="gap-patch">
+                        <div class="circle"></div>
+                      </div><div class="circle-clipper right">
+                        <div class="circle"></div>
+                      </div>
+                    </div>
+                  </div>
+            <p class="white-text center">Proceso en curso espere no cierre la ventana ...</p>
+            </div>
+        </div>
+    </main>    
+    <!-- Compiled and minified JavaScript -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+{% endblock content %}

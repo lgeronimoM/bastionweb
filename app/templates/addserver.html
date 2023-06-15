@@ -1,0 +1,135 @@
+{% extends 'base/base.html' %}
+{% block title %} bastion addserver {% endblock title%}
+{% block content %}
+    <main class="container">
+         <div class="row">
+            <div class="card">
+                <div class="card-content container">
+                    <span class="card-title center"><b>Registro de nuevo servidor</b></span>
+                    <form method="POST" action="/comaddserver">
+                        <p class="red-text">{{ validated }}</p>
+                        <div class="row">
+                            <div class="input-field col s12 m6 l6">
+                                <input placeholder="nuevo hostname" id="value" type="text" class="validate" name="hostname" required>
+                                <label for="hostname">Hostname</label>
+                            </div>
+                            <div class="input-field col s12 m6 l6">
+                                <input placeholder="name" id="value" type="text" class="validate" name="name" required>
+                                <label for="name clave">Nombre clave</label>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="input-field col s12 m12 l12">
+                                <input placeholder="descripcion" id="value" type="text" class="validate" name="descripcion" required>
+                                <label for="descripcion">Descripción</label>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="input-field col s12 m6 l6">
+                                <input placeholder="DNS" id="value" type="text" class="validate" name="dns" required>
+                                <label for="DNS">DNS</label>
+                            </div>
+                            <div class="input-field col s12 m6 l6">
+                                <input placeholder="ipadmin" id="value" type="text" class="validate" name="ipadmin" required>
+                                <label for="ipadmin">IP Administración server</label>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="input-field col s12 m4 l4">
+                                <select class="blue-text text-darken-2" id="select" name="localidad" required>
+                                        <option value="" disabled selected>Localidad</option>
+                                        <option value="miami">miami</option>
+                                        <option value="aws">aws</option>
+                                        <option value="qro">qro</option>
+                                        <option value="cdmx-cua">cdmx-cua</option>
+                                        <option value="cdmx-chi">cdmx-chi</option>
+                                </select>
+                            </div>
+                            <div class="input-field col s12 m4 l4">
+                                <input placeholder="departamento" id="value" type="text" class="validate" name="departamento" required>
+                                <label for="departamento">Departamento</label>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="input-field col s12 m4 l4">
+                                <select class="blue-text text-darken-2" id="select" name="tipo" required>
+                                        <option value="" disabled selected>Tipo de servidor</option>
+                                        <option value="virtual">virtual</option>
+                                        <option value="fisico">fisico</option>
+                                </select>
+                            </div>
+                            <div class="input-field col s12 m8 l8">
+                                <input placeholder="servicio" id="value" type="text" class="validate" name="servicio" required>
+                                <label for="servicio">Servicio</label>
+                            </div>
+                        </div>    
+                        <div class="row">
+                            <label>
+                                <input type="checkbox" name="bastion" value="1" />
+                                <span>Activar para bastion</span>
+                            </label>
+                        </div>
+                        <div class="row">
+                            <div class="form-field">
+                                <button class="btn add-button" type="submit" onclick="mostrarPreload()" name="serveradd">
+                                    Guardar
+                                </button>
+                                <button class="btn find-button" type="submit" name="addsave" formmethod="post" formnovalidate="novalidate" formaction="/comaddsaveserver">
+                                    Guardar/Agregar
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>           
+        </div>
+        <!-- Modal Structure -->
+        <div id="miModal" class="modal modalLoad">
+            <div class="modal-content center">
+                <div class="preloader-wrapper big active">
+                    <div class="spinner-layer spinner-blue">
+                      <div class="circle-clipper left">
+                        <div class="circle"></div>
+                      </div><div class="gap-patch">
+                        <div class="circle"></div>
+                      </div><div class="circle-clipper right">
+                        <div class="circle"></div>
+                      </div>
+                    </div>
+              
+                    <div class="spinner-layer spinner-red">
+                      <div class="circle-clipper left">
+                        <div class="circle"></div>
+                      </div><div class="gap-patch">
+                        <div class="circle"></div>
+                      </div><div class="circle-clipper right">
+                        <div class="circle"></div>
+                      </div>
+                    </div>
+              
+                    <div class="spinner-layer spinner-yellow">
+                      <div class="circle-clipper left">
+                        <div class="circle"></div>
+                      </div><div class="gap-patch">
+                        <div class="circle"></div>
+                      </div><div class="circle-clipper right">
+                        <div class="circle"></div>
+                      </div>
+                    </div>
+              
+                    <div class="spinner-layer spinner-green">
+                      <div class="circle-clipper left">
+                        <div class="circle"></div>
+                      </div><div class="gap-patch">
+                        <div class="circle"></div>
+                      </div><div class="circle-clipper right">
+                        <div class="circle"></div>
+                      </div>
+                    </div>
+                  </div>
+            <p class="white-text center">Proceso en curso espere no cierre la ventana ...</p>
+            </div>
+        </div>
+    </main>    
+
+{% endblock content %}

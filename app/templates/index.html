@@ -1,0 +1,93 @@
+{% extends 'base/base.html' %}
+{% block title %} bastionWeb {% endblock title%}
+{% block content %}
+    <main class="container">
+        <div class="row">
+            <div class="col s12 m4">
+                <div class="card metrics-client">
+                    <div class="card-content white-text">
+                    <span class="card-title"><i class="small material-icons">account_circle</i> Clientes</span>
+                    <h5 class="right-align">{{ client|length }}</h5>
+                    </div>
+                </div>
+            </div>
+            <div class="col s12 m4">
+                <div class="card metrics-client">
+                    <div class="card-content white-text">
+                    <span class="card-title"><i class="small material-icons">account_circle</i> Clientes-webaccess</span>
+                    <h5 class="right-align">{{ clientweb.count() }}</h5>
+                    </div>
+                </div>
+            </div>
+            <div class="col s12 m4">
+                <div class="card metrics-client">
+                    <div class="card-content white-text">
+                    <span class="card-title"><i class="small material-icons">important_devices</i> Servidores-MIAMI</span>
+                    <h5 class="right-align">{{ serversmiami.count() }}</h5>
+                    </div>
+                </div>
+            </div>
+            <div class="col s12 m4">
+                <div class="card metrics-client">
+                    <div class="card-content white-text">
+                    <span class="card-title"><i class="small material-icons">important_devices</i> Servidores-AWS</span>
+                    <h5 class="right-align">{{ serversaws.count() }}</h5>
+                    </div>
+                </div>
+            </div>
+            <div class="col s12 m4">
+                <div class="card metrics-client">
+                    <div class="card-content white-text">
+                    <span class="card-title"><i class="small material-icons">important_devices</i> Servidores-OTROS</span>
+                   <h5 class="right-align">{{ serversotros.count() }}</h5>
+                    </div>
+                </div>
+            </div>
+            <div class="col s12 m4">
+                <div class="card metrics-client">
+                    <div class="card-content white-text">
+                    <span class="card-title"><i class="small material-icons">data_usage</i> Accesos clientes-bastion</span>
+                    <h5 class="right-align">{{ accessclient.count() }}</h5>
+                    </div>
+                </div>
+            </div>
+            <div class="col s12 m4">
+                <div class="card metrics-client">
+                    <div class="card-content white-text">
+                    <span class="card-title"><i class="small material-icons">data_usage</i> Accesos bastion-servers</span>
+                    <h5 class="right-align">{{ accessserver.count() }}</h5>
+                    </div>
+                </div>
+            </div>
+            <div class="col s12 m4">
+                <div class="card metrics-client">
+                    <div class="card-content white-text">
+                    {% if bastion %}
+                     <span class="card-title"><i class="small material-icons">vpn_key</i> Bastion-agregado</span>
+                    <h5 class="right-align">OK</h5>
+                    {% else %}
+                     <span class="card-title"><i class="small material-icons">mood_bad</i> Bastion-agregado</span>
+                    <h5 class="right-align">No agregado todavía</h5>
+                    {% endif %}
+                    </div>
+                </div>
+            </div>
+            <div class="col s12 m4">
+                <div class="card metrics-client">
+                    <div class="card-content white-text">
+                    {% if bastion %}
+                     <span class="card-title"><i class="small material-icons">insert_emoticon</i> Salud del Bastion</span>
+                    <h5 class="right-align">OK</h5>
+                    {% else %}
+                     <span class="card-title"><i class="small material-icons">mood_bad</i> Bastion-agregado</span>
+                    <h5 class="right-align">ERROR</h5>
+                    {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>        
+    </main>    
+    <!-- Compiled and minified JavaScript -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+
+{% endblock content %}

@@ -1,0 +1,110 @@
+.logcontent {
+    display: flex;
+    min-height: 100vh;
+    flex-direction: column;
+}
+
+.navecont {
+    display: flex;
+    min-height: 100vh;
+    flex-direction: column;
+}
+
+.maincont {
+    flex: 1 0 auto;
+}
+
+.pc1 {
+    margin-top: 10px;
+}
+
+.mc5 {
+    margin-top: 13%;
+}
+
+.cardbg {
+    background-image: url("../img/login_D6.png");
+    background-repeat: no-repeat;
+    height: 100vh;
+    background-size: cover;
+ }
+ .cardbgLog {
+    background-image: url("../img/login_D5.png");
+    background-repeat: no-repeat;
+    height: 100vh;
+    background-size: cover;
+ }
+
+.navmain {
+    background-image: linear-gradient(110.3deg, rgba(73, 93, 109, 1) 4.3%, rgba(49, 55, 82, 1) 96.7%);
+    background-color: #607d8b; /* Blue Grey color class */
+}
+.metrics-client {
+    background: #26a69f;  /* fallback for old browsers */
+    background: -webkit-linear-gradient(to right, #26a69f, #80cbc4);  /* Chrome 10-25, Safari 5.1-6 */
+    background: linear-gradient(to right, #26a69f, #80cbc4); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+}
+
+.add-button {border-radius: 12px;
+    background-color: #1b5e20;
+}
+.add-button:hover {
+    background-color: #4caf50; /* Green */
+    color: white;
+}
+
+.find-button {border-radius: 12px;
+    background-color: #0d47a1;
+}
+
+.find-button:hover {
+    background-color: #2196f3; /* Blue */
+    color: white;
+}
+
+.del-button {border-radius: 12px;
+    background-color: #b71c1c;
+}
+
+.del-button:hover {
+    background-color: #f44336; /* Red */
+    color: white;
+}
+
+.gen-button {border-radius: 12px;
+    background-color: #607d8b;
+    
+}
+
+.gen-button:hover {
+    background-color: #c0ca33; /* Blue */
+    color: white;
+}
+
+.modalLoad {
+    background-color: rgba(0, 0, 0, 0.7);
+}
+
+.menu-navbar .line {
+  width: 0;
+  height: 2px;
+  background: radial-gradient(circle, rgba(0, 0, 0, 0.3), transparent);
+  position: relative;
+  bottom: -6px;
+  transition: width 0.3s ease-in-out;
+}
+
+.menu-navbar .col:hover .line {
+  width: 100%;
+}
+
+.form-field button {
+    margin-right: 10px;
+}
+  
+@media only screen and (max-width: 600px) {
+    .input-field.col.s12.m6.l4 {
+        width: 100% !important;
+        margin-bottom: 20px;
+    }
+}  

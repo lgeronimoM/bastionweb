@@ -1,0 +1,78 @@
+almacenamiento,cpu,departamento,descripcion,dns,estado,hostname,hypervisor,id,ipadmin,ipprod,namekey,ram,servicio,sistema,tipo,ubicacion
+20,4,sistemas,Herramienta ansible web,ansible.encontrack.com,True,srvansiblesisplvfl01,vmware,2,192.168.3.68,192.168.3.68,ansible_sis,6,ansible,Centos Linux 7.8,virtual,miami
+20,2,sistemas,nginx proxy MFV,nginx_02.amtelser.com,True,srvnginxplvfl02,vmware,5,10.190.6.100,10.190.7.9,nginx_prod02,2,nginx,Centos Linux 7.8,virtual,miami
+20,2,sistemas,nginx como proxy servicios de backend como MFV,api.encontrack.com,True,srvnginxapiplvfl01,vmware,6,10.190.5.67,10.190.6.67,nginx_api,2,nginx,Centos Linux 7.8,virtual,miami
+10,1,sistemas,nginx aws como proxy para aplicaciones como flotcon,nginx-aws.amtelser.com,True,srvnginxplvaws01,aws,7,172.31.50.115,35.175.166.20,nginx_aws,2,nginx,Centos Linux 7.8,virtual,aws
+20,6,I&D,servidor de comunicaciones,siscom01.amtelser.com,True,srvsiscomplvfl01,vmware,8,10.190.5.163,10.190.6.163,siscom_01,8,supervisor,Centos Linux 6.8,virtual,miami
+20,6,I&D,Servidor de comunicaciones,siscom02.amtelser.com,True,srvsiscomplvfl02,vmware,9,10.190.5.164,10.190.6.164,siscom_02,8,supervisor,Centos Linux 6.8,virtual,miami
+20,6,I&D,Servidor de comunicaciones,siscom03.amtelser.com,True,srvsiscomplv03,vmware,10,10.190.5.165,10.190.6.165,siscom_03,8,supervisor,Centos Linux 6.8,virtual,miami
+20,6,I&D,Servidor de comunicaciones,siscom04.amtelser.com,True,srvsiscomplvfl04,vmware,11,10.190.5.166,10.190.6.166,siscom_04,8,supervisor,Centos Linux 6.8,virtual,miami
+20,12,I&D,Servidor de comunicaciones,siscom05.amtelser.com,True,srvsiscomplvfl05,vmware,12,10.190.5.167,10.190.6.167,siscom_05,6,supervisor,Centos Linux 6.8,virtual,miami
+20,12,I&D,servidor de comunicaciones,siscom06.amtelser.com,True,srvsiscomplvfl06,vmware,13,10.190.5.168,10.190.6.168,siscom_06,8,supervisor,Centos Linux 6.8,virtual,miami
+25,8,I&D,servidor de comunicaciones,siscom07.amtelser.com,True,srvsiscomplvfl07,vmware,14,10.190.5.169,10.190.6.169,siscom_07,8,supervisor,Centos Linux 6.9,virtual,miami
+200,4,I&D,servidor de comunicaciones,siscom08.amtelser.com,True,srvsiscomplvfl08,vmware,15,10.190.5.171,10.190.6.171,siscom_08,12,supervisor,Centos Linux 6.9,virtual,miami
+20,10,I&D,servidor de comunicaciones,siscom09.amtelser.com,True,srvsicomplvfl09,vmware,16,10.190.5.197,10.190.6.197,siscom_09,8,supervisor,Centos Linux 6.9,virtual,miami
+20,12,I&D,servidor de comunicaciones,siscom10.amtelser.com,True,srvsiscomplvfl10,vmware,17,10.190.5.223,10.190.6.223,siscom_10,8,supervisor,Centos Linux 7.6,virtual,miami
+20,6,I&D,servidor de comunicaciones,siscom11.amtelser.com,True,srvsiscomplvfl11,vmware,18,10.190.5.50,10.190.6.50,siscom_11,6,supervisor,Centos Linux 7.6,virtual,miami
+20,6,I&D,servidor de comunicaciones,siscom12.amtelser.com,True,srvsiscomplvfl12,vmware,19,10.190.5.49,10.190.6.49,siscom_12,12,supervisor,Centos Linux 7.6,virtual,miami
+20,4,I&D,Servidor con servicio kafka connect 01,kafka-connect01.amtelser.com,True,srvkafkaconnectplvfl01,vmware,20,10.190.5.149,10.190.6.149,kafka-connect01,5,kafkaconnect,Centos Linux 7.8,virtual,miami
+20,4,I&D,Servidor con servicio kafka connect 02,kafka-connect02.amtelser.com,True,srvkafkaconnectplvfl02,vmware,21,10.190.5.150,10.190.6.150,kafka-connect02,5,kafkaconnect,Centos Linux 7.8,virtual,miami
+20,4,I&D,Servidor con servicio kafka connect 03,kafka-connect03.amtelser.com,True,srvkafkaconnectplvfl03,vmware,22,10.190.5.151,10.190.6.151,kafka-connect03,5,kafkaconnect,Centos Linux 7.8,virtual,miami
+22,4,I&D,kafka connect aws 01,aws-kafka-connect-01.eps-encontrack.com,True,srvkafkaconnectplvaws01,aws,23,172.31.49.37,172.31.49.37,kafka-connect-aws01,8,kafkaconnect,Centos Linux 7.8,virtual,aws
+22,2,I&D,Servidor de ksql01 en AWS,aws-ksql-01.eps-encontrack.com,True,srvksqlplvaws01,aws,24,172.31.57.247,172.31.57.247,ksql-aws-01,8,ksql,Centos Linux 7.8,virtual,aws
+22,2,I&D,Servidor de ksql02 en AWS,aws-ksql-02.eps-encontrack.com,True,srvksqlplvaws02,aws,25,172.31.4.45,172.31.4.45,ksql-aws-02,8,ksql,Centos Linux 7.8,virtual,aws
+6600,16,I+D,cache comunicaciones secundario,cache-com2.encontrack.com,True,dbcachecomunicacionesplffl02,RedHat,26,10.190.6.118,10.190.5.118,cache-comu-sec,128,cache,Red Hat Enterprise 7.6,fisico,miami
+1500,12,I+D,base de datos cpv1,cpv1.encontrack.com,True,dbcpvplvfl01,vmware,27,10.190.5.146,10.190.6.146,cpv1,34,mysql,Red Hat Enterprise 6.8,virtual,miami
+400,6,I+D,base de datos cpv2,cpv2.encontrack.com,True,dbcpvplvfl02,vmware,28,10.190.5.147,10.190.6.147,cpv2,21,mysql,Red Hat Enterprise 6.8,virtual,miami
+760,9,I+D,Base de datos riesgos DB,riesgos.encontrack.com,True,dbriesgosplvfl01,vmware,29,10.190.5.194,10.190.6.194,riesgos_db,21,cache,Red Hat Enterprise 6.10,virtual,miami
+20,2,I+D,base de datos intranet,bd-intranet.encontrack.com,True,dbintranetplfl01,vmware,30,10.190.5.208,10.190.6.208,intranet_db,2,mysql,Centos Linux 7.8,virtual,miami
+60,2,SIO,Pagina de encontrack principal informativa del cliente,www.encontrack.com,True,srvencontrackplvaws01,aws,31,172.31.1.35,172.31.1.35,encontrack-page,2,lamp-server,Centos Linux 7.8,virtual,aws
+60,2,SIO,SIO repostes,resportesaws.encontrack.com,True,srvsioreportesplvaws01,aws,32,172.31.10.69,172.31.10.69,sio_reportes,4,LAMP,Centos Linux 7.8,virtual,aws
+47,6,I+D,Herrmientas de administracion de siscom,siscomtools.amtelser.com,True,srvsiscomtoolsplvfl01,vmware,33,10.190.5.162,10.190.6.162,siscom_tools,7,supervisor,Centos Linux 6.9,virtual,miami
+32,8,I+D,Servidor repositorio de datos,reposiscom.amtelser.com,True,srvschavionplvfl01,vmware,34,10.190.5.51,10.190.5.51,trac_repo,4,trac,Centos Linux 6.9,virtual,miami
+36,4,I+D,Servidor QLG georeferenciador,qlg.amtelser.com,True,srvqlgplvfl01,vmware,35,10.190.5.60,10.190.5.60,qlg_siscom,4,supervisor,Centos Linux 6.9,virtual,miami
+16,2,SIO,Portal de aplicaciones frontales php actualizado con nginx,intranet.encontrack.com,True,srvintranetplvfl02,vmware,36,10.190.5.94,10.190.6.94,intranet_portal,2,"php-fpm, nginx",Centos Linux 7.8,virtual,miami
+20,4,I+D,Servidor tomcat con diversas aplicaciones,ws2.encontrack.com,True,srvwsplvfl02,vmware,37,10.190.6.37,10.190.5.37,ws2,10,tomcat,Centos Linux 7.8,virtual,miami
+20,2,I+D,Servidor tomcat con diversas aplicaciones,ws10.encontrack.com,True,srvwsplvfl10,vmware,38,10.190.6.89,10.190.5.89,ws10,4,tomcat,Centos Linux 7.8,virtual,miami
+20,4,I+D,Servidor tomcat con diversas aplicaciones,ws9.encontrack.com,True,srvwsplvfl09,vmware,39,10.190.6.88,10.190.5.88,ws9,4,tomcat,Centos Linux 7.8,virtual,miami
+20,4,I+D,Miflotaenvivo frontal,mvf01.encontrack.com,True,srvmfvplvfl01,vmware,40,10.190.5.224,10.190.6.224,mvf01,10,tomcat,Centos Linux 7.8,virtual,miami
+20,4,I+D,Miflotaenvivo frontal 2,mvf02.encontrack.com,True,srvmfvplvfl02,vmware,41,10.190.5.91,10.190.6.91,mvf02,9,tomcat,Centos Linux 7.8,virtual,miami
+20,4,I+D,Miflotaenvivo backend 01,mvfback01.encontrack.com,True,srvmfvbackplvfl01,vmware,42,10.190.5.215,10.190.6.215,mvf_backend01,6,tomcat,Centos Linux 7.8,virtual,miami
+20,4,I+D,Miflotaenvivo backend 02,mvfback02.encontrack.com,True,srvmfvbackplvfl02,vmware,43,10.190.5.216,10.190.6.216,mvf_backend02,6,tomcat,Centos Linux 7.8,virtual,miami
+20,4,I+D,Miflotaenvivo backend 03 servicio movil,mvfback03.encontrack.com,True,srvmfvbackplvfl03,vmware,44,10.190.5.214,10.190.6.214,mvf_backend03,6,tomcat,Centos Linux 7.8,virtual,miami
+20,4,I+D,"Servidor nginx con frontales de intranet Robos, etc.",robos.encontrack.com,True,srvphpfrontalplvfl01,vmware,46,10.190.5.92,10.190.6.92,php_nginx,4,tomcat,Centos Linux 7.8,virtual,miami
+45,4,I+D,Servidor servicios robos,becontrack.encontrack.com,True,rvbeacontrackplvfl01,vmware,47,10.190.5.213,10.190.6.213,becontrack,11,supervisor,Centos Linux 7.8,virtual,miami
+130,6,I+D,Servidor servicios robos,rhetink.encontrack.com,True,dbrethinkplvfl01,vmware,48,10.190.5.211,10.190.6.211,Rhetink,16,supervisor,Centos Linux 7.8,virtual,miami
+22,2,I&D,Servidor kafkaconnect 02,kafkaconnect.eps-encontrack.com,True,srvkafkaconnecplvaws02,aws,49,172.31.5.247,172.31.5.247,kafkaconnect_02,16,kafka,Centos 7,virtual,aws
+60,4,I+D,KAFKA STREAMS TOOLS SISCOM,kafkastreams01.encontrack.com,True,srvkafkastreamsplvfl01,vmware,50,10.190.5.191,10.190.6.191,kafka-streams-tools01,7,supervisor,Centos Linux 6.9,virtual,miami
+60,4,I+D,KAFKA STREAMS TOOLS SISCOM,kafkastreams02.encontrack.com,True,srvkafkastreamsplvfl02,vmware,51,10.190.5.192,10.190.6.192,kafka-streams-tools02,7,supervisor,Centos Linux 6.9,virtual,miami
+50,4,I+D,KAFKA STREAMS TOOLS SISCOM 03,kafkastreams03.encontrack.com,True,srvkafkastreamsplvfl03,vmware,52,10.190.5.193,10.190.6.193,kafka-streams-tools03,8,supervisor,Centos Linux 6.9,virtual,miami
+50,4,I+D,KAFKA STREAMS TOOLS SISCOM 04,kafkastreams04.encontrack.com,True,srvkafkastreamsplvfl04,vmware,53,10.190.5.199,10.190.6.199,kafka-streams-tools04,8,supervisor,Centos Linux 6.10,virtual,miami
+60,4,I+D,KAFKA STREAMS TOOLS SISCOM 06,kafkastreams06.encontrack.com,True,srvkafkastreamsplvfl06,vmware,54,10.190.5.80,10.190.6.80,kafka-streams-tools06,7,supervisor,Centos Linux 6.9,virtual,miami
+100,2,I+D,cluster kafka broker 03,kafkabroker03.encontrack.com,True,srvkafkabrokerplvfl03,vmware,55,10.190.5.203,10.190.6.203,kafka-broker03,8,apache kafka,Centos Linux 6.9,virtual,miami
+100,2,I+D,cluster kafka broker 04,kafkabroker04.encontrack.com,True,srvkafkabrokerplvfl04,vmware,56,10.190.5.204,10.190.6.204,kafka-broker04,8,apache kafka,Centos Linux 6.9,virtual,miami
+110,2,I+D,cluster kafka broker 01,kafkabroker01.encontrack.com,True,srvkafkabrokerplvfl01,vmware,57,10.190.5.172,10.190.6.172,kafka-broker01,8,apache kafka,Centos Linux 6.9,virtual,miami
+110,2,I+D,cluster kafka broker 02,kafkabroker02.encontrack.com,True,srvkafkabrokerplvfl02,vmware,58,10.190.5.173,10.190.6.173,kafka-broker02,8,apache kafka,Centos Linux 6.9,virtual,miami
+35,2,I+D,cluster zookeeper miami 03,zookeeper03.encontrack.com,True,srvzookeeperplvfl03,vmware,59,10.190.5.205,10.190.6.205,zookeeper-03,4,zookeeper,Centos Linux 6.9,virtual,miami
+45,2,I+D,cluster zookeeper miami 01,zookeeper01.encontrack.com,True,srvzookeeperplvfl01,vmware,60,10.190.5.174,10.190.6.174,zookeeper-01,4,zookeeper,Centos Linux 6.9,virtual,miami
+20,2,I+D,cluster zookeeper miami 02,zookeeper02.encontrack.com,True,srvzookeeperplvfl02,vmware,61,10.190.5.210,10.190.6.210,zookeeper-02,4,zookeeper,Centos Linux 6.9,virtual,miami
+20,6,I+D,servidor kafka con herramientas de los cluster,kafkatools01.encontrack.com,True,srvkafkatoolsplvfl01,vmware,62,10.190.5.148,10.190.6.148,kafka-tools01,6,docker,Centos Linux 7.4,virtual,miami
+20,4,I+D,KAFKA STREAMs para CAS,kafka-cas01.encontrack.com,True,srvkafkastreamscasplvfl01,vmware,63,10.190.5.122,10.190.6.122,kafka-streams-cas01,5,supervisor,Centos Linux 7.8,virtual,miami
+20,4,I+D,KAFKA STREAMs para CAS 02,kafka-cas02.encontrack.com,True,srvkafkastreamscasplvfl02,vmware,64,10.190.5.123,10.190.6.123,kafka-streams-cas02,5,supervisor,Centos Linux 7.8,virtual,miami
+20,4,I+D,api charolas con servicios de docker,api-charolas01.encontrack.com,True,srvapicharolasplvfl01,vmware,65,10.190.5.134,10.190.6.134,api-charolas01,6,docker,Centos Linux 7.8,virtual,miami
+20,4,I+D,api charolas con servicios de docker 02,api-charolas02.encontrack.com,True,srvapicharolasplvfl02,vmware,66,10.190.5.135,10.190.6.135,api-charolas02,6,docker,Centos Linux 7.8,virtual,miami
+20,4,SIO,Web service tomcat 01 ,ws1.encontrack.com,True,wsinternosplvfl01,vmware,67,10.190.5.35,10.190.6.35,ws-01,5,tomcat,Centos Linux 7.8,virtual,miami
+20,2,I+D,Web service tomcat 03,ws3.encontrack.com,True,wsinternosplvfl02,vmware,68,10.190.5.53,10.190.6.53,ws-03,2,tomcat,Centos Linux 7.8,virtual,miami
+20,2,I+D,Web service tomcat 04,ws4.encontrack.com,True,wsinternosplvfl03,vmware,69,10.190.5.54,10.190.6.54,ws-04,4,tomcat,Centos Linux 7.8,virtual,miami
+20,4,I+D,Web service tomcat 11,ws11.encontrack.com,True,wsinternosplvfl05,vmware,70,10.190.5.153,10.190.6.153,ws-11,12,tomcat,Centos Linux 7.8,virtual,miami
+20,2,I+D,Web service tomcat publico,tomcatpublico.encontrack.com,True,wsinternosplvfl06,vmware,71,10.190.5.43,10.190.6.43,ws-publico,2,tomcat,Centos Linux 7.8,virtual,miami
+20 ,2,I+D,portal de HDI,hdi.encontrack.com,True,srvhdiplvfl01,vmware,72,10.190.5.71,10.190.6.71,hdi-portal,2,apache,Centos Linux 7.5,virtual,miami
+20,2,I+D,Servidor de notificaciones,notificaciones.encontrack.com,True,srvnotificacionesplvfl01,vmware,73,10.190.5.63,10.190.6.63,notificaciones,4,supervisor,Centos Linux 7.8,virtual,miami
+20,2,I+D,LDAP produccion principal,ldap.encontrack.com,True,srvldapplvfl01,vmware,74,10.190.5.46,10.190.6.46,ldap-pro,3,open-ldap,Centos Linux 5.5,virtual,miami
+60,8,SIO,Servicios de SIO,servicios-sio.encontrack.com,True,srvserviciosplvfl01,vmware,75,10.190.5.196,10.190.6.196,servicios-sio,12,api-sio,Centos Linux 6.9,virtual,miami
+250,16,SIO,Base de datos servicios sio,db-servicios.encontrack.com,True,dbserviciosplvfl01,vmware,76,10.190.5.195,10.190.6.196,db-servicios-sio,32,cache,Red Hat Enterprise 6.9,virtual,miami
+20,2,I+D,DNS pruebas,slave-dns01.encontrack.com,True,srvslavednsplvqr01,vmware,77,10.10.4.32,10.10.4.32,slave-qro01,4,dns,Centos Linux 7.8,virtual,qro
+20,2,I+D,Integrador,integrador,True,dbintegradorplvfl01,vmware,79,10.190.5.44,10.190.5.44,integrador,2,tomcat,Amazon Linux 2,virtual,miami
+20,2,I+D,test,ws2-test.encontrack.com,True,ws2test-aws,vmware,80,192.168.3.65,192.168.3.65,ws2-test-aws,2,tomcat,Centos,virtual,aws
+20,2,I+D,test,ws1-test.encontrack.com,True,ws1test,vmware,81,192.168.3.63,192.168.3.63,ws1-test,2,tomcat,Centos,virtual,qro
+20,2,I+D,server bastion,bastion.amtelser.com,True,bastion-des,vmware,82,192.168.3.67,192.168.3.67,bastion-des,2,tomcat,Centos,virtual,qro

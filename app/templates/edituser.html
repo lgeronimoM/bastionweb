@@ -1,0 +1,152 @@
+{% extends 'base/base.html' %}
+{% block title %} bastion edituser {% endblock title%}
+{% block content %}
+    <main class="container">
+        <div class="row">
+            <div class="card">
+                <div class="card-content container">
+                    <h1 class="card-title center">Editar registro del usuario: <b> {{apiusers.username}}</b></h1>
+                    <div class="row"></div>
+                    <div class="row"></div>
+                    <form method="POST" action="/updateuser">
+                        <input id="idf" type="hidden" value="{{apiusers.id}}" class="validate" name="idf" required>
+                        <div class="row">
+                            <div class="input-field col s12 m6 l6">
+                                <label for="username">Usuario</label>
+                                <input placeholder="username" id="username" type="hidden" value="{{apiusers.username}}" class="validate" name="username" required>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <!-- Switch -->
+                            <div class="switch">
+                                <p>¿Deseas cambiar tu contraseña?</p>
+                                <label for="chkPassport">
+                                <input type="checkbox" id="chkPassport">
+                                <span class="lever"></span>
+                                si
+                                </label>
+                            </div>
+                            <div id="AddPassport"><br>
+                                Preciona si, si no deseas cambiar la contraseña omite este paso
+                            </div>
+                        <div>
+                        <div class="row"><br>
+                            <div class="input-field col s12 m6 l6" id="dvPassport" style="display: none">
+                                <input placeholder="Contrasena" id="passwordnew" type="password" class="validate" name="passwordnew" value="{{ passwd_user }}">
+                                <label for="Contraseña">Nueva Contraseña</label>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="input-field col s12 m6 l6">
+                                <input placeholder="email" id="email_inline" type="email" value="{{apiusers.email}}" class="validate" name="email" required>
+                                <label for="email_inline">Correo</label>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="input-field col s12 m6 l6">
+                                <input placeholder="area" id="area" type="text" class="validate" value="{{apiusers.area}}" name="area" required>
+                                <label for="area">Area de trabajo</label>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="input-field col s12 m4 l4">
+                                <select class="blue-text text-darken-2" name="group" required>
+                                    <option value="{{apiusers.group}}" selected>{{apiusers.group}}</option>
+                                    <option value="GroupTI">GroupTI</option>
+                                    <option value="GroupAPS">GroupAPS</option>
+                                    <option value="GroupDB">GroupDB</option>
+                                    <option value="GroupSIO">GroupSIO</option>
+                                    <option value="GroupID">GroupID</option>
+                                    <option value="GroupEXT">GroupEXT</option>
+                                </select>
+                                <label>Grupo al que pertenece</label>
+                            </div>
+                            <div class="input-field col s12 m4 l4">
+                                <select class="blue-text text-darken-2" name="bastion" required>
+                                    {% if apiusers.status%}
+                                        <option value="1" selected>habilitado</option>
+                                        <option value="0">deshabilitado</option>
+                                    {% else %}
+                                        <option value="1">habilitado</option>
+                                        <option value="0" selected>deshabilitado</option>
+                                    {% endif %}
+                                </select>
+                                <label>Permiso para ingresar como bastion</label>
+                            </div>
+                            <div class="input-field col s12 m4 l4">
+                              <select class="blue-text text-darken-2" name="webaccess" required>
+                                  {% if apiusers.web %}
+                                      <option value="1" selected>habilitado</option>
+                                      <option value="0">deshabilitado</option>
+                                  {% else %}
+                                      <option value="1">habilitado</option>
+                                      <option value="0" selected>deshabilitado</option>
+                                  {% endif %}
+                              </select>
+                              <label>Permiso para ingresar administrador web</label>
+                          </div>                          
+                        </div>
+                        <div class="row">
+                            <div class="form-field">
+                                <button class="btn add-button miBoton" type="submit" onclick="mostrarPreload()" name="conf">Modificar
+                                </button>
+                                <button class="btn del-button" type="submit" formmethod="get" formnovalidate="novalidate" formaction="/users" name="cancelar" >cancelar
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <!-- Modal Structure -->
+        <div id="miModal" class="modal modalLoad">
+            <div class="modal-content center">
+                <div class="preloader-wrapper big active">
+                    <div class="spinner-layer spinner-blue">
+                      <div class="circle-clipper left">
+                        <div class="circle"></div>
+                      </div><div class="gap-patch">
+                        <div class="circle"></div>
+                      </div><div class="circle-clipper right">
+                        <div class="circle"></div>
+                      </div>
+                    </div>
+              
+                    <div class="spinner-layer spinner-red">
+                      <div class="circle-clipper left">
+                        <div class="circle"></div>
+                      </div><div class="gap-patch">
+                        <div class="circle"></div>
+                      </div><div class="circle-clipper right">
+                        <div class="circle"></div>
+                      </div>
+                    </div>
+              
+                    <div class="spinner-layer spinner-yellow">
+                      <div class="circle-clipper left">
+                        <div class="circle"></div>
+                      </div><div class="gap-patch">
+                        <div class="circle"></div>
+                      </div><div class="circle-clipper right">
+                        <div class="circle"></div>
+                      </div>
+                    </div>
+              
+                    <div class="spinner-layer spinner-green">
+                      <div class="circle-clipper left">
+                        <div class="circle"></div>
+                      </div><div class="gap-patch">
+                        <div class="circle"></div>
+                      </div><div class="circle-clipper right">
+                        <div class="circle"></div>
+                      </div>
+                    </div>
+                  </div>
+            <p class="white-text center">Proceso en curso espere no cierre la ventana ...</p>
+            </div>
+        </div>
+    </main>    
+    <!-- Compiled and minified JavaScript -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+
+{% endblock content %}

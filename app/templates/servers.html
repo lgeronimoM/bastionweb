@@ -1,0 +1,250 @@
+{% extends 'base/base.html' %}
+{% block title %} bastion servers {% endblock title%}
+{% block content %}
+    <main>
+        <div class="row">
+            {% if exist==False %}
+            <div class="container">
+                <div class="col s12 m6 l6">
+                    <form method="POST" action="/addbastion">
+                        <p>Selecciona tu servidor BastionHost. Si aun no has agregado servidor<a href="/servers"> click aquí</a></p>
+                        <div class="input-field col s16 m6 l6">
+                            <select class="blue-text text-darken-2" id="select" name="server" required>
+                                <option value="" disabled selected>Seleccion el servidor</option>
+                                {% for res in servers_all %}
+                                <option value="{{res['id']}}">{{ res['hostname'] }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="form-field">
+                            <button class="btn waves-effect waves-green blue darken-2" type="submit" name="Submit">
+                                Agregar
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+		    {% else %}
+            <div class="container">
+                {% with messages = get_flashed_messages(with_categories=true) %}
+                    {% if messages %}
+                        <ul class=flashes>
+                        {% for category, message in messages %}
+                            {% if category == 'error' %}
+                                <li class="red-text center">{{ message }}</li>
+                            {% else %}
+                                <li class="green-text center">{{ message }}</li>
+                            {% endif %}
+                        {% endfor %}
+                        </ul>
+                    {% endif %}
+                {% endwith %}
+                <div class="col s12 m4 l4">
+                    <form method="GET" action="/servers">
+                        <div class="input-field col s12 m12 l12">
+                            <input placeholder="Hostname, nombre clave, localizacion fisica o ip" id="" type="search" class="validate" name="findserver" required>
+                            <label for="Hostname, nombre clave, localizacion fisica o ip">Buscar Server</label>
+                        </div>
+                        <div class="card-action">
+                            <div class="form-field">
+                                <button class="btn find-button" type="submit" name="Submit">
+                                    Buscar <i class="material-icons white-text">find_in_page</i>
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                    {% if findservers %}
+                        <a href="/servers" class="btn del-button">Remover filtro</a>
+                    {% endif %}
+                </div>
+                <div class="col s12 m4 l4">
+                    <div>
+                        <h5 class="center"><i class="medium material-icons white-black">assignment_turned_in</i></h5>
+                    </div>
+                    <div>
+                        <h5 class="center"><b>Administrador de servidores</b></h5>
+                    </div>
+                </div>
+                <div class="col s12 m4 l4">
+                    <div class="card lighten-3"><br>
+                        <p class="center">Realizar nuevo registro de servidor</p>
+                        <div class="card-action">
+                            <form method="POST" action="/addserver">
+                                <div class="form-field center">
+                                    <button class="btn add-button" type="submit" name="Submit">
+                                        Crear +
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="container">
+            <div class="row">
+                <div class="">
+                    <div class="card-content">
+                        <form action="/deleteserver" method="POST">
+                            <table class="striped">
+                                <thead>
+                                    <tr>
+                                        <th>Hostname</th>
+                                        <th>Nombre clave</th>
+                                        <th>DNS</th>
+                                        <th>Tipo</th>
+                                        <th class="center">Area</th>
+                                        <th class="center">Localidad</th>
+                                        <th class="center">IP_Admin</th>
+                                        <th class="center">RAMxCPUS</th>
+                                        <th class="center">Storage</th>
+                                        <th class="center">Estatus</th>
+                                        <th class="center">Actualizar</th>
+                                        <th class="center">Editar</th>
+                                        <th class="center">Borrar</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for res in data.items %}
+                                    <tr>
+                                        <td>{{res['hostname']}}</td>
+                                        <td>{{res['namekey']}}</td>
+                                        <td>{{res['dns']}}</td>
+                                        <td class="center">{{res['tipe']}}</td>
+                                        <td class="center">{{res['department']}}</td>
+                                        <td class="center">{{res['localation']}}</td>
+                                        <td class="center">{{res['ipadmin']}}</td>
+                                        <td class="center">{{res['ram']}} x {{res['cpu']}}</td>
+                                        <td class="center">{{res['storage']}}</td>
+                                        <td class="center">
+                                            {% if res['active'] == True %}
+                                                <i class="material-icons green-text">check_circle</i>
+                                            {% else %}
+                                                <i class="material-icons grey-text">do_not_disturb_on</i>
+                                            {% endif %} 
+                                        </td>
+                                        <td class="center">
+                                            <button class="waves-effect waves-light btn grey" type="submit"  onclick="mostrarPreload()" formmethod="post" formaction="/updateresources" name="idserver"  value="{{res['id']}}" >
+                                                <i class="material-icons black-text">update</i>
+                                            </button>
+                                        </td>
+                                        <td class="center">
+                                            <button class="waves-effect waves-light btn grey" type="submit"  formmethod="post" formaction="/editserver" name="update_button"  value="{{res['id']}}" >
+                                                <i class="material-icons black-text">edit</i>
+                                            </button>
+                                        </td>
+                                        <td class="center">
+                                            <button class="waves-effect waves-light btn grey" type="submit" name="id" onclick="return confirm('Are you sure to delete?')" value="{{res['id']}}">
+                                                <i class="material-icons black-text">delete</i>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </form>
+                        <form method="GET" action="/getdataservers">
+                            <div class="form-field right">
+                                <button class="btn waves-effect waves-green green darken-2" type="submit" name="Submit">
+                                    Exportar CSV
+                                </button>
+                            </div>
+                        </form>
+                        <form method="POST" action="/deletebastion">
+                            <p>Servidor seleccionado como bastion <b class="green-text">{{apibastion['bastion']}}</b></p>
+                            <input type="hidden" value="{{apibastion['id']}}" class="validate" name="idf" required>
+                            <button class="btn del-button" type="submit"  id="submit_button" disabled>Eliminar
+                            </button>
+                            <p>
+                                <label for="terms_and_conditions">
+                                  <input type="checkbox" id="terms_and_conditions" value="1" onclick="terms_changed(this)"  />
+                                  <span>Check si deseas remover el actual server bastion </span>
+                                </label>
+                              </p>
+                        </form>
+                        <div class="center">
+                            <ul class="pagination">
+
+                            {% if data.has_prev %}
+                                <li class="waves-effect"><a class="page-link" href="{{ url_for('servers', page_num=data.prev_num, findserver=findserver) }}"><i class="material-icons">chevron_left</i></a></li>
+                            {% else %}
+                                <li class="disabled"><span><i class="material-icons">chevron_left</i></span>
+                            {% endif %}
+                                </li>
+
+                            {% for page in data.iter_pages(left_edge=3, right_edge=3) %}
+                            {% if page %}
+                            <li class="waves-effect"><a href="{{ url_for('servers', page_num=page, findserver=findserver) }}">{{ page }}</a></li>
+                            {% else %}
+                            <li class="disabled"><a href="#">…</a></li> 
+                            {% endif %}
+                            {% endfor %}
+
+                            {% if data.has_next %}
+                                <li class="waves-effect"><a href="{{ url_for('servers', page_num=data.next_num, findserver=findserver) }}"><i class="material-icons">chevron_right</i></a></li>
+                            {% else %}
+                                <li class="disabled"><span><i class="material-icons">chevron_right</i></span>
+                            {% endif %}
+                                    
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <form method="post"  action="/test">
+                <button class="waves-effect waves-light btn grey" type="submit" name="id" >
+                    test
+                </button>
+            </form>
+            {% endif %}
+        </div>
+         <!-- Modal Structure -->
+         <div id="miModal" class="modal modalLoad">
+            <div class="modal-content center">
+                <div class="preloader-wrapper big active">
+                    <div class="spinner-layer spinner-blue">
+                      <div class="circle-clipper left">
+                        <div class="circle"></div>
+                      </div><div class="gap-patch">
+                        <div class="circle"></div>
+                      </div><div class="circle-clipper right">
+                        <div class="circle"></div>
+                      </div>
+                    </div>
+              
+                    <div class="spinner-layer spinner-red">
+                      <div class="circle-clipper left">
+                        <div class="circle"></div>
+                      </div><div class="gap-patch">
+                        <div class="circle"></div>
+                      </div><div class="circle-clipper right">
+                        <div class="circle"></div>
+                      </div>
+                    </div>
+              
+                    <div class="spinner-layer spinner-yellow">
+                      <div class="circle-clipper left">
+                        <div class="circle"></div>
+                      </div><div class="gap-patch">
+                        <div class="circle"></div>
+                      </div><div class="circle-clipper right">
+                        <div class="circle"></div>
+                      </div>
+                    </div>
+              
+                    <div class="spinner-layer spinner-green">
+                      <div class="circle-clipper left">
+                        <div class="circle"></div>
+                      </div><div class="gap-patch">
+                        <div class="circle"></div>
+                      </div><div class="circle-clipper right">
+                        <div class="circle"></div>
+                      </div>
+                    </div>
+                  </div>
+            <p class="white-text center">Proceso en curso espere no cierre la ventana ...</p>
+            </div>
+        </div>
+    </main>    
+
+{% endblock content %}
