@@ -1,4 +1,4 @@
-env/
+venv/
 bastion_*
 __pycache__*
 properties.py*
