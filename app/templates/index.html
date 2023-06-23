@@ -4,60 +4,64 @@
     <main class="container">
         <div class="row">
             <div class="col s12 m4">
+                <a href="/users">
                 <div class="card metrics-client">
                     <div class="card-content white-text">
                     <span class="card-title"><i class="small material-icons">account_circle</i> Clientes</span>
                     <h5 class="right-align">{{ client|length }}</h5>
                     </div>
                 </div>
+                </a>
             </div>
             <div class="col s12 m4">
+                <a href="/users">
                 <div class="card metrics-client">
                     <div class="card-content white-text">
                     <span class="card-title"><i class="small material-icons">account_circle</i> Clientes-webaccess</span>
                     <h5 class="right-align">{{ clientweb.count() }}</h5>
                     </div>
                 </div>
+                </a>
             </div>
             <div class="col s12 m4">
-                <div class="card metrics-client">
-                    <div class="card-content white-text">
-                    <span class="card-title"><i class="small material-icons">important_devices</i> Servidores-MIAMI</span>
-                    <h5 class="right-align">{{ serversmiami.count() }}</h5>
-                    </div>
-                </div>
-            </div>
-            <div class="col s12 m4">
+                <a href="/servers?findserver=aws&Submit=">
                 <div class="card metrics-client">
                     <div class="card-content white-text">
                     <span class="card-title"><i class="small material-icons">important_devices</i> Servidores-AWS</span>
                     <h5 class="right-align">{{ serversaws.count() }}</h5>
                     </div>
                 </div>
+                </a>
             </div>
             <div class="col s12 m4">
+                <a href="/servers?findserver=qro&Submit=">
                 <div class="card metrics-client">
                     <div class="card-content white-text">
                     <span class="card-title"><i class="small material-icons">important_devices</i> Servidores-OTROS</span>
                    <h5 class="right-align">{{ serversotros.count() }}</h5>
                     </div>
                 </div>
+                </a>
             </div>
             <div class="col s12 m4">
+                <a href="/bastion">
                 <div class="card metrics-client">
                     <div class="card-content white-text">
                     <span class="card-title"><i class="small material-icons">data_usage</i> Accesos clientes-bastion</span>
                     <h5 class="right-align">{{ accessclient.count() }}</h5>
                     </div>
                 </div>
+                </a>
             </div>
             <div class="col s12 m4">
+                <a href="/bastion">
                 <div class="card metrics-client">
                     <div class="card-content white-text">
                     <span class="card-title"><i class="small material-icons">data_usage</i> Accesos bastion-servers</span>
                     <h5 class="right-align">{{ accessserver.count() }}</h5>
                     </div>
                 </div>
+                </a>
             </div>
             <div class="col s12 m4">
                 <div class="card metrics-client">
