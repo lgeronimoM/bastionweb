@@ -2,112 +2,8 @@
 {% block title %} bastion web {% endblock title%}
 {% block content %}
     <main class="container">
-        {% if exist==True %}
-        <div class="row">
-            {% if nameuser %}
-            <form method="GET" action="/bastion">
-                <input id="filteruser" type="hidden" value="{{filteruser}}" class="validate" name="filteruser" required>
-                <div class="col s12 m6 l6">
-                    <h6>Usuario: <b class="green-text text-darken-2">{{nameuser}}</b>
-                    <a href="/bastion" class="btn del-button">Remover filtro</a></h6>
-                </div>
-                <div class="input-field col s12 m4 l4">
-                    <input placeholder="nombre clave" id="" type="text" class="validate" name="findserver" required>
-                    <label for="nombre clave">Buscar Server</label>
-                </div>
-                <div class="card-action">
-                    <div class="form-field">
-                        <button class="btn find-button" type="submit" name="Submit">
-                            Buscar <i class="material-icons white-text">find_in_page</i>
-                        </button>
-                    </div>
-                </div>
-            </form>
-            {% else %}
-            <form method="GET" action="/bastion">
-                <div class="input-field col s12 m4 l4">
-                    <select class="blue-text text-darken-2" searchable="Buscar usuario" id="select" name="filteruser" required>
-                        <option value="" disabled selected>Seleccione un usuario para filtrar</option>
-                        {% for res in apiusers %}
-                            <option value="{{res['id']}}">{{res['username']}}</option>
-                        {% endfor %}
-                    </select>
-                    <div class="form-field">
-                        <button class="btn find-button" type="submit">
-                            Buscar <i class="material-icons white-text">find_in_page</i>
-                        </button>
-                    </div>
-                </div>
-            </form>
-            <div class="col s12 m4 l4">
-                <div>
-                    <h5 class="center"><i class="medium material-icons white-black">vpn_lock</i></h5>
-                </div>
-                <div>
-                    <h5 class="center"><b>Control de accesos</b></h5>
-                </div>
-            </div>
-            <form method="GET" action="/bastion">
-                <div class="input-field col s12 m4 l4">
-                    <select class="blue-text text-darken-2" serachname="myselectsearch" searchable="Buscar server" id="select" name="filterhost" required>
-                        <option value="" disabled selected>Seleccione un servidor para filtrar</option>
-                        {% for res in apiservers %}
-                            <option value="{{res['id']}}">{{ res['hostname'] }}_{{ res['ipadmin'] }}</option>
-                        {% endfor %}
-                    </select>
-                    <div class="form-field">
-                        <button class="btn find-button" type="submit">
-                            Buscar <i class="material-icons white-text">find_in_page</i>
-                        </button>
-                    </div>
-                </div>
-            </form>
-            {% endif %}
-        </div>
-        <div class="row">
-            <div class="col s12 m8 l8">
-                <div class="card">
-                    <form method="POST" action="/addbastionserver"><br>
-                        <h6 class="center"><b>Generar acceso BationHost-Servidor</b></h6>
-                        <div class="col m1 l1"></div>
-                        <div class="input-field col s12 m6 l6">
-                            <select  class="form-field-ref-select-field-name validate " name="server" searchable="Search in this list" required>
-                                <option value="" disabled selected>Selecciona el servidor</option>
-                                {% for res in apiservers %}
-                                    {% if res['estado'] %}
-                                        <option value="{{ res['id'] }}">{{ res['hostname'] }}_{{ res['ipadmin'] }}</option>
-                                    {% endif %}
-                                {% endfor %}
-                            </select>   
-                        </div>
-                        
-                        <div class="input-field col s12 m5 l5">
-                            <select class="blue-text text-darken-2" id="select" name="user" serachname="myselectsearch" searchable="Buscar user" required>
-                                <option value="" disabled selected>Seleccion el usuario</option>
-                                {% for res in apiusers %}
-                                    <option value="{{res['id']}}">{{ res['username'] }}</option>
-                                {% endfor %}
-                            </select>
-                        </div>
-                        <div class="row">
-                            <div class="form-field center row">
-                                <button class="btn add-button miBoton" type="submit" name="Submit"  onclick="mostrarPreload()">
-                                    Crear +
-                                </button>
-                            </div>
-                        </div>
-                    </form>
-                </div>
-            </div>
-            <div class="col s12 m4 l4">
-                <div class="card">
-                    <div class="card-content">
-                    <span class="card-title"><i class="small material-icons">data_usage</i> Accesos bastion-servers</span>
-                    <input placeholder="" id="sl" type="hidden">
-                    <h5 class="right-align">{{ accessserver.count() }}</h5>
-                    </div>
-                </div>
-            </div>  
+    {% if validatebastion %}
+        {% if filterbastion==False %}
             {% with messages = get_flashed_messages(with_categories=true) %}
                 {% if messages %}
                     <ul class=flashes>
@@ -121,154 +17,358 @@
                     </ul>
                 {% endif %}
             {% endwith %}
-        </div>
-        {% endif %}
-        <div class="row">
-                <div class="card-content">
-                    <table class="striped">
-                        <thead>
-                            <tr>
-                                <th></th>
-                                <th>Usuario</th>
-                                <th>Servidor</th>
-                                <th>Tipo Acceso</th>
-                                <th>Archivo Key</th>
-                                <th>Healfty</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <div class="col s2 m2 l2">
+            <div class="row">
+                {% if nameuser %}
+                <div class="col s12" style="border: 1px solid #ddd;">
+                    <p> Accessos del usuario {{ nameuser }} </p>
+                    <div class="col s4 m4 l4">
+                        <form method="GET" action="/bastion">
+                            <input id="filteruser" type="hidden" value="{{filteruser}}" class="validate" name="filteruser" required>
+                            <div class="search-container">
+                                <input placeholder="Server" type="search" class="client-search-input" name="findserver" required>
+                                <button class="client-search-button" type="submit" name="Submit">
+                                    Buscar <i class="material-icons white-text">find_in_page</i>
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="col s4 m4 l4">
+                        <a href="/bastion" class="btn del-button">Remover filtro</a></h6>
+                    </div>
+                </div> 
+                {% elif filterhost %}
+                <div class="col s12" style="border: 1px solid #ddd;">
+                    <p> Accessos del server {{ filterhost }} </p>
+                    <div class="col s4 m4 l4">
+                    </div>
+                    <div class="col s4 m4 l4">
+                        <a href="/bastion" class="btn del-button">Remover filtro</a></h6>
+                    </div>
+                </div>    
+                {% else %}
+                <div class="col s12" style="border: 1px solid #ddd;">
+                    <p> Accesos establecidos({{ accessserver.count() }}) </p>
+                    <div class="col s12 m4 l4">
+                        <h6>Selecciona filtro rapido</h6>
+                    </div>
+                    <div class="col s12 m4 l4">
+                        <form method="GET" action="/bastion">
+                            <div class="input-field">
+                                <select class="blue-text text-darken-2" searchable="Buscar usuario" id="select" name="filteruser" required>
+                                    <option value="" disabled selected>Filtro por usuario</option>
+                                    {% for res in apiusers %}
+                                        <option value="{{res['id']}}">{{res['username']}}</option>
+                                    {% endfor %}
+                                </select>
                                 <div class="form-field">
-                                    <button id="logButton" class="btn gen-button" type="button">Mostrar LOG</button>
+                                    <button class="client-search-button" type="submit" name="Submit">
+                                        Buscar <i class="material-icons white-text">find_in_page</i>
+                                    </button>
                                 </div>
                             </div>
-                            
-                            <!-- Modal Structure -->
-                            <div id="logModal" class="modal">
-                                <div class="modal-content">
-                                    <h4>Log</h4>
-                                    <pre id="log-content"></pre>
-                                </div>
-                                <div class="modal-footer">
-                                    <button id="closeButton" class="modal-close waves-effect waves-green btn-flat">Cerrar</button>
+                        </form>
+                    </div>
+                    <div class="col s12 m4 l4">
+                        <form method="GET" action="/bastion">
+                            <div class="input-field">
+                                <select class="blue-text text-darken-2" serachname="myselectsearch" searchable="Buscar server" id="select" name="filterhost" required>
+                                    <option value="" disabled selected>Filtro por servidor</option>
+                                    {% for res in apiservers %}
+                                        {% if res.ipadmin != ipbastion %}
+                                            {% if res['estado'] and res['ipadmin'] != apibastion['ip'] %}
+                                                <option value="{{ res['id'] }}">{{ res['hostname'] }}_{{ res['ipadmin'] }}</option>
+                                            {% endif %}
+                                        {% endif %}
+                                    {% endfor %}
+                                </select>
+                                <div class="form-field">
+                                    <button class="client-search-button" type="submit" name="Submit">
+                                        Buscar <i class="material-icons white-text">find_in_page</i>
+                                    </button>
                                 </div>
                             </div>
-
-                            <form  method="POST" action="/combastion">
-                                <div class="col s2 m2 l2">
-                                    <div class="form-field">
-                                        <button id="regenAvalive" class="btn del-button miBoton" type="submit" name="Submit" formaction="/deleteaccess" method="POST" onclick="mostrarPreload(); obtenerValores();" disabled>
-                                            Eliminar
-                                        </button>
-                                    </div>
-                                </div>
-                                <div class="col s2 m2 l2">
-                                    <div class="form-field">
-                                        <button id="regenAvalive" class="btn gen-button miBoton" type="submit" name="Submit" onclick="mostrarPreload(); obtenerValores();" disabled>
-                                            Regenerar
-                                        </button>
-                                    </div>
-                                </div>
+                        </form>
+                    </div>
+                    <p class="right"> Control accesos</p>
+                </div>
+                {% endif %}
+            </div>   
+            <div class="row">        
+                <form method="POST" action="/combastion">
+                    <div class="col s12">
+                        <table class="aws-table">
+                            <thead>
+                                <tr>
+                                    <th></th>
+                                    <th>Usuario</th>
+                                    <th>Servidor</th>
+                                    <th>Tipo Acceso</th>
+                                    <th>Archivo Key</th>
+                                    <th>Healthy</th>
+                                </tr>
+                            </thead>
+                            <tbody>
                                 <!-- Modal Structure -->
                                 <div id="miModal" class="modal modalLoad">
                                     <div class="modal-content center">
                                         <div class="preloader-wrapper big active">
                                             <div class="spinner-layer spinner-blue">
-                                              <div class="circle-clipper left">
+                                            <div class="circle-clipper left">
                                                 <div class="circle"></div>
-                                              </div><div class="gap-patch">
+                                            </div><div class="gap-patch">
                                                 <div class="circle"></div>
-                                              </div><div class="circle-clipper right">
+                                            </div><div class="circle-clipper right">
                                                 <div class="circle"></div>
-                                              </div>
                                             </div>
-                                      
+                                            </div>
+                                    
                                             <div class="spinner-layer spinner-red">
-                                              <div class="circle-clipper left">
+                                            <div class="circle-clipper left">
                                                 <div class="circle"></div>
-                                              </div><div class="gap-patch">
+                                            </div><div class="gap-patch">
                                                 <div class="circle"></div>
-                                              </div><div class="circle-clipper right">
+                                            </div><div class="circle-clipper right">
                                                 <div class="circle"></div>
-                                              </div>
                                             </div>
-                                      
+                                            </div>
+                                    
                                             <div class="spinner-layer spinner-yellow">
-                                              <div class="circle-clipper left">
+                                            <div class="circle-clipper left">
                                                 <div class="circle"></div>
-                                              </div><div class="gap-patch">
+                                            </div><div class="gap-patch">
                                                 <div class="circle"></div>
-                                              </div><div class="circle-clipper right">
+                                            </div><div class="circle-clipper right">
                                                 <div class="circle"></div>
-                                              </div>
                                             </div>
-                                      
+                                            </div>
+                                    
                                             <div class="spinner-layer spinner-green">
-                                              <div class="circle-clipper left">
+                                            <div class="circle-clipper left">
                                                 <div class="circle"></div>
-                                              </div><div class="gap-patch">
+                                            </div><div class="gap-patch">
                                                 <div class="circle"></div>
-                                              </div><div class="circle-clipper right">
+                                            </div><div class="circle-clipper right">
                                                 <div class="circle"></div>
-                                              </div>
                                             </div>
-                                          </div>
+                                            </div>
+                                        </div>
                                     <p class="white-text center">Proceso en curso espere no cierre la ventana ...</p>
                                     </div>
                                 </div>
-                                
                                 {% for res in data.items %}
                                     {% if res['tipe'] == 'server' %}
                                         <tr>
                                             <td>
                                                 <p>
                                                     <label>
-                                                        <input name="checkbox" type="checkbox"  value="{{res['id']}}" id="activeEditor" onchange="habilitarBotones()">
+                                                        <input name="checkbox_{{ res['id'] }}" type="checkbox" value="{{ res['id'] }}" id="activeEditor" onchange="habilitarBotones()">
                                                         <span></span>
                                                     </label>
                                                 </p>
                                             </td>
-                                            <td>{{res['user']}}</td>
-                                            <td>{{res['server']}}</td>
-                                            <td>{{res['tipe']}}</td>
-                                            <td>{{res['keypair']}}</td>
+                                            <td>{{ res['user'] }}</td>
+                                            <td>{{ res['server'] }}</td>
+                                            <td>{{ res['tipe'] }}</td>
+                                            <td>{{ res['keypair'] }}</td>
                                             <td><i class="material-icons green-text">check_circle</i></td>
                                         </tr>
                                     {% endif %}
                                 {% endfor %}
-                                <input type="hidden" id="valoresSeleccionados" name="valoresSeleccionados">
-                            </form>
-                        </tbody>
-                    </table>
-                    <div class="center">
-                        <ul class="pagination">
-
-                        {% if data.has_prev %}
-                            <li class="waves-effect"><a class="page-link" href="{{ url_for('bastion', page_num=data.prev_num, filteruser=filteruser) }}"><i class="material-icons">chevron_left</i></a></li>
-                        {% else %}
-                            <li class="disabled"><span><i class="material-icons">chevron_left</i></span>
-                        {% endif %}
-                            </li>
-
-                        {% for page in data.iter_pages(left_edge=3, right_edge=3) %}
-                        {% if page %}
-                        <li class="waves-effect"><a href="{{ url_for('bastion', page_num=page, filteruser=filteruser) }}">{{ page }}</a></li>
-                        {% else %}
-                        <li class="disabled"><a href="#">…</a></li> 
-                        {% endif %}
-                        {% endfor %}
-
-                        {% if data.has_next %}
-                            <li class="waves-effect"><a href="{{ url_for('bastion', page_num=data.next_num, filteruser=filteruser) }}"><i class="material-icons">chevron_right</i></a></li>
-                        {% else %}
-                            <li class="disabled"><span><i class="material-icons">chevron_right</i></span>
-                        {% endif %}
-                                
-                        </ul>
+                            </tbody>
+                        </table>
+                        <br><br>
                     </div>
+                    <div class="col s2 m2 l2">
+                        <div class="form-field">
+                            <button id="logButton" class="btn gen-button" type="button">Mostrar LOG</button>
+                        </div>
+                    </div>
+                    <div class="col s2 m2 l2">
+                        <div class="form-field">
+                            <button id="regenAvalive" class="btn del-button miBoton" type="submit" formaction="/deleteaccess" method="POST" onclick="mostrarPreload(); obtenerValores();" disabled>
+                                Eliminar
+                            </button>
+                        </div>
+                    </div>
+                    <div class="col s2 m2 l2">
+                        <div class="form-field">
+                            <button id="regenAvalive" class="btn gen-button miBoton" type="submit" onclick="mostrarPreload(); obtenerValores();" disabled>
+                                Regenerar
+                            </button>
+                        </div>
+                    </div>
+                
+                    <input type="hidden" id="valoresSeleccionados" name="valoresSeleccionados">
+                    
+                </form>          
+                    <div class="col s2 m2 l2">
+                        <div class="form-field">
+                            <form  method="GET" action="/bastion">
+                                <input  type="hidden" class="" name="createaccess" value="True">
+                                <button class="btn add-button miBoton" type="submit">
+                                    Nuevo
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                    <div class="col s2 m2 l2">
+                        <div class="form-field">
+                            <form  method="GET" action="/bastion">
+                                <button id="regenAvalive" class="btn del-button miBoton" type="submit" disabled>
+                                    Cancelar
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                    <div class="col s2 m2 l2">
+
+                    </div>
+                    
+                <div class="col s12 center">
+                    <ul class="pagination">
+
+                    {% if data.has_prev %}
+                        <li class="waves-effect"><a class="page-link" href="{{ url_for('bastion', page_num=data.prev_num, filteruser=filteruser) }}"><i class="material-icons">chevron_left</i></a></li>
+                    {% else %}
+                        <li class="disabled"><span><i class="material-icons">chevron_left</i></span>
+                    {% endif %}
+                        </li>
+
+                    {% for page in data.iter_pages(left_edge=3, right_edge=3) %}
+                    {% if page %}
+                    <li class="waves-effect"><a href="{{ url_for('bastion', page_num=page, filteruser=filteruser) }}">{{ page }}</a></li>
+                    {% else %}
+                    <li class="disabled"><a href="#">…</a></li> 
+                    {% endif %}
+                    {% endfor %}
+
+                    {% if data.has_next %}
+                        <li class="waves-effect"><a href="{{ url_for('bastion', page_num=data.next_num, filteruser=filteruser) }}"><i class="material-icons">chevron_right</i></a></li>
+                    {% else %}
+                        <li class="disabled"><span><i class="material-icons">chevron_right</i></span>
+                    {% endif %}
+                            
+                    </ul>
+                </div>
+            </div>
+            <!-- Modal Structure Log llamada-->
+            <div id="logModal" class="modal">
+                <div class="modal-content">
+                    <h4>Log</h4>
+                    <pre id="log-content"></pre>
+                </div>
+                <div class="modal-footer">
+                    <button id="closeButton" class="modal-close waves-effect waves-green btn-flat">Cerrar</button>
+                </div>
+            </div>
+        {% else %}
+                <div class="row">
+                    <div class="col s12" style="border: 1px solid #ddd;">
+                        <p> Generar acceso para bastion server </p>
+                        <form method="POST" action="/addbastionserver"><br>
+                            <div class="col s12 m4 l4">
+                                <div class="input-field">
+                                    <select  class="form-field-ref-select-field-name" name="server" searchable="Search in this list" required>
+                                        <option value="" disabled selected>Selecciona el servidor</option>
+                                        {% for res in apiservers %}
+                                            {% if res.ipadmin != ipbastion %}
+                                                {% if res['estado'] and res['ipadmin'] != apibastion['ip'] %}
+                                                    <option value="{{ res['id'] }}">{{ res['hostname'] }}_{{ res['ipadmin'] }}</option>
+                                                {% endif %}
+                                            {% endif %}
+                                        {% endfor %}
+                                    </select>   
+                                </div>
+                            </div>
+                            <div class="col s12 m4 l4">
+                                <div class="input-field">
+                                    <select class="blue-text text-darken-2" name="user" serachname="myselectsearch" searchable="Buscar user" required>
+                                        <option value="" disabled selected>Seleccion el usuario</option>
+                                        {% for res in apiusers %}
+                                            <option value="{{res['id']}}">{{ res['username'] }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col s12 m4 l4">
+                                <div class="input-field">
+                                    <div class="form-field">
+                                        <button class="btn add-button miBoton" type="submit" name="Submit"  onclick="mostrarPreload()">
+                                            Crear +
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                        <div class="row">
+                            <div class="col s4 m4 l4">
+                                <a href="/bastion" class="btn del-button">Cancelar</a></h6>
+                            </div>
+                        </div>
+                        <p class="right">Acceso a Bastion</p>
+                    </div>
+                   
+                </div>
+        {% endif %}
+    {% else %}
+        <div class="row">
+            <div class="custom-col s12">
+                <div class="validate-bastion-container">
+                    <h1>Bienvenido al sistema Bastion Host Web</h1>
+                    <p>Para empezar, debes agregar un servidor bastión.</p>
+                    <form action="{{ url_for('servers') }}" method="get">
+                        <button class="validate-bastion-button" type="submit">Agregar servidor bastión</button>
+                    </form>
                 </div>
             </div>
         </div>
-    </main>    
-    
+    {% endif %}
+    <!-- Modal Structure -->
+    <div id="miModal" class="modal modalLoad">
+        <div class="modal-content center">
+            <div class="preloader-wrapper big active">
+                <div class="spinner-layer spinner-blue">
+                <div class="circle-clipper left">
+                    <div class="circle"></div>
+                </div><div class="gap-patch">
+                    <div class="circle"></div>
+                </div><div class="circle-clipper right">
+                    <div class="circle"></div>
+                </div>
+                </div>
+        
+                <div class="spinner-layer spinner-red">
+                <div class="circle-clipper left">
+                    <div class="circle"></div>
+                </div><div class="gap-patch">
+                    <div class="circle"></div>
+                </div><div class="circle-clipper right">
+                    <div class="circle"></div>
+                </div>
+                </div>
+        
+                <div class="spinner-layer spinner-yellow">
+                <div class="circle-clipper left">
+                    <div class="circle"></div>
+                </div><div class="gap-patch">
+                    <div class="circle"></div>
+                </div><div class="circle-clipper right">
+                    <div class="circle"></div>
+                </div>
+                </div>
+        
+                <div class="spinner-layer spinner-green">
+                <div class="circle-clipper left">
+                    <div class="circle"></div>
+                </div><div class="gap-patch">
+                    <div class="circle"></div>
+                </div><div class="circle-clipper right">
+                    <div class="circle"></div>
+                </div>
+                </div>
+            </div>
+        <p class="white-text center">Proceso en curso espere no cierre la ventana ...</p>
+        </div>
+    </div>
+    </main>   
 {% endblock content %}  

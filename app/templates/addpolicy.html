@@ -1,0 +1,102 @@
+{% extends 'base/base.html' %}
+{% block title %} bastion adduser {% endblock title%}
+{% block content %}
+<main class="container">
+  <form method="POST" action="/comaddpolicy">
+    <div class="row">
+      <div class="card">
+        <div class="card-content">
+          <span class="card-title center"><b>Una política es un objeto que define permisos.</b></span>
+          <br>
+          <div class="row">
+            <div class="col s12 m4 l4">
+              <p>Asignar un nombre a esta política.</p>
+              <div class="text-container">
+                <input placeholder="NETWORK ejemplo" type="text" class="validate client-text-input" name="name" required>
+              </div>
+            </div>
+            <div class="col s12 m4 l4">
+              <p>Descripción.</p>
+              <div class="text-container">
+                <input placeholder="Politica para administracion de redes ejemplo ..." type="text" class="validate client-text-input" name="description" required>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col s12">
+        <p>Agrega todas las politicas separada por coma.</p>
+        <label for="myTextarea">Document policy.</label>
+        <textarea id="myTextarea" class="materialize-textarea custom-textarea" name="policy"></textarea>
+      </div>
+    </div>
+    <div class="row right">
+      <div class="form-field">
+        <button class="btn add-button miBoton" onclick="mostrarPreload()" type="submit" name="add_button">Agregar
+        </button>
+        <button class="btn del-button" type="submit" formmethod="get" formnovalidate="novalidate" formaction="/users" name="cancelar">cancelar
+        </button>
+      </div>
+    </div>
+  </form>
+  <!-- Modal Structure -->
+  <div id="miModal" class="modal modalLoad">
+    <div class="modal-content center">
+      <div class="preloader-wrapper big active">
+        <div class="spinner-layer spinner-blue">
+          <div class="circle-clipper left">
+            <div class="circle"></div>
+          </div>
+          <div class="gap-patch">
+            <div class="circle"></div>
+          </div>
+          <div class="circle-clipper right">
+            <div class="circle"></div>
+          </div>
+        </div>
+
+        <div class="spinner-layer spinner-red">
+          <div class="circle-clipper left">
+            <div class="circle"></div>
+          </div>
+          <div class="gap-patch">
+            <div class="circle"></div>
+          </div>
+          <div class="circle-clipper right">
+            <div class="circle"></div>
+          </div>
+        </div>
+
+        <div class="spinner-layer spinner-yellow">
+          <div class="circle-clipper left">
+            <div class="circle"></div>
+          </div>
+          <div class="gap-patch">
+            <div class="circle"></div>
+          </div>
+          <div class="circle-clipper right">
+            <div class="circle"></div>
+          </div>
+        </div>
+
+        <div class="spinner-layer spinner-green">
+          <div class="circle-clipper left">
+            <div class="circle"></div>
+          </div>
+          <div class="gap-patch">
+            <div class="circle"></div>
+          </div>
+          <div class="circle-clipper right">
+            <div class="circle"></div>
+          </div>
+        </div>
+      </div>
+      <p class="white-text center">Proceso en curso espere no cierre la ventana ...</p>
+    </div>
+  </div>
+</main>
+<!-- Compiled and minified JavaScript -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+{% endblock content %}

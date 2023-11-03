@@ -1,15 +1,18 @@
+# This file contains the Flask app configuration and imports the necessary modules.
 __author__ = 'Luis Geronimo'
 from flask import Flask
 
-#Entorno
+# Entorno
 from flask_environments import Environments
 
-#QLAlchemy
+# SQLAlchemy
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.orm import sessionmaker
 
-#Login manager
+# Login manager
 from flask_login import LoginManager
+
+import hmac
 
 app = Flask(__name__)
 
@@ -48,6 +51,8 @@ class cf():
     LOG_LEVEL=app.config["LOG_LEVEL"]
     DEBUG=app.config["DEBUG"]
     RUTALOG=app.config["RUTALOG"]
+    VARSFILE=app.config['VARSFILE']
+    DIRFILES=app.config['DIRFILES']
 
 app.config['SECRET_KEY'] = cf.SECRETKEY
 app.config['SQLALCHEMY_DATABASE_URI'] = cf.DB_DIR
@@ -62,3 +67,4 @@ from app.view import home
 from app.view import servers
 from app.view import bastion
 from app.view import users
+from app.view import permissions

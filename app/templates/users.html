@@ -2,6 +2,7 @@
 {% block title %} bastion users {% endblock title%}
 {% block content %}
     <main class="container">
+    {% if validatebastion %}
         <div class="row">
             {% with messages = get_flashed_messages(with_categories=true) %}
                 {% if messages %}
@@ -16,150 +17,221 @@
                     </ul>
                 {% endif %}
             {% endwith %}
-            <div class="col s12 m4 l4">
-                <form method="GET" action="/users">
-                    <div class="input-field col s12 m12 l12">
-                        <input placeholder="Usuario" id="" type="search" class="validate" name="finduser" required>
-                        <label for="Usuario">Buscar usuario</label>
-                    </div>
-                    <div class="card-action">
-                        <div class="form-field">
-                            <button class="btn find-button" type="submit" name="Submit">
-                                Buscar <i class="material-icons white-text">find_in_page</i>
-                            </button>
-                        </div>
-                    </div>
-                </form>
-                {% if removefilter %}
-                    <a href="/users" class="btn del-button">Remover filtro</a>
-                {% endif %}
-            </div>
-            <div class="col s12 m4 l4">
-                    <div>
-                        <h5 class="center"><i class="medium material-icons white-black">verified_user</i></h5>
-                    </div>
-                    <div>
-                        <h5 class="center"><b>Administrador de usuarios</b></h5>
-                    </div>
-            </div> 
-            <div class="col s12 m4 l4">
-                <div class="card lighten-3"><br>
-                    <p class="center">Realizar nuevo registro de usuario</p>
-                    <div class="card-action">
-                    <form method="POST" action="/adduser">
-                        <p class="red-text">{{statususer}}</p>
-                        <div class="form-field center">
-                            <button class="btn add-button" type="submit" name="Submit">
-                                Crear +
-                            </button>
-                        </div>
-                    </form>
-                    </div>
-                </div>
-            </div>
         </div>
         <div class="row">
-            <div class="">
-                <div class="card-content">
-                    <div class="row">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Usuario</th>
-                                <th>Correo</th>
-                                <th>Area</th>
-                                <th>Grupo</th>
-                                <th>bastion</th>
-                                <th>Web</th>
-                                <th>Editar</th>
-                                <th>Borrar</th>
-                                <th>copiar</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {% for user in data.items %}
-                            <tr>
-                                <td>
-                                    {{user['username']}}
-                                </td>
-                                <td>
-                                    {{user['email']}}
-                                </td>
-                                <td>
-                                    {{user['area']}}
-                                </td>
-                                <td>
-                                    {{user['group']}}
-                                </td>
-                                <form method="POST" action="/updateuser">
-                                <td>
-                                    {% if user['status'] == True %}
-                                        <i class="material-icons green-text">check_circle</i>
-                                    {% else %}
-                                        <i class="material-icons grey-text">do_not_disturb_on</i>
-                                    {% endif %} 
-                                </td>
-                                <td>
-                                    {% if user['web'] == True %}
-                                        <i class="material-icons green-text">check_circle</i>
-                                    {% else %}
-                                        <i class="material-icons grey-text">do_not_disturb_on</i>
-                                    {% endif %}
-                                </td>
-                                <td>
-                                    <button class="waves-effect waves-light btn grey" type="submit" formmethod="post" formaction="/edituser" name="conf"  value="{{user['id']}}">
-                                        <i class="material-icons black-text">edit</i>
-                                    </button>
-                                </td>
-                                </form>
-                                <td>
-                                    <form method="POST" action="/deleteuser"><br>
-                                        <button class="waves-effect waves-light btn grey" type="submit" name="id" onclick="return confirm('Are you sure to delete?')" value="{{user['id']}}">
-                                            <i class="material-icons black-text">delete</i>
-                                        </button>
-                                    </form>
-                                </td>
-                                <td>
-                                    <form method="POST" action="/copyaccess"><br>
-                                        <button class="btn find-button" type="submit" name="id" value="{{user['id']}}">
-                                            <i class="material-icons">content_copy</i>
-                                        </button>
-                                    </form>
-                                </td>
-                            </tr>
-                            {% endfor %}
-                        </tbody>
-                    </table>
-                        <div class="center">
-                            <ul class="pagination">
-
-                            {% if data.has_prev %}
-                                <li class="waves-effect"><a class="page-link" href="{{ url_for('users', page_num=data.prev_num) }}"><i class="material-icons">chevron_left</i></a></li>
-                            {% else %}
-                                <li class="disabled"><span><i class="material-icons">chevron_left</i></span>
-                            {% endif %}
-                                </li>
-
-                            {% for page in data.iter_pages(left_edge=3, right_edge=3) %}
-                            {% if page %}
-                            <li class="waves-effect"><a href="{{ url_for('users', page_num=page) }}">{{ page }}</a></li>
-                            {% else %}
-                            <li class="disabled"><a href="#">…</a></li> 
-                            {% endif %}
-                            {% endfor %}
-
-                            {% if data.has_next %}
-                                <li class="waves-effect"><a href="{{ url_for('users', page_num=data.next_num) }}"><i class="material-icons">chevron_right</i></a></li>
-                            {% else %}
-                                <li class="disabled"><span><i class="material-icons">chevron_right</i></span>
-                            {% endif %}
-                                    
-                            </ul>
+            <div class="col s12" style="border: 1px solid #ddd;">
+                <p> Usuarios ({{ usersall|length }}) </p>
+                <div class="input-field col s12 m4 l4">
+                    <form method="GET" action="/users">
+                        {% if removefilter %}
+                        <div class="form-field">
+                            <button class="btn del-button" type="submit" name="Submit">
+                                cancelar <i class="material-icons white-text">find_in_page</i>
+                            </button>
                         </div>
-                    </div>
+                        {% else %}
+                        <div class="search-container">
+                            <input placeholder="Usuario" type="search" class="client-search-input" name="finduser" required>
+                            <button class="client-search-button" type="submit" name="Submit">
+                              Buscar <i class="material-icons white-text">find_in_page</i>
+                            </button>
+                          </div>
+                        {% endif %}
+                    </form>
+                </div>
+                <div class="col s12 m4 l4">
+                </div>
+                <div class="col s12 m4 l4">
+                    <select id="iamSelect">
+                        <option value="">Acciones de seguridad</option>
+                        <option value="/adduser">Crear nuevo usuario</option>
+                        <option value="/addgroup">Crear nuevo grupo</option>
+                        <option value="/addpolicy">Crear nueva politica</option>
+                        <option value="/ejemplo" class="editarUsuario" disabled>Copiar registro</option>
+                        <option value="/ejemplo" class="editarUsuario" disabled>Editar registro</option>
+                        <option value="/ejemplo" class="eliminarUsuario" disabled>Eliminar usuario</option>
+                    </select>
+                </div>
+                <div class="col s12">
+                  <p class="right"> Control de Usuarios</p>
+                </div>
+            </div>
+            <table class="aws-table">
+                <thead>
+                  <tr>
+                    <th>Selecciona</th>
+                    <th>Usuario</th>
+                    <th>Correo</th>
+                    <th>Area</th>
+                    <th>Grupo</th>
+                    <th>bastion</th>
+                    <th>Web</th>
+                    <th></th>
+                    <th>Setting</th>
+                    <th></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for user in data.items %}
+                  <tr>
+                    <td class="center">
+                      <p>
+                        <label>
+                          <input name="checkbox" type="checkbox" id="activeOptionsUsers" disabled>
+                          <span></span>
+                        </label>
+                      </p>
+                    </td>
+                    <td>
+                      {{user['username']}}
+                    </td>
+                    <td>
+                      {{user['email']}}
+                    </td>
+                    <td>
+                      {{user['area']}}
+                    </td>
+                    <td>
+                        {% for res in apiug %}
+                            {% if res.id_user == user.id %}
+                                {% for getgroup in apigroup %}
+                                    {% if res.id_group == getgroup.id %}
+                                    <form method="POST" action="/permissions?selectgroups=True&groupselect={{ getgroup.id}}">
+                                      <button class="borderless-button" type="submit" name="id" value="{{ getgroup.id }}">
+                                        <span class="button-text">{{ getgroup.name }}</span>
+                                      </button>
+                                    </form>
+                                    {% endif %}
+                                {% endfor %}
+                            {% endif %}
+                        {% endfor %}
+                    </td>
+                    <form method="POST" action="/updateuser">
+                    <td>
+                      {% if user['status'] == True %}
+                        <i class="material-icons green-text">check_circle</i>
+                      {% else %}
+                        <i class="material-icons grey-text">do_not_disturb_on</i>
+                      {% endif %} 
+                    </td>
+                    <td>
+                      {% if user['web'] == True %}
+                        <i class="material-icons green-text">check_circle</i>
+                      {% else %}
+                        <i class="material-icons grey-text">do_not_disturb_on</i>
+                      {% endif %}
+                    </td>
+                    <td>
+                        <button type="submit" formmethod="post" formaction="/edituser" name="conf" value="{{user['id']}}" class="borderless-button">
+                            <span class="button-text ">Edit</span>
+                        </button>
+                    </td>
+                    </form>
+                    <td class="center">
+                      <form method="POST" action="/copyaccess"><br>
+                        <button class="borderless-button" type="submit" name="id" value="{{user['id']}}">
+                            <span class="button-text">Copy</span>
+                        </button>
+                      </form>
+                    </td>
+                    <td>
+                        <form method="POST" action="/deleteuser"><br>
+                          <button class="borderless-button" type="submit" name="id" onclick="if (confirm('Are you sure to delete?')) { mostrarPreload(); }" value="{{user['id']}}">
+                              <span class="button-text">Delete</span>
+                          </button>
+                        </form>
+                      </td>
+                  </tr>
+                  {% endfor %}
+                </tbody>
+            </table>
+            <div class="center">
+                <ul class="pagination">
+
+                {% if data.has_prev %}
+                    <li class="waves-effect"><a class="page-link" href="{{ url_for('users', page_num=data.prev_num) }}"><i class="material-icons">chevron_left</i></a></li>
+                {% else %}
+                    <li class="disabled"><span><i class="material-icons">chevron_left</i></span>
+                {% endif %}
+                    </li>
+
+                {% for page in data.iter_pages(left_edge=3, right_edge=3) %}
+                {% if page %}
+                <li class="waves-effect"><a href="{{ url_for('users', page_num=page) }}">{{ page }}</a></li>
+                {% else %}
+                <li class="disabled"><a href="#">…</a></li> 
+                {% endif %}
+                {% endfor %}
+
+                {% if data.has_next %}
+                    <li class="waves-effect"><a href="{{ url_for('users', page_num=data.next_num) }}"><i class="material-icons">chevron_right</i></a></li>
+                {% else %}
+                    <li class="disabled"><span><i class="material-icons">chevron_right</i></span>
+                {% endif %}
+                        
+                </ul>
+            </div>  
+        </div>
+    {% else %}
+        <div class="row">
+            <div class="custom-col s12">
+                <div class="validate-bastion-container">
+                    <h1>Bienvenido al sistema Bastion Host Web</h1>
+                    <p>Para empezar, debes agregar un servidor bastión.</p>
+                    <form action="{{ url_for('servers') }}" method="get">
+                        <button class="validate-bastion-button" type="submit">Agregar servidor bastión</button>
+                    </form>
                 </div>
             </div>
         </div>
+    {% endif %}
+        <!-- Modal Structure -->
+        <div id="miModal" class="modal modalLoad">
+          <div class="modal-content center">
+              <div class="preloader-wrapper big active">
+                  <div class="spinner-layer spinner-blue">
+                    <div class="circle-clipper left">
+                      <div class="circle"></div>
+                    </div><div class="gap-patch">
+                      <div class="circle"></div>
+                    </div><div class="circle-clipper right">
+                      <div class="circle"></div>
+                    </div>
+                  </div>
+            
+                  <div class="spinner-layer spinner-red">
+                    <div class="circle-clipper left">
+                      <div class="circle"></div>
+                    </div><div class="gap-patch">
+                      <div class="circle"></div>
+                    </div><div class="circle-clipper right">
+                      <div class="circle"></div>
+                    </div>
+                  </div>
+            
+                  <div class="spinner-layer spinner-yellow">
+                    <div class="circle-clipper left">
+                      <div class="circle"></div>
+                    </div><div class="gap-patch">
+                      <div class="circle"></div>
+                    </div><div class="circle-clipper right">
+                      <div class="circle"></div>
+                    </div>
+                  </div>
+            
+                  <div class="spinner-layer spinner-green">
+                    <div class="circle-clipper left">
+                      <div class="circle"></div>
+                    </div><div class="gap-patch">
+                      <div class="circle"></div>
+                    </div><div class="circle-clipper right">
+                      <div class="circle"></div>
+                    </div>
+                  </div>
+                </div>
+          <p class="white-text center">Proceso en curso espere no cierre la ventana ...</p>
+          </div>
+      </div>
     </main>    
     <!-- Compiled and minified JavaScript -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>

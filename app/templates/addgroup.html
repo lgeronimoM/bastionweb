@@ -1,0 +1,138 @@
+{% extends 'base/base.html' %}
+{% block title %} bastion adduser {% endblock title%}
+{% block content %}
+    <main class="container">
+        <div class="row">
+          {% with messages = get_flashed_messages(with_categories=true) %}
+              {% if messages %}
+                  <ul class=flashes>
+                  {% for category, message in messages %}
+                      {% if category == 'error' %}
+                          <li class="red-text">{{ message }}</li>
+                      {% else %}
+                          <li class="green-text">{{ message }}</li>
+                      {% endif %}
+                  {% endfor %}
+                  </ul>
+              {% endif %}
+          {% endwith %}
+      </div>
+        <form method="POST" action="/comaddgroup" id="FormsIds">
+          <div class="row">
+              <div class="card">
+                  <div class="card-content container">
+                      <span class="card-title center"><b>Crear grupo de usuarios</b></span>
+                          <p class="red-text">{{statususer}}</p>
+                          <br>
+                          <div class="row">
+                              <div class="col s6">
+                                <p>Asignar un nombre al grupo</p>
+                                <div class="text-container">   
+                                  <input placeholder="GroupTI ejemplo"  type="text" class="validate client-text-input" name="name" required>
+                                </div>
+                              </div>
+                              <div class="col s6">
+                                <p>Descripción</p>
+                                <div class="text-container"> 
+                                  <input placeholder="Grupo de administradores infra ejemplo..." type="text" class="validate client-text-input" name="description" required>
+                                </div>
+                              </div>
+                          </div>
+                        </div>
+                  </div>
+              </div>   
+          </div>
+          <table class="aws-table">
+            <thead>
+              <tr>
+                <th class="center">Selecciona</th>
+                <th>Usuario</th>
+                <th>Correo</th>
+                <th>Area</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for user in data %}
+              <tr>
+                <td class="center">
+                  <p>
+                    <label>
+                      <input name="checkbox_{{ user.id }}" type="checkbox" value="{{ user.id }}">
+                      <span></span>
+                    </label>
+                  </p>
+                </td>
+                <td>
+                  {{user.username}}
+                </td>
+                <td>
+                  {{user.email}}
+                </td>
+                <td>
+                  {{user.area}}
+                </td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+          <div class="row right" style="margin-top: 30px; margin-bottom: 30px;">
+            <div class="form-field">
+              <input name="valuesSeleccts" type="hidden" value="">
+              <button id="regenAvalive" class="btn add-button miBoton" onclick="mostrarPreload(); getValueIds();" type="submit" name="add_button">Agregar</button>
+                <button class="btn del-button" type="submit" formmethod="get" formnovalidate="novalidate" formaction="/users" name="cancelar" >cancelar
+                </button>
+            </div>
+          </div>
+        </form>
+        <!-- Modal Structure -->
+        <div id="miModal" class="modal modalLoad">
+            <div class="modal-content center">
+                <div class="preloader-wrapper big active">
+                    <div class="spinner-layer spinner-blue">
+                      <div class="circle-clipper left">
+                        <div class="circle"></div>
+                      </div><div class="gap-patch">
+                        <div class="circle"></div>
+                      </div><div class="circle-clipper right">
+                        <div class="circle"></div>
+                      </div>
+                    </div>
+              
+                    <div class="spinner-layer spinner-red">
+                      <div class="circle-clipper left">
+                        <div class="circle"></div>
+                      </div><div class="gap-patch">
+                        <div class="circle"></div>
+                      </div><div class="circle-clipper right">
+                        <div class="circle"></div>
+                      </div>
+                    </div>
+              
+                    <div class="spinner-layer spinner-yellow">
+                      <div class="circle-clipper left">
+                        <div class="circle"></div>
+                      </div><div class="gap-patch">
+                        <div class="circle"></div>
+                      </div><div class="circle-clipper right">
+                        <div class="circle"></div>
+                      </div>
+                    </div>
+              
+                    <div class="spinner-layer spinner-green">
+                      <div class="circle-clipper left">
+                        <div class="circle"></div>
+                      </div><div class="gap-patch">
+                        <div class="circle"></div>
+                      </div><div class="circle-clipper right">
+                        <div class="circle"></div>
+                      </div>
+                    </div>
+                  </div>
+            <p class="white-text center">Proceso en curso espere no cierre la ventana ...</p>
+            </div>
+        </div>
+    </main>    
+    <!-- Compiled and minified JavaScript -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+
+{% endblock content %}

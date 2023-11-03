@@ -12,7 +12,7 @@ from flask_admin import Admin, AdminIndexView
 from flask_admin.contrib.sqla import ModelView
 
 # Models
-from app.models import Servers, Users, Access, Bastion, AdminView
+from app.models import Servers, Users, Access, Bastion, AdminView, Policy, UGPolicies, Groups, UGRelation, GSRelation
 
 # Flask Login
 from flask_login import current_user, logout_user
@@ -64,13 +64,18 @@ def actualizar_actividad():
 def before_request():
     actualizar_actividad()
 
-
 admin = Admin(app, url=cf.LINK, index_view=CustomAdminIndexView(), name=cf.NAMEAPP, template_mode=cf.TEM)
 admin.add_view(CustomModelView(Servers, db.session))
 admin.add_view(CustomModelView(Users, db.session))
+admin.add_view(CustomModelView(Groups, db.session))
+admin.add_view(CustomModelView(UGPolicies, db.session))
+admin.add_view(CustomModelView(UGRelation, db.session))
+admin.add_view(CustomModelView(GSRelation, db.session))
+admin.add_view(CustomModelView(Policy, db.session))
 admin.add_view(CustomModelView(Access, db.session))
 admin.add_view(CustomModelView(Bastion, db.session))
 
 if __name__ == '__main__':
-    db.create_all()
+    with app.app_context():
+        db.create_all()
     app.run(debug=cf.DEBUG, host=cf.SERVER, port=cf.PRTO, threaded=True)

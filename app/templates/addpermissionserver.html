@@ -1,0 +1,198 @@
+{% extends 'base/base.html' %}
+{% block title %} bastion users {% endblock title%}
+{% block content %}
+<main class="container">
+    <div class="row">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <ul class=flashes>
+                {% for category, message in messages %}
+                    {% if category == 'error' %}
+                        <li class="red-text">{{ message }}</li>
+                    {% else %}
+                        <li class="green-text">{{ message }}</li>
+                    {% endif %}
+                {% endfor %}
+                </ul>
+            {% endif %}
+        {% endwith %}
+    </div>
+
+ <!-- Aqui muestro todo el contenido de los Usuarios tablas y asignacion  -->
+    
+    <div class="row">   
+        <div class="col s12" style="border: 1px solid #ddd;">
+            <p> Servidores({{ getservers|length }}) </p>
+            <div class="input-field col s12 m4 l4">
+                <form method="GET" action="/addpermissionserver">
+                    {% if removefilter %}
+                    <div class="form-field">
+                        <input type="hidden" name="serverselect" value="{{ getidserverselect }}">
+                        <button class="btn del-button" type="submit" name="selectusers" value="True">
+                            cancelar <i class="material-icons white-text">find_in_page</i>
+                        </button>
+                    </div>
+                    {% else %}
+                    <div class="search-container">
+                        <input type="hidden" name="serverselect" value="{{ getidserverselect }}">
+                        <input placeholder="Buscas grupo" type="search" class="client-search-input" name="server_find" required>
+                        <button class="client-search-button" type="submit">
+                            Buscar <i class="material-icons white-text">find_in_page</i>
+                        </button>
+                    </div>
+                    {% endif %}
+                </form>
+            </div>
+            <div class="col s12 m4 l4">
+            </div>
+            <form method="POST" action="/addrole" id="policyForm">
+            <div class="col s12 m4 l4">
+                <select id="permissionServerSelect" serachname="myselectsearch" searchable="Buscar server" id="select" name="idserverselect" required>
+                    {% if getidserverselect %}
+                        {% for serverget in getservers %}
+                            {% if serverget.ipadmin != ipbastion %}
+                                {% if getidserverselect == serverget['id'] %}
+                                    <option value="{{ getidserverselect }}">{{ serverget['namekey'] }}_{{ serverget['ipadmin'] }}</option>
+                                {% endif %}
+                            {% endif %}
+                        {% endfor %}
+                    {% else %}
+                        <option value="" disabled selected>Selecciona un Servidor</option>
+                    {% endif %}
+                    {% for res in getservers %} 
+                        {% if res.ipadmin != ipbastion %}   
+                            <option value="{{ res.id }}">{{ res.namekey }}_{{ res.ipadmin }}</option>
+                        {% endif %}
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col s12">
+                <p class="right"> Control de permisos a grupos</p>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+            <table class="aws-table">
+                <thead>
+                <tr>
+                    <th>Selecciona</th>
+                    <th>Nombre</th>
+                    <th>Descripcion</th>
+                    <th></th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for res in getpagination.items %}
+                    <tr>
+                        <td class="center">          
+                            <p>
+                                <label>
+                                    <input name="idgroups" value="{{ res['id'] }}" type="checkbox" id="activeOptionsUsers" {% if res['id'] in getidgroupselect %}checked disabled {% endif %}>
+                                    <span></span>
+                                </label>
+                            </p>
+                         <td>
+                            {{ res['name'] }}
+                        </td>
+                        <td>
+                            {{ res['desc'] }}
+                        </td>
+                        <td>
+                            {% if res['id'] in getidgroupselect %}
+                            <button id="regenAvalive" class="borderless-button" onclick="mostrarPreload()" type="submit" value="[{{ res['id'] }},{{ getidserverselect }}]" name="idrole" formaction="/deleteroleg" method="POST">
+                                Delete
+                            </button>
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+            <br>
+            <div class="right">
+                <div class="form-field">
+                    <button class="btn add-button miBoton" onclick="mostrarPreload()" type="submit" name="add_button">Agregar
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="row">
+        <div class="center">
+            <ul class="pagination">
+
+            {% if getpagination.has_prev %}
+                <li class="waves-effect"><a class="page-link" href="{{ url_for('addpermissionserver', page_num=getpagination.prev_num, serverselect=getidserverselect) }}"><i class="material-icons">chevron_left</i></a></li>
+            {% else %}
+                <li class="disabled"><span><i class="material-icons">chevron_left</i></span>
+            {% endif %}
+                </li>
+
+            {% for page in getpagination.iter_pages(left_edge=3, right_edge=3) %}
+            {% if page %}
+            <li class="waves-effect"><a href="{{ url_for('addpermissionserver', page_num=page, serverselect=getidserverselect) }}">{{ page }}</a></li>
+            {% else %}
+            <li class="disabled"><a href="#">…</a></li> 
+            {% endif %}
+            {% endfor %}
+
+            {% if getpagination.has_next %}
+                <li class="waves-effect"><a href="{{ url_for('addpermissionserver', page_num=getpagination.next_num, serverselect=getidserverselect) }}"><i class="material-icons">chevron_right</i></a></li>
+            {% else %}
+                <li class="disabled"><span><i class="material-icons">chevron_right</i></span>
+            {% endif %}
+                    
+            </ul>
+        </div> 
+    </div>
+    <!-- Modal Structure -->
+    <div id="miModal" class="modal modalLoad">
+        <div class="modal-content center">
+            <div class="preloader-wrapper big active">
+                <div class="spinner-layer spinner-blue">
+                <div class="circle-clipper left">
+                    <div class="circle"></div>
+                </div><div class="gap-patch">
+                    <div class="circle"></div>
+                </div><div class="circle-clipper right">
+                    <div class="circle"></div>
+                </div>
+                </div>
+        
+                <div class="spinner-layer spinner-red">
+                <div class="circle-clipper left">
+                    <div class="circle"></div>
+                </div><div class="gap-patch">
+                    <div class="circle"></div>
+                </div><div class="circle-clipper right">
+                    <div class="circle"></div>
+                </div>
+                </div>
+        
+                <div class="spinner-layer spinner-yellow">
+                <div class="circle-clipper left">
+                    <div class="circle"></div>
+                </div><div class="gap-patch">
+                    <div class="circle"></div>
+                </div><div class="circle-clipper right">
+                    <div class="circle"></div>
+                </div>
+                </div>
+        
+                <div class="spinner-layer spinner-green">
+                <div class="circle-clipper left">
+                    <div class="circle"></div>
+                </div><div class="gap-patch">
+                    <div class="circle"></div>
+                </div><div class="circle-clipper right">
+                    <div class="circle"></div>
+                </div>
+                </div>
+            </div>
+        <p class="white-text center">Proceso en curso espere no cierre la ventana ...</p>
+        </div>
+    </div>
+</main>    
+<!-- Compiled and minified JavaScript -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+{% endblock content %}

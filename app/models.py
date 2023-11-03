@@ -3,8 +3,13 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_admin import Admin, BaseView, expose, AdminIndexView
 from flask import redirect, url_for
 from flask_login import  UserMixin, current_user
-
+from datetime import datetime, timedelta
+import pytz
 from app import db, cf
+
+def mexico_city_datetime():
+    mexico_timezone = pytz.timezone('America/Mexico_City')
+    return datetime.now(mexico_timezone)
 
 class Servers(db.Model):
     __tablename__ = "servers"
@@ -57,16 +62,14 @@ class Users(UserMixin, db.Model):
     password =  db.Column(db.String(50), nullable=False)
     email =  db.Column(db.String(50), nullable=False)
     area =  db.Column(db.String(50), nullable=False)
-    group =  db.Column(db.String(50), nullable=False)
     status =  db.Column(db.Boolean, default=False, nullable=False)
     web =  db.Column(db.Boolean, default=False, nullable=False)
    
-    def __init__(self, username=None, password=None, email=None, area=None, group=None, status=None, web=None):
+    def __init__(self, username=None, password=None, email=None, area=None, status=None, web=None):
         self.username = username
         self.password = password
         self.email = email
         self.area = area
-        self.group = group
         self.status = status
         self.web = web
     
@@ -84,7 +87,83 @@ class Users(UserMixin, db.Model):
     
     def __repr__(self):
         return  self.username
+    
+class Groups(db.Model):
+    __tablename__ = "groups"
+    id =  db.Column(db.Integer, primary_key=True, autoincrement=True)
+    name =  db.Column(db.String(50), nullable=False)
+    desc =  db.Column(db.String(100), nullable=False)
+    date = db.Column(db.DateTime, default=mexico_city_datetime, nullable=False)
+   
+    def __init__(self, name=None, desc=None):
+        self.name = name
+        self.desc = desc
+        
+    def __repr__(self):
+        return  self.name
+    
+class UGRelation(db.Model):
+    __tablename__ = "ugrelation"
+    id =  db.Column(db.Integer, primary_key=True, autoincrement=True)
+    id_user =  db.Column(db.Integer, nullable=False)
+    id_group =  db.Column(db.Integer, nullable=False)
+    date = db.Column(db.DateTime, default=mexico_city_datetime, nullable=False)
+   
+    def __init__(self, id_user=None, id_group=None):
+        self.id_user = id_user
+        self.id_group = id_group
+        
+    def __repr__(self):
+        return  self.id_user
 
+class GSRelation(db.Model):
+    __tablename__ = "gsrelation"
+    id =  db.Column(db.Integer, primary_key=True, autoincrement=True)
+    typeug =  db.Column(db.String(10), nullable=False)
+    idug =  db.Column(db.Integer, nullable=False)
+    idserver =  db.Column(db.Integer, nullable=False)
+    date = db.Column(db.DateTime, default=mexico_city_datetime, nullable=False)
+   
+    def __init__(self, idug=None, idserver=None, typeug=None):
+        self.idug = idug
+        self.idserver = idserver
+        self.typeug = typeug
+        
+    def __repr__(self):
+        return  self.idserver
+    
+class Policy(db.Model):
+    __tablename__ = "policy"
+    id =  db.Column(db.Integer, primary_key=True, autoincrement=True)
+    name =  db.Column(db.String(50), nullable=False)
+    desc =  db.Column(db.String(200), nullable=False)
+    policy = db.Column(db.Text, nullable=False)
+    date = db.Column(db.DateTime, default=mexico_city_datetime, nullable=False)
+   
+    def __init__(self, desc=None, name=None, policy=None):
+        self.desc = desc
+        self.name = name
+        self.policy = policy
+    
+    def __repr__(self):
+        return  self.name
+    
+class UGPolicies(db.Model):
+    __tablename__ = "ugpolicies"
+    id =  db.Column(db.Integer, primary_key=True, autoincrement=True)
+    type_ug =  db.Column(db.String(50), nullable=False)
+    id_ug =  db.Column(db.Integer, nullable=False)
+    id_policy =  db.Column(db.Integer, nullable=False)
+    date = db.Column(db.DateTime, default=mexico_city_datetime, nullable=False)
+   
+    def __init__(self, type_ug=None, id_ug=None, id_policy=None):
+        self.type_ug = type_ug
+        self.id_ug = id_ug
+        self.id_policy = id_policy
+    
+    def __repr__(self):
+        return  self.type_ug
+    
 class Access(db.Model):
     __tablename__ = "access"
     id =  db.Column(db.Integer, primary_key=True, autoincrement=True)

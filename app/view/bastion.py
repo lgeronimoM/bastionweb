@@ -1,9 +1,12 @@
 from flask import render_template, redirect, url_for, request, jsonify, session, Blueprint, flash
-import os, requests, json, sys
+import os, requests, json, sys, re, io, base64
+
+from .home import validatebastion
+from .permissions import sudoers_delete_policies, sudoers_delete_groups, sudoers_policies, sudoers_groups, api_playbook_role
 
 # APP MVC
 from app import app, cf, login_manager, db
-from app.models import Servers, Users, Access, Bastion
+from app.models import Servers, Users, Access, Bastion, UGRelation, Policy, UGPolicies, Groups, GSRelation
 
 # MAIL
 import email, smtplib, ssl
@@ -66,10 +69,13 @@ user_smtp=cf.USER_SMTP
 pass_smtp=cf.PASS_SMTP
 dirfilepem=cf.DIRFILEPEM
 dirfileqr=cf.DIRFILEQR
+dirfiles=cf.DIRFILES
 reception_mails=cf.RECIVE_MAILS
 serverlocal=cf.SERVER
 rutalogs = cf.RUTALOG
 urlaccessuser = "http://"+cf.SERVER+":"+str(cf.PRTO)+'/core/v1.0/access/user'
+urlapigroups = "http://"+cf.SERVER+":"+str(cf.PRTO)+'/core/v1.0/groups'
+urlugrelation = "http://"+cf.SERVER+":"+str(cf.PRTO)+'/core/v1.0/ugrelation'
 
 ####################### Endpoints #############################
 
@@ -77,25 +83,25 @@ urlaccessuser = "http://"+cf.SERVER+":"+str(cf.PRTO)+'/core/v1.0/access/user'
 @app.route('/bastion/<int:page_num>', methods=['GET'])
 @login_required
 def bastion(page_num):
+    getbastion = db.session.query(Bastion).first()
+    ipbastion = getbastion.ip
     filteruser=request.args.get('filteruser')
     filterhost=request.args.get('filterhost')
     filterserver=request.args.get('findserver')
-    exist = db.session.query(Bastion).filter().first()
+    filterbastion = request.args.get('createaccess')
+    if filterbastion is None or filterbastion == False:
+        filterbastion=False
+    else:
+        filterbastion=True
     accessserver = db.session.query(Access).filter(Access.tipe=='server')
     apibastion=''
     nameuser=False
-    nameserver=False
-    if exist:
-        exist=True
-        apibastion = requests.get(urlbastion, headers=headers, verify=False).json()
-    else:
-        exist=False
-    apiaccess=db.session.query(Access).paginate(per_page=10, page=page_num, error_out=True)
+    apiaccess=db.session.query(Access).paginate(per_page=20, page=page_num, error_out=True)
     if filteruser:
         queryuser = db.session.query(Users).filter(Users.id==int(filteruser)).first()
         nameuser=queryuser.username
         logging.info('Filter user on page bastion')
-        apiaccess=db.session.query(Access).filter(Access.userid==int(filteruser)).paginate(per_page=10, page=page_num, error_out=True)
+        apiaccess=db.session.query(Access).filter(Access.userid==int(filteruser)).paginate(per_page=20, page=page_num, error_out=True)
         if filterserver:
             search = "%{}%".format(filterserver)
             apiaccess=db.session.query(Access).filter(and_(Access.userid==int(filteruser), Access.keypair.like(search))).paginate(per_page=10, page=page_num, error_out=True)
@@ -103,13 +109,15 @@ def bastion(page_num):
     if filterhost:
         logging.info('Filter host on page bastion')
         apiaccess=db.session.query(Access).filter(Access.serverid==int(filterhost)).paginate(per_page=10, page=page_num, error_out=True)
+        apigroups = requests.get(urlservers+'/'+str(filterhost), headers=headers, verify=False).json()
+        filterhost = apigroups['namekey']
     apiservers = requests.get(urlservers, headers=headers, verify=False).json()
     apiusers = requests.get(urlusers, headers=headers, verify=False).json()
     logging.info('Access page Bastion')
     user = current_user.username
     queryuser = db.session.query(Users).filter(Users.username==user).first()
     mail = queryuser.email
-    return render_template('bastion.html', filteruser=filteruser, user=user, nameuser=nameuser, apiservers=apiservers, apiusers=apiusers, apibastion=apibastion, data=apiaccess, mail=mail, exist=exist, accessserver=accessserver)
+    return render_template('bastion.html', ipbastion=ipbastion, filteruser=filteruser,filterhost=filterhost, validatebastion=validatebastion(), user=user, nameuser=nameuser, apiservers=apiservers, apiusers=apiusers, apibastion=apibastion, data=apiaccess, mail=mail, accessserver=accessserver, filterbastion=filterbastion)
 
 # Agregar servidor master de bastion
 @app.route('/addbastion', methods=['POST'])
@@ -136,75 +144,61 @@ def deletebastion():
     db.session.query(Bastion).filter(Bastion.id == idf).delete(synchronize_session=False)
     db.session.commit()
     return redirect(url_for('servers'))
-
-def addbastionclient(iduser):
-    apibastion = requests.get(urlbastion, headers=headers, verify=False).json()
-    apiusers = requests.get(urlusers+'/'+str(iduser), headers=headers, verify=False).json()
-    idserver=apibastion['idserver']
-    apiservers = requests.get(urlservers+'/'+str(idserver), headers=headers, verify=False).json()
-    server=apiservers['hostname']
-    user=apiusers['username']
-    email=apiusers['email']
-    group=apiusers['group']
-    ipserver=apiservers['ipadmin']
-    namekey=apiservers['namekey']
-    filekey=namekey+'_'+user+'.pem'
-    fileqrm=namekey+'_'+user+'.txt'
-    inventory_ansible()
-    queryuser =  Access.query.filter(and_(Access.server==server, Access.user==user, Access.tipe=='client' )).first()
-    if queryuser:
-        flash('Ya existe este acceso 2', 'error')
-        logging.warning('Ya tiene acceso a bastion '+user)
-        return redirect(url_for('bastion', filteruser=iduser))
-    else:
-        var_ansible(user, group, email, ipserver, namekey)
-        content={ "tagsexc": ['adduser-mfa'], "ipmanage": ipserver, "fileprivatekey":fileprivatekey, "passwd": "", "user": userans, "inventory":inventoryfile, "play":playbookyml }
-        r=requests.post(url_api_ansible, json=content, headers=headers, verify=False)
-        result=r.json()
-        if result['status']==0:
-            insertQuery = Access('client',filekey,fileqrm,server,user,idserver,iduser)
-            db.session.add(insertQuery)
-            db.session.commit()
-            logging.warning('genrado usuario: '+user)
-            flash('Nuevo usuario creado '+user, 'ok')
-            return redirect(url_for('bastion', filteruser=iduser))
-        else:
-            flash('Error al intentar Verifica la causa', 'error')
-            return redirect(url_for('bastion', filteruser=iduser))
         
-@app.route('/newbastionclient', methods=['POST'])
-@login_required
-def newbastionclient(iduser, user, email, group):
-    apibastion = requests.get(urlbastion, headers=headers, verify=False).json()
-    idserver=apibastion['idserver']
-    apiservers = requests.get(urlservers+'/'+str(idserver), headers=headers, verify=False).json()
-    server=apiservers['hostname']
-    ipserver=apiservers['ipadmin']
-    namekey=apiservers['namekey']
-    filekey=namekey+'_'+user+'.pem'
-    fileqrm=namekey+'_'+user+'.txt'
-    inventory_ansible()
-    queryuser =  Access.query.filter(and_(Access.server==server, Access.user==user, Access.tipe=='client' )).first()
-    if queryuser:
-        flash('Ya existe este acceso' , 'error')
-        logging.warning('Ya tiene acceso a bastion '+user)
-        return redirect(url_for('bastion', filteruser=iduser))
-    else:
-        var_ansible(user, group, email, ipserver, namekey)
-        content={ "tagsexc": ['adduser-mfa'], "ipmanage": ipserver, "fileprivatekey":fileprivatekey, "passwd": "", "user": userans, "inventory":inventoryfile, "play":playbookyml }
-        r=requests.post(url_api_ansible, json=content, headers=headers, verify=False)
-        result=r.json()
-        if result['status']==0:
-            insertQuery = Access('client',filekey,fileqrm,server,user,idserver,iduser)
+def bastionclient(iduser, user, email):
+    try:
+        apibastion = requests.get(urlbastion, headers=headers, verify=False).json()
+        idserver = apibastion.get('idserver')
+        
+        if idserver is None:
+            flash('No se pudo obtener información del servidor', 'error')
+            logging.warning('No se pudo obtener información del servidor para ' + user)
+            return False  # Indica que la operación falló
+            
+        apiservers = requests.get(f'{urlservers}/{idserver}', headers=headers, verify=False).json()
+        server = apiservers.get('hostname')
+        ipserver = apiservers.get('ipadmin')
+        namekey = apiservers.get('namekey')
+        filekey = f"{namekey}_{user}.pem"
+        fileqrm = f"{namekey}_{user}.txt"
+
+        queryuser = Access.query.filter(and_(Access.server == server, Access.user == user, Access.tipe == 'client')).first()
+        if queryuser:
+            flash('Ya existe este acceso', 'error')
+            logging.warning('Ya tiene acceso a bastion ' + user)
+            return False  # Indica que la operación falló
+            
+        var_ansible(user, '', email, ipserver, namekey)
+        
+        content = {
+            "tagsexc": ['adduser-mfa'],
+            "ipmanage": ipserver,
+            "fileprivatekey": fileprivatekey,
+            "passwd": "",
+            "user": userans,
+            "inventory": inventoryfile,
+            "play": playbookyml
+        }
+        
+        r = requests.post(url_api_ansible, json=content, headers=headers, verify=False)
+        result = r.json()
+        
+        if result['status'] == 0:
+            insertQuery = Access('client', filekey, fileqrm, server, user, idserver, iduser)
             db.session.add(insertQuery)
             db.session.commit()
-            logging.info('se crea nuevo usuario: '+user)
-            flash('Nuevo usuario creado '+user, 'ok')
-            return redirect(url_for('bastion', filteruser=iduser))
+            logging.info('se crea nuevo usuario: ' + user)
+            flash('Nuevo usuario creado ' + user, 'ok')
         else:
-            flash('Error al intentar Verifica la causa', 'error')
-            logging.info('Erro al generar client-bastion '+user+' '+result['status'])
-            return redirect(url_for('bastion', filteruser=iduser))
+            flash('Error al intentar. Verifica la causa', 'error')
+            logging.info(f'Error al generar client-bastion {user} {result["status"]}')
+            return False  # Indica que la operación falló
+        
+        return True  # Indica que la operación tuvo éxito
+    except Exception as e:
+        flash('Ocurrió un error inesperado. Verifica la causa', 'error')
+        logging.error('Error inesperado: ' + str(e))
+        return False  # Indica que la operación falló
 
 @app.route('/combastion', methods=['POST'])
 @login_required
@@ -224,11 +218,21 @@ def combastion():
         server=apiservers['hostname']
         user=apiusers['username']
         email=apiusers['email']
-        group=apiusers['group']
+        getgroup = requests.get(urlugrelation, headers=headers, verify=False).json()
+        getidsgroups = []
+        getnamesgroups = []
+        for res in getgroup:
+            if res['id_user'] == int(iduser):
+                getidsgroups.append(res['id_group'])
+        for getidg in getidsgroups:
+            apigroups = requests.get(urlapigroups+'/'+str(getidg), headers=headers, verify=False).json()
+            getnamesgroups.append(apigroups['name'])
+        apigroups = requests.get(urlapigroups+'/'+str(getidg), headers=headers, verify=False).json()
+        group=apigroups['name']
         namekey=apiservers['namekey']
         inventory_ansible()
         filekey=namekey+'_'+ipserver+'.pem'
-        var_ansible(user, group, email, ipserver, namekey)
+        var_ansible(user, getnamesgroups, email, ipserver, namekey)
         content={ "tagsexc": ['adduser-host', 'permissions'], "ipmanage": ipserver, "fileprivatekey":fileprivatekey, "passwd": "", "user": userans, "inventory":inventoryfile, "play":playbookyml }
         r = requests.post(url_api_ansible, json=content, headers=headers, verify=False)
         result=r.json()
@@ -248,12 +252,13 @@ def deleteuserbastion(iduser):
     idserver=apibastion['idserver']
     apiusers = requests.get(urlusers+'/'+str(iduser), headers=headers, verify=False).json()
     apiservers = requests.get(urlservers+'/'+str(idserver), headers=headers, verify=False).json()
+    
     ipserver=apiservers['ipadmin']
     user=apiusers['username']
+    
     email=''
-    group=apiusers['group']
     namekey=apiservers['namekey']
-    var_ansible(user, group, email, ipserver, namekey)
+    var_ansible(user, [], email, ipserver, namekey)
     content={ "tagsexc": ['deluser-mfa'], "ipmanage": ipserver, "fileprivatekey":fileprivatekey, "passwd": "", "user": userans, "inventory":inventoryfile, "play":playbookyml }
     r = requests.post(url_api_ansible, json=content, headers=headers, verify=False)
     result=r.json()
@@ -283,9 +288,35 @@ def deleteaccess():
         ipserver=apiservers['ipadmin']
         user=apiusers['username']
         email=''
-        group=apiusers['group']
+        getgroup = requests.get(urlugrelation, headers=headers, verify=False).json()
+        getidsgroups = []
+        getnamesgroups = []
+        for res in getgroup:
+            if res['id_user'] == int(iduser):
+                getidsgroups.append(res['id_group'])
+        for getidg in getidsgroups:
+            apigroups = requests.get(urlapigroups+'/'+str(getidg), headers=headers, verify=False).json()
+            getnamesgroups.append(apigroups['name'])
+
         namekey=apiservers['namekey']
-        var_ansible(user, group, email, ipserver, namekey)
+
+        file = open(inventoryfile,'w') # Archivo de inventory de ansible
+        file.write('[hostexec]\n')
+        file.write(str(ipserver)+'\n')
+        file.write('\n')
+        file.close()
+
+        var_ansible(user, getnamesgroups, email, ipserver, namekey)
+        
+        role = ['report']
+        response, status_code = api_playbook_role(role)
+
+        input_file = dirfiles+'/audit/audit_'+user+'_'+ipserver+'.txt'
+        output_file = dirfiles+'/audit/audit_filt_'+user+'_'+ipserver+'.txt'
+        outfilter = dirfiles+'/audit/audit_report_'+user+'_'+ipserver+'.txt'
+        parse_audit_logs_from_file(input_file, output_file)
+        generate_audit_report(output_file, outfilter)
+
         content={ "tagsexc": ['deluser-server'], "ipmanage": ipserver, "fileprivatekey":fileprivatekey, "passwd": "", "user": userans, "inventory":inventoryfile, "play":playbookyml }
         r = requests.post(url_api_ansible, json=content, headers=headers, verify=False)
         result=r.json()
@@ -298,8 +329,70 @@ def deleteaccess():
             flash('Error al intentar Verifica la causa', 'error')
             logging.info('Erro al Eliminar client-bastion '+user+' '+str(result['status']))
             return redirect(url_for('bastion', filteruser=iduser))
+    
     return redirect(url_for('bastion', filteruser=iduser, estado='ok'))
+
+def parse_audit_logs_from_file(record, out_file):
+    user_logs = {}
+    current_user = None
+
+    with open(record, 'r') as file:
+        log_sections = file.read().split('----\n')
+
+    with open(out_file, "w") as report_file:  # Abre el archivo una vez para escritura
+        for log_section in log_sections:
+            log_lines = log_section.strip().split('\n')
+            for i in range(len(log_lines)):
+                log_lines[i] = re.sub(r'"|\'', '', log_lines[i])
+            result = []
+            listreport = {}
+            # Extraer el tiempo completo de la primera línea
+            time_line = log_lines[0]
+            time_match = re.search(r'time->(.+)', time_line)
+            if time_match:
+                log_entry = {'time': time_match.group(1)}
+            for line in log_lines[1:]:
+                log_entry = log_entry.copy()
+                # Extraer el tipo
+                type_match = re.search(r'type=(\S+)', line)
+                if type_match:
+                    log_entry['type'] = type_match.group(1)
+                # Extraer el mensaje
+                msg_match = re.search(r'msg=(.+)', line)
+                if msg_match:
+                    log_entry['msg'] = msg_match.group(1)
+                result.append(log_entry)
+            for entry in result:
+                report_file.write(str(entry) + '\n')
+
+def generate_audit_report(records_file, out_file):
+    with open(records_file, 'r') as file:
+        log_sections = file.readlines()
+
+    with io.open(out_file, "w", encoding="utf-8") as report_file:
+        for log_section in log_sections:
+            log_entry = eval(log_section)  # Convierte la cadena a un diccionario
+            report_file.write(f"Fecha y hora: {log_entry.get('time', 'N/A')}\n")
+            report_file.write(f"Tipo: {log_entry.get('type', 'N/A')}\n")
+            msg = log_entry.get('msg', 'N/A')
+            report_file.write(f"Mensaje: {msg}\n")
+            report_file.write("Descripción:\n")
+            res_match = re.search(r'res=(\w+)', msg)
+            res = res_match.group(1) if res_match else 'N/A'
+            report_file.write(f"Resultado: {res}\n")
             
+            # Agregar "Comando ejecutado" para USER_CMD
+            if 'USER_CMD' in log_entry.get('type', ''):
+                cmd_match = re.search(r'cmd=([\w\d]+)', msg)  # Cambio la expresión regular para capturar solo palabras y números
+                cmd_encoded = cmd_match.group(1) if cmd_match else 'N/A'
+                try:
+                    cmd_decoded = base64.b64decode(cmd_encoded).decode("utf-8")
+                except:
+                    cmd_decoded = 'No se pudo decodificar'
+                report_file.write(f"Comando ejecutado: {cmd_decoded}\n")
+            
+            report_file.write("\n")
+
 @app.route("/message", methods=['POST'])
 @login_required
 def message():
@@ -344,18 +437,101 @@ def addbastionserver():
     server=apiservers['hostname']
     user=apiusers['username']
     email=apiusers['email']
-    group=apiusers['group']
+    getgroup = requests.get(urlugrelation, headers=headers, verify=False).json()
+    getidsgroups = []
+    getnamesgroups = []
+    for res in getgroup:
+        if res['id_user'] == int(iduser):
+            getidsgroups.append(res['id_group'])
+    for getidg in getidsgroups:
+        apigroups = requests.get(urlapigroups+'/'+str(getidg), headers=headers, verify=False).json()
+        getnamesgroups.append(apigroups['name'])
     namekey=apiservers['namekey']
     ipserver=apiservers['ipadmin']
     filekey=namekey+'_'+ipserver+'.pem'
     inventory_ansible()
+    var_ansible(user, getnamesgroups, email, ipserver, namekey)
     queryuser =  Access.query.filter(and_(Access.server==server, Access.user==user, Access.tipe=='server' )).first()
     if queryuser:
         flash('Ya existe este acceso', 'error')
         logging.warning('Ya tiene acceso a bastion '+user)
         return redirect(url_for('bastion', filteruser=iduser))
     else:
-        var_ansible(user, group, email, ipserver, namekey)
+        idg = getidg
+        idserverselect = idserver
+        getpolicies = db.session.query(Policy).all()
+        getugpolicies = db.session.query(UGPolicies).all()
+        getserver = db.session.query(Servers).all()
+        getgrupo = db.session.query(Groups).all()
+        
+        for res in getserver:
+            if str(idserverselect) == str(res.id):
+                server_ip = res.ipadmin
+                
+        file = open(inventoryfile,'w') # Archivo de inventory de ansible
+        file.write('[hostexec]\n')
+        file.write(str(server_ip)+'\n')
+        file.write('\n')
+        file.close()
+       
+        queryvalidate = GSRelation.query.filter(and_(GSRelation.typeug=="group", GSRelation.idug==idg, GSRelation.idserver==idserverselect)).first()
+        if queryvalidate:
+            db.session.commit()
+        else:
+            insertUP = GSRelation(idg, idserverselect, "group")
+            db.session.add(insertUP)
+            db.session.commit()
+        getidsgroups = []
+        getpolicyids_list = []
+        listpolicy = []
+        getgsrelation = db.session.query(GSRelation).all()
+        for res in getgsrelation:
+            if str(res.idserver) == str(idserverselect):
+                getidsgroups.append(res.idug)
+        for idspolicies in getugpolicies:
+            for idgroup in getidsgroups:
+                if idspolicies.type_ug == "group" and idspolicies.id_ug == idgroup:
+                    getpolicyids_list.append(idspolicies.id_policy)
+        getpolicyids = list(set(getpolicyids_list))
+        for idspoli in getpolicies:
+            for ids in getpolicyids:
+                if idspoli.id == ids:
+                    listpolicy.append({idspoli.name: idspoli.policy})
+        
+        sudoers_delete_policies()
+        namepolicies=[]
+        for item in listpolicy:
+            for key, value in item.items():
+                namepolicies.append(key)
+                sudoers_policies(key,value)
+
+        group_policies = {}
+
+        # Itera a través de los grupos en getidsgroups
+        for idgroup in getidsgroups:
+            # Inicializa una lista vacía para las políticas de este grupo
+            group_policies[idgroup] = []
+
+            # Itera a través de las políticas y encuentra las que corresponden a este grupo
+            for ugpolicy in getugpolicies:
+                if str(ugpolicy.id_ug) == str(idgroup) and ugpolicy.type_ug == "group":
+                    for getpolicy in getpolicies:
+                        if str(getpolicy.id) == str(ugpolicy.id_policy):
+                            group_policies[idgroup].append(getpolicy.name)
+
+        sudoers_delete_groups()
+        # Ahora, imprime la información de los grupos con sus políticas
+        for idgroup, policies in group_policies.items():
+            group_name = None
+            for res in getgrupo:
+                if str(res.id) == str(idgroup):
+                    group_name = res.name
+            if group_name and policies:
+                formatted_policies = ", ".join(policies)
+            
+                sudoers_groups(group_name,formatted_policies)
+        role = ['role-sudo']
+        response, status_code = api_playbook_role(role)
         content={ "tagsexc": [ 'permissions','adduser-host'], "ipmanage": ipserver, "fileprivatekey":fileprivatekey, "passwd": "", "user": userans, "inventory":inventoryfile, "play":playbookyml }
         r=requests.post(url_api_ansible, json=content, headers=headers, verify=False)
         result=r.json()
@@ -393,7 +569,7 @@ def copyaccessbastion(idusercopy, user, mail, groups):
     for ip, name in zip(server_ips, server_namekey):
         file.write(f'{ip} namekey={name} ipserver={ip} serverapp={serverlocal}\n')
     file.close()
-    var_ansible_multi(user, groups, mail)
+    var_ansible(user, groups, mail, "", "")
     content={ "tagsexc": ['adduser-host', 'permissions'], "fileprivatekey":fileprivatekey, "passwd": "", "user": userans, "inventory":inventoryfile, "play":playbookyml }
     r=requests.post(url_api_ansible_mul, json=content, headers=headers, verify=False)
     result=r.json()
@@ -460,20 +636,20 @@ def inventory_ansible():
     file.write('\n')
     file.close()
 
-def var_ansible(user, grupo, email, ipserver, namekey):
+def var_ansible(user, grupos, email, ipserver, namekey):
     logging.info('creating YML file vars')
     apibastion = requests.get(urlbastion, headers=headers, verify=False).json()
     ipbastion=apibastion['ip']
     dnsbastion=apibastion['dns']
-    file = open('app/ansible/roles/manageCustomUsers/vars/main.yml','w')
+    file = open('app/ansible/roles/manageCustomUsers/vars/main.yml', 'w')
     file.write('---\n')
-    file.write('# vars file for roles/addCustomUsers\n')
+    file.write('# vars file for roles/manageCustomUsers\n')
     file.write('\n')
-    file.write('usuario: "'+user+'"\n')
-    file.write('grupo: "'+grupo+'"\n')
+    file.write('usuario: "' + user + '"\n')
     file.write('email: "'+email+', '+reception_mails+'"\n')
     file.write('dirfile: "'+dirfilepem+'/'+user+'"\n')
     file.write('dirgoogle: "'+dirfileqr+'"\n')
+    file.write('dirfiles: "'+dirfiles+'"\n')
     file.write('\n')
     file.write('# SERVER ACCESS\n')
     file.write('\n')
@@ -494,6 +670,10 @@ def var_ansible(user, grupo, email, ipserver, namekey):
     file.write('serverapp: '+serverlocal+'\n')
     file.write('\n')
     file.write('admin_user: '+userans+'\n')
+    file.write('\n')
+    file.write('grupos:\n')
+    for name in grupos:
+        file.write('  - '+name+'\n')
     file.close()
 
 def var_ansible_multi_user(ipserver, namekey):
@@ -528,38 +708,6 @@ def var_ansible_multi_user(ipserver, namekey):
     file.write('admin_user: '+userans+'\n')
     file.close()
 
-def var_ansible_multi(user, grupo, email):
-    logging.info('creating YML file vars')
-    apibastion = requests.get(urlbastion, headers=headers, verify=False).json()
-    ipbastion=apibastion['ip']
-    dnsbastion=apibastion['dns']
-    file = open('app/ansible/roles/manageCustomUsers/vars/main.yml','w')
-    file.write('---\n')
-    file.write('# vars file for roles/addCustomUsers\n')
-    file.write('\n')
-    file.write('usuario: "'+user+'"\n')
-    file.write('grupo: "'+grupo+'"\n')
-    file.write('email: "'+email+', '+reception_mails+'"\n')
-    file.write('dirfile: "'+dirfilepem+'/'+user+'"\n')
-    file.write('dirgoogle: "'+dirfileqr+'"\n')
-    file.write('\n')
-    file.write('# SERVER ACCESS\n')
-    file.write('\n')
-    file.write('# vars config smtp server\n')
-    file.write('\n')
-    file.write('host_smtp: "'+host_smtp+'"\n')
-    file.write('port_smtp: "'+str(port_smtp)+'"\n')
-    file.write('user_smtp: "'+user_smtp+'"\n')
-    file.write('pass_smtp: "'+pass_smtp+'"\n')
-    file.write('\n')
-    file.write('# Config bastion host\n')
-    file.write('ipbastion: "'+ipbastion+'"\n')
-    file.write('dnsbastion: "'+dnsbastion+'"\n')
-    file.write('\n')
-    file.write('serverappp: '+serverlocal+'\n')
-    file.write('\n')
-    file.write('admin_user: '+userans+'\n')
-    file.close()
 ######################## API ##################################
 
 @app.route('/core/v1.0/access')

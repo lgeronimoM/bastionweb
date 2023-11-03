@@ -1,0 +1,465 @@
+{% extends 'base/base.html' %}
+{% block title %} bastion users {% endblock title%}
+{% block content %}
+    <main class="container">
+    {% if validatebastion %}
+        <div class="row">
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    <ul class=flashes>
+                    {% for category, message in messages %}
+                        {% if category == 'error' %}
+                            <li class="red-text">{{ message }}</li>
+                        {% else %}
+                            <li class="green-text">{{ message }}</li>
+                        {% endif %}
+                    {% endfor %}
+                    </ul>
+                {% endif %}
+            {% endwith %}
+        </div>
+        <form method="GET" action="/permissions">
+            <button class="custom-button" type="submit" name="selectusers" value="True">Reporte</button>
+            <button class="custom-button" type="submit" name="selectgroups" value="True">Grupos</button>
+            <button class="custom-button" type="submit" name="selectpolicies" value="True" >Todos</button>
+        </form>
+
+    <!-- Aqui muestro todo el contenido -->
+        
+        {% if policies %}
+        <div class="row">     
+            <div class="col s12" style="border: 1px solid #ddd;">
+                <p> Políticas establecidas({{ getugpolicy|length }}) </p>
+                <div class="input-field col s4">
+                    <form method="GET" action="/permissions">
+                        {% if removefilter %}
+                        <div class="form-field">
+                            <button class="btn del-button" type="submit" name="Submit">
+                                cancelar <i class="material-icons white-text">find_in_page</i>
+                            </button>
+                        </div>
+                        {% else %}
+                        <div class="search-container">
+                            <input placeholder="Grupo" type="search" class="client-search-input" name="finduser" required>
+                            <button class="client-search-button" type="submit" name="Submit">
+                                Buscar <i class="material-icons white-text">find_in_page</i>
+                            </button>
+                        </div>
+                        {% endif %}
+                    </form>
+                </div>
+                <div class="col s12">
+                    <p class="right"> Control de permisos</p>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <table class="aws-table">
+                <thead>
+                <tr>
+                    <th class="center">Grupos</th>
+                    <th>Politica</th>
+                    <th>Descripción politica</th>
+                    <th>Fecha</th>
+                    <th>Setting</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for policy in getugpolicy %}
+                    <tr>
+                        <td class="center">
+                            {% if policy.type_ug|string == 'group' %}
+                                {% for group in getgroups if policy.id_ug == group.id %}
+                                    %{{ group.name }}
+                                {% endfor %}
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% for res in getpolicies.items if policy.id_policy == res.id %}
+                                {{ res.name }}
+                            {% endfor %}
+                        </td>
+                        <td>
+                            {% for res in getpolicies.items if policy.id_policy == res.id %}
+                                {{ res.desc }}
+                            {% endfor %}
+                        </td>
+                        <td>
+                            {{ policy.date }}
+                        </td>
+                        <td>
+                            {% if policy.type_ug|string == 'user' %}
+                                {% for user in getusers if policy.id_ug == user.id %}
+                                    <form method="POST" action="/deletepermission"><br>
+                                        <button  id="regenAvalive" class="borderless-button" type="submit" name="idpolicyuser" onclick="return confirm('Are you sure to delete?')" value="[{{ policy.id_policy }},{{ user.id }}]">
+                                            <span class="button-text">Delete</span>
+                                        </button>
+                                    </form>
+                                {% endfor %}
+                            {% else %}
+                                {% for group in getgroups if policy.id_ug == group.id %}
+                                    <form method="POST" action="/deletepolicygroup"><br>
+                                        <button  id="regenAvalive" class="borderless-button" type="submit" name="idpolicygroup" onclick="return confirm('Are you sure to delete?')" value="[{{ policy.id_policy }},{{ group.id }}]">
+                                            <span class="button-text">Delete</span>
+                                        </button>
+                                    </form>
+                                {% endfor %}
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% endfor %}                
+                </tbody>
+            </table>   
+        </div>
+        <div class="row">
+            <div class="center">
+                <ul class="pagination">
+
+                {% if getpolicies.has_prev %}
+                    <li class="waves-effect"><a class="page-link" href="{{ url_for('permissions', selectpolicies=True, page_num=getpolicies.prev) }}"><i class="material-icons">chevron_left</i></a></li>
+                {% else %}
+                    <li class="disabled"><span><i class="material-icons">chevron_left</i></span>
+                {% endif %}
+                    </li>
+
+                {% for page in getpolicies.iter_pages(left_edge=3, right_edge=3) %}
+                {% if page %}
+                <li class="waves-effect"><a href="{{ url_for('permissions', selectpolicies=True, page_num=page) }}">{{ page }}</a></li>
+                {% else %}
+                <li class="disabled"><a href="#">…</a></li> 
+                {% endif %}
+                {% endfor %}
+            
+                {% if getpolicies.has_next %}
+                    <li class="waves-effect"><a href="{{ url_for('permissions', selectpolicies=True, page_num=getpolicies.next_num) }}"><i class="material-icons">chevron_right</i></a></li>
+                {% else %}
+                    <li class="disabled"><span><i class="material-icons">chevron_right</i></span>
+                {% endif %}
+                        
+                </ul>
+            </div> 
+        </div>
+        {% endif %} 
+
+    <!-- Aqui muestro todo el contenido de los grupos tablas y asignacion -->
+
+        {% if policygroups %}
+        <div class="row">   
+            <div class="col s12" style="border: 1px solid #ddd;">
+                <p> Grupos disponibles({{ getgroups|length }}) </p>
+                <div class="input-field col s4">
+                    <form method="GET" action="/permissions">
+                        {% if removefilter %}
+                        <div class="form-field">
+                            <input type="hidden" name="groupselect" value="{{ getidgroupselect }}">
+                            <button class="btn del-button" type="submit" name="selectgroups" value="True">
+                                cancelar <i class="material-icons white-text">find_in_page</i>
+                            </button>
+                        </div>
+                        {% else %}
+                        <div class="search-container">
+                            <input type="hidden" name="groupselect" value="{{ getidgroupselect }}">
+                            <input placeholder="Buscas política" type="search" class="client-search-input" name="policy_find" required>
+                            <button class="client-search-button" type="submit" name="selectgroups" value="True">
+                                Buscar <i class="material-icons white-text">find_in_page</i>
+                            </button>
+                        </div>
+                        {% endif %}
+                    </form>
+                </div>
+                <div class="col s12 m4 l4">
+                </div>
+                <form method="POST" action="/addpolicygroup" id="policyForm">
+                <div class="col s12 m4 l4">
+                    <select id="iamGroupSelect" serachname="myselectsearch" searchable="Buscar server" id="select" name="idgroupselect" required>
+                        {% if getidgroupselect%}
+                            {% for groupget in getgroups %}
+                                {% if getidgroupselect == groupget['id'] %}
+                                    <option value="{{ getidgroupselect }}">{{ groupget['name'] }}</option>
+                                {% endif %}
+                            {% endfor %}
+                        {% else %}
+                            <option value="" disabled selected>Selecciona un grupo</option>
+                        {% endif %}
+                        {% for res in getgroups %}    
+                            <option value="{{ res.id }}">{{ res.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col s12">
+                    <p class="right"> Establecer permisos a grupos</p>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+                <table class="aws-table">
+                    <thead>
+                    <tr>
+                        <th>Selecciona</th>
+                        <th>Nombre</th>
+                        <th>Politica</th>
+                        <th></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for res in getpolicies.items %}
+                    <tr>
+                        <td class="center">
+                            <p>
+                                <label>
+                                    <input name="idpolicy" value="{{ res['id'] }}" type="checkbox" id="activeOptionsGroups" {% if res['id'] in gpolicies %}checked disabled {% endif %}>
+                                    <span></span>
+                                </label>
+                            </p>
+                        </td>
+                        <td>
+                        {{ res['name'] }}
+                        </td>
+                        <td>
+                        {{ res['policy'] }}
+                        </td>
+                        <td>
+                            {% if res['id'] in gpolicies %}
+                            <button id="regenAvalive" class="borderless-button" type="submit"  value="[{{ res['id'] }},{{ getidgroupselect }}]" onclick="mostrarPreload()" name="idpolicygroup" formaction="/deletepolicygroup">
+                                Delete
+                            </button>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+                <br>
+                <div class="right">
+                    <div class="form-field">
+                        <button class="btn add-button miBoton" onclick="mostrarPreload()" type="submit" name="add_button">Agregar
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="row">
+            <div class="center">
+                <ul class="pagination">
+
+                {% if getpolicies.has_prev %}
+                    <li class="waves-effect"><a class="page-link" href="{{ url_for('permissions', selectusers=True, page_num=getpolicies.prev, groupselect=getidgroupselect) }}"><i class="material-icons">chevron_left</i></a></li>
+                {% else %}
+                    <li class="disabled"><span><i class="material-icons">chevron_left</i></span>
+                {% endif %}
+                    </li>
+
+                {% for page in getpolicies.iter_pages(left_edge=3, right_edge=3) %}
+                {% if page %}
+                <li class="waves-effect"><a href="{{ url_for('permissions', selectgroups=True, page_num=page, groupselect=getidgroupselect) }}">{{ page }}</a></li>
+                {% else %}
+                <li class="disabled"><a href="#">…</a></li> 
+                {% endif %}
+                {% endfor %}
+
+                {% if getpolicies.has_next %}
+                    <li class="waves-effect"><a href="{{ url_for('permissions', selectgroups=True, page_num=getpolicies.next_num, groupselect=getidgroupselect) }}"><i class="material-icons">chevron_right</i></a></li>
+                {% else %}
+                    <li class="disabled"><span><i class="material-icons">chevron_right</i></span>
+                {% endif %}
+                        
+                </ul>
+            </div> 
+        </div>
+    {% endif %} 
+
+     <!-- Aqui muestro todo el contenido de los Usuarios tablas y asignacion  -->
+        
+    {% if reports %}
+    
+        <div class="row">   
+            <div class="col s12" style="border: 1px solid #ddd;">
+                <p> Usuarios disponibles({{ getusers|length }}) </p>
+                <div class="input-field col s12 m4 l4"> 
+                </div>
+                <form method="POST" action="/addpolicyuser" id="policyForm">
+                <div class="col s12 m4 l4">
+                    
+                    <select id="iamUserSelect" serachname="myselectsearch" searchable="Buscar server" id="select" name="iduserselect" required>
+                        {% if getiduserselect%}
+                            {% for userget in getusers %}
+                                {% if userget['id'] == getiduserselect|int %}
+                                    <option value="{{ userget['id'] }}">{{ userget['username'] }}</option>
+                                {% endif %}
+                            {% endfor %}
+                        {% else %}
+                            <option value="" disabled selected>Selecciona un usuario</option>
+                        {% endif %}
+                        {% for res in getusers %}   
+                            <option value="{{ res.id }}">{{ res.username }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col s12 m4 l4">
+                </div><br><br><br><br>      
+                <p class="center"> Reporte</p>
+            </div>
+        </div>
+        {% if getiduserselect %}
+        <div class="row">
+            <table class="aws-table">
+                <thead>
+                <tr>
+                    <th>Nombre</th>
+                    <th>Politica</th>
+                    <th>Descripción</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for idpolicy in getidspoliciesuser %}    
+                    {% for res in getpolis %}
+                        {% if idpolicy == res.id %}
+                            <tr>
+                                <td>
+                                    {{ res['name'] }}
+                                </td>
+                                <td>
+                                    {{ res['desc'] }}
+                                </td>
+                                <td>
+                                    {{ res['policy'] }}
+                                </td>
+                            </tr>
+                        {% endif %}
+                    {% endfor %}
+                {% endfor %}
+                </tbody>
+            </table><br>
+            <table class="aws-table">
+                <thead>
+                <tr>
+                    <th>Grupos</th>
+                    <th>descripcion</th>
+                    <th></th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for getgroup in getugrelation %}
+                    {% for res in getgroups %}
+                        {% if getgroup.id_group == res.id %}
+                            <tr>
+                                <td>
+                                    {{ res['name'] }}
+                                </td>
+                                <td>
+                                    {{ res['desc'] }}
+                                </td>
+                            </tr>
+                        {% endif %}
+                    {% endfor %}
+                {% endfor %}
+                </tbody>
+            </table><br>
+            <table class="aws-table">
+                <thead>
+                <tr>
+                    <th>Hostname</th>
+                    <th>Servidor</th>
+                    <th>Ip_Admin</th>
+                    <th>Generar reporte</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for getserver in getaccess %}
+                    {% for res in getservers %}
+                        {% if getserver.serverid == res.id%}
+                            <tr>
+                                <td>
+                                    {{ res['hostname'] }}
+                                </td>
+                                <td>
+                                    {{ res['namekey'] }}
+                                </td>
+                                <td>
+                                    {{ res['ipadmin'] }}
+                                </td>
+                                <td>
+                                    <button class="btn find-button miBoton" onclick="mostrarPreload()" type="submit" value="[{{ res['ipadmin'] }},{{ getiduserselect }}]" name="getidserver" formaction="/getreportuser">enviar
+                                    </button>
+                                </td>
+                            </tr>
+                        {% endif %}
+                    {% endfor %}
+                {% endfor %}
+                </tbody>
+            </table><br><br>
+                <div class="right">
+                    <div class="form-field">
+                        <button class="btn add-button miBoton" onclick="mostrarPreload()" type="submit" name="add_button">Exportar
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+        {% endif %}
+    {% endif %} 
+
+    {% else %}
+        <div class="row">
+            <div class="custom-col s12">
+                <div class="validate-bastion-container">
+                    <h1>Bienvenido al sistema Bastion Host Web</h1>
+                    <p>Para empezar, debes agregar un servidor bastión.</p>
+                    <form action="{{ url_for('servers') }}" method="get">
+                        <button class="validate-bastion-button" type="submit">Agregar servidor bastión</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+        <!-- Modal Structure -->
+        <div id="miModal" class="modal modalLoad">
+            <div class="modal-content center">
+                <div class="preloader-wrapper big active">
+                    <div class="spinner-layer spinner-blue">
+                    <div class="circle-clipper left">
+                        <div class="circle"></div>
+                    </div><div class="gap-patch">
+                        <div class="circle"></div>
+                    </div><div class="circle-clipper right">
+                        <div class="circle"></div>
+                    </div>
+                    </div>
+            
+                    <div class="spinner-layer spinner-red">
+                    <div class="circle-clipper left">
+                        <div class="circle"></div>
+                    </div><div class="gap-patch">
+                        <div class="circle"></div>
+                    </div><div class="circle-clipper right">
+                        <div class="circle"></div>
+                    </div>
+                    </div>
+            
+                    <div class="spinner-layer spinner-yellow">
+                    <div class="circle-clipper left">
+                        <div class="circle"></div>
+                    </div><div class="gap-patch">
+                        <div class="circle"></div>
+                    </div><div class="circle-clipper right">
+                        <div class="circle"></div>
+                    </div>
+                    </div>
+            
+                    <div class="spinner-layer spinner-green">
+                    <div class="circle-clipper left">
+                        <div class="circle"></div>
+                    </div><div class="gap-patch">
+                        <div class="circle"></div>
+                    </div><div class="circle-clipper right">
+                        <div class="circle"></div>
+                    </div>
+                    </div>
+                </div>
+            <p class="white-text center">Proceso en curso espere no cierre la ventana ...</p>
+            </div>
+        </div>
+    </main>    
+<!-- Compiled and minified JavaScript -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+{% endblock content %}

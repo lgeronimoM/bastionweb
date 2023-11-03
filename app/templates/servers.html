@@ -2,9 +2,9 @@
 {% block title %} bastion servers {% endblock title%}
 {% block content %}
     <main>
-        <div class="row">
+        <div class="container">
             {% if exist==False %}
-            <div class="container">
+            <div class="row">
                 <div class="col s12 m6 l6">
                     <form method="POST" action="/addbastion">
                         <p>Selecciona tu servidor BastionHost. Si aun no has agregado servidor<a href="/servers"> click aquí</a></p>
@@ -25,7 +25,6 @@
                 </div>
             </div>
 		    {% else %}
-            <div class="container">
                 {% with messages = get_flashed_messages(with_categories=true) %}
                     {% if messages %}
                         <ul class=flashes>
@@ -39,43 +38,31 @@
                         </ul>
                     {% endif %}
                 {% endwith %}
-                <div class="col s12 m4 l4">
-                    <form method="GET" action="/servers">
-                        <div class="input-field col s12 m12 l12">
-                            <input placeholder="Hostname, nombre clave, localizacion fisica o ip" id="" type="search" class="validate" name="findserver" required>
-                            <label for="Hostname, nombre clave, localizacion fisica o ip">Buscar Server</label>
-                        </div>
-                        <div class="card-action">
-                            <div class="form-field">
-                                <button class="btn find-button" type="submit" name="Submit">
-                                    Buscar <i class="material-icons white-text">find_in_page</i>
-                                </button>
+                <div class="row">
+                    <div class="col s12" style="border: 1px solid #ddd;">
+                        <div class="col s12">
+                            <div class="input-field col s4 m4 l4">
+                                <p> Servidores({{ servers_all|length }}) </p>
+                                <form method="GET" action="/servers">
+                                    {% if findservers %}
+                                    <div class="form-field">
+                                        <button class="btn del-button" type="submit" name="Submit">
+                                            cancelar <i class="material-icons white-text">find_in_page</i>
+                                        </button>
+                                    </div>
+                                    {% else %}
+                                    <div class="search-container">
+                                        <input placeholder="Hostname, namekey, localizacion o ip" type="search" class="client-search-input" name="findserver" required>
+                                        <button class="client-search-button" type="submit" name="Submit">
+                                            Buscar <i class="material-icons white-text">find_in_page</i>
+                                        </button>
+                                    </div>
+                                    {% endif %}
+                                </form>
                             </div>
                         </div>
-                    </form>
-                    {% if findservers %}
-                        <a href="/servers" class="btn del-button">Remover filtro</a>
-                    {% endif %}
-                </div>
-                <div class="col s12 m4 l4">
-                    <div>
-                        <h5 class="center"><i class="medium material-icons white-black">assignment_turned_in</i></h5>
-                    </div>
-                    <div>
-                        <h5 class="center"><b>Administrador de servidores</b></h5>
-                    </div>
-                </div>
-                <div class="col s12 m4 l4">
-                    <div class="card lighten-3"><br>
-                        <p class="center">Realizar nuevo registro de servidor</p>
-                        <div class="card-action">
-                            <form method="POST" action="/addserver">
-                                <div class="form-field center">
-                                    <button class="btn add-button" type="submit" name="Submit">
-                                        Crear +
-                                    </button>
-                                </div>
-                            </form>
+                        <div class="col s12">
+                            <p class="right"> Control de servidores</p>
                         </div>
                     </div>
                 </div>
@@ -83,112 +70,123 @@
         </div>
         <div class="container">
             <div class="row">
-                <div class="">
-                    <div class="card-content">
-                        <form action="/deleteserver" method="POST">
-                            <table class="striped">
-                                <thead>
-                                    <tr>
-                                        <th>Hostname</th>
-                                        <th>Nombre clave</th>
-                                        <th>DNS</th>
-                                        <th>Tipo</th>
-                                        <th class="center">Area</th>
-                                        <th class="center">Localidad</th>
-                                        <th class="center">IP_Admin</th>
-                                        <th class="center">RAMxCPUS</th>
-                                        <th class="center">Storage</th>
-                                        <th class="center">Estatus</th>
-                                        <th class="center">Actualizar</th>
-                                        <th class="center">Editar</th>
-                                        <th class="center">Borrar</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {% for res in data.items %}
-                                    <tr>
-                                        <td>{{res['hostname']}}</td>
-                                        <td>{{res['namekey']}}</td>
-                                        <td>{{res['dns']}}</td>
-                                        <td class="center">{{res['tipe']}}</td>
-                                        <td class="center">{{res['department']}}</td>
-                                        <td class="center">{{res['localation']}}</td>
-                                        <td class="center">{{res['ipadmin']}}</td>
-                                        <td class="center">{{res['ram']}} x {{res['cpu']}}</td>
-                                        <td class="center">{{res['storage']}}</td>
-                                        <td class="center">
-                                            {% if res['active'] == True %}
-                                                <i class="material-icons green-text">check_circle</i>
-                                            {% else %}
-                                                <i class="material-icons grey-text">do_not_disturb_on</i>
-                                            {% endif %} 
-                                        </td>
-                                        <td class="center">
-                                            <button class="waves-effect waves-light btn grey" type="submit"  onclick="mostrarPreload()" formmethod="post" formaction="/updateresources" name="idserver"  value="{{res['id']}}" >
-                                                <i class="material-icons black-text">update</i>
-                                            </button>
-                                        </td>
-                                        <td class="center">
-                                            <button class="waves-effect waves-light btn grey" type="submit"  formmethod="post" formaction="/editserver" name="update_button"  value="{{res['id']}}" >
-                                                <i class="material-icons black-text">edit</i>
-                                            </button>
-                                        </td>
-                                        <td class="center">
-                                            <button class="waves-effect waves-light btn grey" type="submit" name="id" onclick="return confirm('Are you sure to delete?')" value="{{res['id']}}">
-                                                <i class="material-icons black-text">delete</i>
-                                            </button>
-                                        </td>
-                                    </tr>
-                                    {% endfor %}
-                                </tbody>
-                            </table>
-                        </form>
-                        <form method="GET" action="/getdataservers">
-                            <div class="form-field right">
-                                <button class="btn waves-effect waves-green green darken-2" type="submit" name="Submit">
-                                    Exportar CSV
-                                </button>
-                            </div>
-                        </form>
-                        <form method="POST" action="/deletebastion">
-                            <p>Servidor seleccionado como bastion <b class="green-text">{{apibastion['bastion']}}</b></p>
-                            <input type="hidden" value="{{apibastion['id']}}" class="validate" name="idf" required>
-                            <button class="btn del-button" type="submit"  id="submit_button" disabled>Eliminar
-                            </button>
-                            <p>
-                                <label for="terms_and_conditions">
-                                  <input type="checkbox" id="terms_and_conditions" value="1" onclick="terms_changed(this)"  />
-                                  <span>Check si deseas remover el actual server bastion </span>
-                                </label>
-                              </p>
-                        </form>
-                        <div class="center">
-                            <ul class="pagination">
-
-                            {% if data.has_prev %}
-                                <li class="waves-effect"><a class="page-link" href="{{ url_for('servers', page_num=data.prev_num, findserver=findserver) }}"><i class="material-icons">chevron_left</i></a></li>
-                            {% else %}
-                                <li class="disabled"><span><i class="material-icons">chevron_left</i></span>
-                            {% endif %}
-                                </li>
-
-                            {% for page in data.iter_pages(left_edge=3, right_edge=3) %}
-                            {% if page %}
-                            <li class="waves-effect"><a href="{{ url_for('servers', page_num=page, findserver=findserver) }}">{{ page }}</a></li>
-                            {% else %}
-                            <li class="disabled"><a href="#">…</a></li> 
-                            {% endif %}
+                <form action="/deleteserver" method="POST">
+                    <table class="aws-table">
+                        <thead>
+                            <tr>
+                                <th>Hostname</th>
+                                <th>Nombre clave</th>
+                                <th>DNS</th>
+                                <th>Tipo</th>
+                                <th class="center">Area</th>
+                                <th class="center">Adjuntar</th>
+                                <th class="center">IP_Admin</th>
+                                <th class="center">RAMxCPUS</th>
+                                <th class="center">Storage</th>
+                                <th class="center">Actualizar</th>
+                                <th class="center">Editar</th>
+                                <th class="center">Borrar</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for res in data.items %}
+                                {% if res.ipadmin != ipbastion %}
+                            <tr>
+                                <td>{{res['hostname']}}</td>
+                                <td>{{res['namekey']}}</td>
+                                <td>{{res['dns']}}</td>
+                                <td class="center">{{res['tipe']}}</td>
+                                <td class="center">{{res['department']}}</td>
+                                <td class="center">
+                                    <button class="borderless-button" type="submit"  formmethod="post" formaction="/addpermissionserver?serverselect={{res['id']}}" name="update_button"  value="{{res['id']}}" >
+                                        permission
+                                    </button>
+                                </td>
+                                <td class="center">{{res['ipadmin']}}</td>
+                                <td class="center">{{res['ram']}} x {{res['cpu']}}</td>
+                                <td class="center">{{res['storage']}}</td>
+                                <td class="center">
+                                    <button class="waves-effect waves-light btn white" type="submit"  onclick="mostrarPreload()" formmethod="post" formaction="/updateresources" name="idserver"  value="{{res['id']}}" >
+                                        <i class="material-icons black-text">update</i>
+                                    </button>
+                                </td>
+                                <td class="center">
+                                    <button class="borderless-button" type="submit"  formmethod="post" formaction="/editserver" name="update_button"  value="{{res['id']}}" >
+                                        Edit
+                                    </button>
+                                </td>
+                                <td class="center">
+                                    <button class="borderless-button" type="submit" name="id" onclick="return confirm('Are you sure to delete?')" value="{{res['id']}}">
+                                        Delete
+                                    </button>
+                                </td>
+                                {% endif %}
+                            </tr>
                             {% endfor %}
-
-                            {% if data.has_next %}
-                                <li class="waves-effect"><a href="{{ url_for('servers', page_num=data.next_num, findserver=findserver) }}"><i class="material-icons">chevron_right</i></a></li>
-                            {% else %}
-                                <li class="disabled"><span><i class="material-icons">chevron_right</i></span>
-                            {% endif %}
-                                    
-                            </ul>
+                        </tbody>
+                    </table>
+                </form>
+            </div>
+            <div class="row">
+                <div class="col s4 m4 l4">
+                    <form method="POST" action="/deletebastion">
+                        <p>Servidor seleccionado como bastion <b class="green-text">{{apibastion['bastion']}}</b></p>
+                        <input type="hidden" value="{{apibastion['id']}}" class="validate" name="idf" required>
+                        <button class="btn del-button" type="submit"  id="submit_button" disabled>Eliminar
+                        </button>
+                        <p>
+                            <label for="terms_and_conditions">
+                            <input type="checkbox" id="terms_and_conditions" value="1" onclick="terms_changed(this)"  />
+                            <span>Check si deseas remover el actual server bastion </span>
+                            </label>
+                        </p>
+                    </form>
+                </div>
+                <div class="col s4 m4 l4">
+                    <form method="GET" action="/getdataservers">
+                        <div class="form-field right">
+                            <button class="btn waves-effect waves-green green darken-2" type="submit" name="Submit">
+                                Exportar CSV
+                            </button>
                         </div>
-                    </div>
+                    </form>
+                </div>
+                <div class="col s4 m4 l4">
+                    <form method="POST" action="/addserver">
+                        <div class="form-field center">
+                            <button class="btn add-button" type="submit" name="Submit">
+                                Crear registro
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="row">
+                <div class="center">
+                    <ul class="pagination">
+
+                    {% if data.has_prev %}
+                        <li class="waves-effect"><a class="page-link" href="{{ url_for('servers', page_num=data.prev_num, findserver=findserver) }}"><i class="material-icons">chevron_left</i></a></li>
+                    {% else %}
+                        <li class="disabled"><span><i class="material-icons">chevron_left</i></span>
+                    {% endif %}
+                        </li>
+
+                    {% for page in data.iter_pages(left_edge=3, right_edge=3) %}
+                    {% if page %}
+                    <li class="waves-effect"><a href="{{ url_for('servers', page_num=page, findserver=findserver) }}">{{ page }}</a></li>
+                    {% else %}
+                    <li class="disabled"><a href="#">…</a></li> 
+                    {% endif %}
+                    {% endfor %}
+
+                    {% if data.has_next %}
+                        <li class="waves-effect"><a href="{{ url_for('servers', page_num=data.next_num, findserver=findserver) }}"><i class="material-icons">chevron_right</i></a></li>
+                    {% else %}
+                        <li class="disabled"><span><i class="material-icons">chevron_right</i></span>
+                    {% endif %}
+                            
+                    </ul>
                 </div>
             </div>
             {% endif %}

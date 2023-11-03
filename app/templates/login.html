@@ -1,43 +1,67 @@
 {% extends 'base/baselogin.html' %}
 
-{% block title %} Login {% endblock title%}
+{% block title %} Iniciar Sesión en la Plataforma {% endblock title %}
 
 {% block content %}
-<main class="grey maincont">
-    <div class="row">
-        <div class="col l6 m6 s12 offset-l3 mc5">
-            <div class="col s12 m6 l6 white center-align cardbg" style="height: 300px;">
-                    <img class="responsive-img" src="{{ url_for('static', filename='img/logo.png' ) }}" style="width: 230px; margin-top: 80px;">
-            </div>
-            <div class="col s12 m6 l6 white" style="height: 300px;">
+<main style="background-color: #9e9e9e; height: 100vh; display: flex; align-items: center; justify-content: center;">
+    <div class="col s6">
+        <div class="card" style="width: 150%; background: rgba(255, 255, 255, 0.8); border-radius: 10px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);">
+            <div class="card-content center-align">
                 <form action="/login" method="POST">
+                    <br>
                     <div class="row">
-                        <h6 class="center">Autentificate para acceder</h6>
-                        <div class="input-field col s10 l10 m10" style="margin-top: 15px">
+                        <span class="card-title">
+                            <img src="{{ url_for('static', filename='img/logofind.png' ) }}" alt="Icono" style="height: 30px; margin-right: 10px;">
+                            ACCOUNT LOGIN
+                        </span>
+                    </div>
+                    <div class="row">
+                        <div class="input-field col s10 offset-s1">
                             <i class="material-icons prefix">account_circle</i>
-                            <input id="icon_prefix" placeholder="Usuario" type="text" data-length="15" name="username" required>
-                        </div>
-                        <div class="input-field col s10 l10 m10">
-                            <i class="material-icons prefix">settings_ethernet</i>
-                            <input id="icon_prefix" placeholder="Contraseña" type="password" data-length="25" name="password" required>
+                            <input type="text" placeholder="Usuario" data-length="15" name="username" required>
                         </div>
                     </div>
-                    <div class="form-field center-align">
-                        <button class="btn add-button" type="submit" name="action">INGRESAR
-                        <i class="material-icons left">send</i>
-                        </button> 
-                        {% with messages = get_flashed_messages() %}
-                            {% if messages %}
-                                <ul class=flashes>
-                                {% for message in messages %}
-                                    <li class="center red-text">Error: {{ message }}.</li>
-                                {% endfor %}
-                                </ul>
-                            {% endif %}
-                        {% endwith %}
+                    <div class="row">
+                        <div class="input-field col s10 offset-s1">
+                            <i class="material-icons prefix">settings_ethernet</i>
+                            <input type="password" placeholder="Contraseña" data-length="25" name="password" required>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col s12 center-align">
+                            <button class="login-button" type="submit" name="action">
+                                INGRESAR
+                            </button>
+                        </div>
+                    </div>
+                    {% with messages = get_flashed_messages() %}
+                        {% if messages %}
+                            <div class="row">
+                                <div class="col s12">
+                                    <ul class="flashes">
+                                    {% for message in messages %}
+                                        <li class="red-text">Error: {{ message }}.</li>
+                                    {% endfor %}
+                                    </ul>
+                                </div>
+                            </div>
+                        {% endif %}
+                    {% endwith %}
+                    <div class="row">
+                        <div class="card-action">
+                            <a href="https://console.aws.amazon.com">
+                                <img src="{{ url_for('static', filename='img/awslogo.png' ) }}" alt="Icono" style="height: 30px; ">
+                            </a>
+                            <a href="https://github.com/lgeronimoM/bastionweb">
+                                <img src="{{ url_for('static', filename='img/github.png' ) }}" alt="Icono" style="height: 30px;">
+                            </a>
+                            <a href="https://encontrack.com">
+                                <img src="{{ url_for('static', filename='img/logoencontrack.png' ) }}" alt="Icono" style="height: 30px;">
+                            </a>
+                        </div>
                     </div>
                 </form>
-            </div>  
+            </div>
         </div>
     </div>
 </main>

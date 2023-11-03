@@ -1,5 +1,5 @@
 almacenamiento,cpu,departamento,descripcion,dns,estado,hostname,hypervisor,id,ipadmin,ipprod,namekey,ram,servicio,sistema,tipo,ubicacion
-20,4,sistemas,Herramienta ansible web,ansible.encontrack.com,True,srvansiblesisplvfl01,vmware,2,192.168.3.68,192.168.3.68,ansible_sis,6,ansible,Centos Linux 7.8,virtual,miami
+31,1,sistemas,Herramienta ansible web,ansible.encontrack.com,True,srvansiblesisplvfl01,VMware,2,192.168.3.68,192.168.3.68,ansible_sis,2,ansible,CentOS,virtual,miami
 20,2,sistemas,nginx proxy MFV,nginx_02.amtelser.com,True,srvnginxplvfl02,vmware,5,10.190.6.100,10.190.7.9,nginx_prod02,2,nginx,Centos Linux 7.8,virtual,miami
 20,2,sistemas,nginx como proxy servicios de backend como MFV,api.encontrack.com,True,srvnginxapiplvfl01,vmware,6,10.190.5.67,10.190.6.67,nginx_api,2,nginx,Centos Linux 7.8,virtual,miami
 10,1,sistemas,nginx aws como proxy para aplicaciones como flotcon,nginx-aws.amtelser.com,True,srvnginxplvaws01,aws,7,172.31.50.115,35.175.166.20,nginx_aws,2,nginx,Centos Linux 7.8,virtual,aws
@@ -72,7 +72,9 @@ almacenamiento,cpu,departamento,descripcion,dns,estado,hostname,hypervisor,id,ip
 60,8,SIO,Servicios de SIO,servicios-sio.encontrack.com,True,srvserviciosplvfl01,vmware,75,10.190.5.196,10.190.6.196,servicios-sio,12,api-sio,Centos Linux 6.9,virtual,miami
 250,16,SIO,Base de datos servicios sio,db-servicios.encontrack.com,True,dbserviciosplvfl01,vmware,76,10.190.5.195,10.190.6.196,db-servicios-sio,32,cache,Red Hat Enterprise 6.9,virtual,miami
 20,2,I+D,DNS pruebas,slave-dns01.encontrack.com,True,srvslavednsplvqr01,vmware,77,10.10.4.32,10.10.4.32,slave-qro01,4,dns,Centos Linux 7.8,virtual,qro
-20,2,I+D,Integrador,integrador,True,dbintegradorplvfl01,vmware,79,10.190.5.44,10.190.5.44,integrador,2,tomcat,Amazon Linux 2,virtual,miami
+32,2,I+D,Ansible_bastion_aws_prod,bastion.amtelser.com,True,ansibleplaws01,kvm,79,172.31.116.163,172.31.116.163,ansible_aws_pro,4,bastion,Amazon,virtual,ams
 20,2,I+D,test,ws2-test.encontrack.com,True,ws2test-aws,vmware,80,192.168.3.65,192.168.3.65,ws2-test-aws,2,tomcat,Centos,virtual,aws
-20,2,I+D,test,ws1-test.encontrack.com,True,ws1test,vmware,81,192.168.3.63,192.168.3.63,ws1-test,2,tomcat,Centos,virtual,qro
+20,2,I+D,test,ws1-test.encontrack.com,True,ws1test0202,vmware,81,192.168.3.73,192.168.3.73,ws1-test0202,2,tomcat,Centos,virtual,qro
 20,2,I+D,server bastion,bastion.amtelser.com,True,bastion-des,vmware,82,192.168.3.67,192.168.3.67,bastion-des,2,tomcat,Centos,virtual,qro
+20,2,I+D,Integrador,ws1-test-n.encontrack.com,True,ws1test-n,aws,83,192.168.3.64,192.168.3.64,ws1-test-n,2,tomcat,Centos,virtual,cdmx-cua
+31,1,I+D,test,ws11-test.encontrack.com,True,ws11test,VMware,84,192.168.3.66,192.168.3.66,ws11-test,2,tomcat,CentOS,virtual,qro

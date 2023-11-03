@@ -51,13 +51,21 @@ playbookyml = cf.MAINAPP
 fileprivatekey = cf.PRIVATEKEY
 
 ####################### Endpoints #############################
+def validatebastion():
+    validatebastion = db.session.query(Bastion).first()
+    if validatebastion:
+        validatebastion = True
+    else: 
+        validatebastion = False
+    return validatebastion 
+
 @app.route('/')
 def home():
     is_auth = current_user.is_authenticated
     if is_auth:
-        logging.info('User authentication')
         user = current_user.username
         query = db.session.query(Users).filter(Users.username==user).first()
+        logging.info(f'{user} user is authentifica')
         servers = db.session.query(Servers).all()
         serversmiami = db.session.query(Servers).filter(Servers.localation=='miami')
         serversaws = db.session.query(Servers).filter(Servers.localation=='aws')
@@ -70,7 +78,7 @@ def home():
         if bastion:
             pass
         mail = query.email
-        return render_template('index.html',user=user,mail=mail,servers=servers,client=client,clientweb=clientweb,serversotros=serversotros,serversmiami=serversmiami,serversaws=serversaws,accessclient=accessclient,accessserver=accessserver,bastion=bastion )
+        return render_template('index.html',user=user,mail=mail,validatebastion=validatebastion(),servers=servers,client=client,clientweb=clientweb,serversotros=serversotros,serversmiami=serversmiami,serversaws=serversaws,accessclient=accessclient,accessserver=accessserver,bastion=bastion )
     else:
         logging.info('User trying access to page')
         return render_template('login.html')

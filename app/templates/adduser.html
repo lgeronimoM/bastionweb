@@ -3,12 +3,27 @@
 {% block content %}
     <main class="container">
         <div class="row">
+          {% with messages = get_flashed_messages(with_categories=true) %}
+              {% if messages %}
+                  <ul class=flashes>
+                  {% for category, message in messages %}
+                      {% if category == 'error' %}
+                          <li class="red-text">{{ message }}</li>
+                      {% else %}
+                          <li class="green-text">{{ message }}</li>
+                      {% endif %}
+                  {% endfor %}
+                  </ul>
+              {% endif %}
+          {% endwith %}
+        </div>
+        <div class="row">
             <div class="card">
                 <div class="card-content container">
                     <span class="card-title center"><b>Administración nuevo usuario</b></span>
                     <div class="row"></div>
                     <div class="row"></div>
-                    <form method="POST" action="/comadduser">
+                    <form method="POST" action="/comadduser" id="FormsIds">
                         <p class="red-text">{{statususer}}</p>
                         <br>
                         <div class="row">
@@ -31,36 +46,55 @@
                                 <label for="area">Area de trabajo</label>
                             </div>
                         </div>
-                        <div class="row">
-                            <div class="input-field col s12 m4 l4">
-                                <select class="blue-text text-darken-2" id="group" name="group" required>
-                                    <option value="" disabled selected>Selecciona su grupo</option>
-                                    <option value="GroupTI">GroupTI</option>
-                                    <option value="GroupAPS">GroupAPS</option>
-                                    <option value="GroupDB">GroupDB</option>
-                                    <option value="GroupSIO">GroupSIO</option>
-                                    <option value="GroupID">GroupID</option>
-                                    <option value="GroupEXT">GroupEXT</option>
-                                </select>
-                                <label>Grupo al que pertenece</label>
-                            </div>
-                            <div class="input-field col s12 m4 l4">
-                                <label>
-                                    <input type="checkbox" name="useractive" value="1" />
-                                    <span>Habilitar usuario bastion</span>
-                                </label>
-                            </div>
-                            <div class="input-field col s12 m4 l4">
-                                <label>
-                                    <input type="checkbox" name="webaccess" value="1" />
-                                    <span>Acceso al administrador web</span>
-                                </label>
-                            </div>
+                        <div class="s12">
+                          <table class="aws-table">
+                            <thead>
+                              <tr>
+                                <th class="center">Selecciona</th>
+                                <th>Grupo</th>
+                                <th>Descripción</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              {% for res in getgroups %}
+                                <tr>
+                                  <td class="center">
+                                    <p>
+                                      <label>
+                                        <input name="group_checkbox_{{ res.id }}" type="checkbox" value="{{ res.id }}">
+                                        <span></span>
+                                      </label>
+                                    </p>
+                                  </td>
+                                  <td>
+                                    {{res.name}}
+                                  </td>
+                                  <td>
+                                    {{res.desc}}
+                                  </td>
+                                </tr>
+                              {% endfor %}
+                            </tbody>
+                          </table>
                         </div>
                         <div class="row">
+                            <div class="input-field col s12 m4 l4">
+                              <select class="blue-text text-darken-2" name="useractive" required>
+                                  <option value="1" selected>habilitado</option>
+                                  <option value="0">deshabilitado</option>
+                              </select>
+                            </div>
+                            <div class="input-field col s12 m4 l4">
+                                <select class="blue-text text-darken-2" name="webaccess" required>
+                                    <option value="1" selected>habilitado</option>
+                                    <option value="0">deshabilitado</option>
+                                </select>
+                            </div>                        
+                        </div>
+                        <div class="row"><br><br>
                             <div class="form-field">
-                                <button class="btn add-button miBoton" onclick="mostrarPreload()" type="submit" name="add_button">Agregar
-                                </button>
+                                <input name="valuesSeleccts" type="hidden" value="">
+                                <button id="regenAvalive" class="btn add-button miBoton" onclick="mostrarPreload(); getValueIds();" type="submit" name="add_button">Agregar</button>
                                 <button class="btn del-button" type="submit" formmethod="get" formnovalidate="novalidate" formaction="/users" name="cancelar" >cancelar
                                 </button>
                             </div>

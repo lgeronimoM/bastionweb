@@ -3,12 +3,27 @@
 {% block content %}
     <main class="container">
         <div class="row">
+          {% with messages = get_flashed_messages(with_categories=true) %}
+              {% if messages %}
+                  <ul class=flashes>
+                  {% for category, message in messages %}
+                      {% if category == 'error' %}
+                          <li class="red-text">{{ message }}</li>
+                      {% else %}
+                          <li class="green-text">{{ message }}</li>
+                      {% endif %}
+                  {% endfor %}
+                  </ul>
+              {% endif %}
+          {% endwith %}
+        </div>
+        <div class="row">
             <div class="card">
                 <div class="card-content container">
                     <h1 class="card-title center">Editar registro del usuario: <b> {{apiusers.username}}</b></h1>
                     <div class="row"></div>
                     <div class="row"></div>
-                    <form method="POST" action="/updateuser">
+                    <form method="POST" action="/updateuser" id="FormsIds">
                         <input id="idf" type="hidden" value="{{apiusers.id}}" class="validate" name="idf" required>
                         <div class="row">
                             <div class="input-field col s12 m6 l6">
@@ -41,26 +56,55 @@
                                 <input placeholder="email" id="email_inline" type="email" value="{{apiusers.email}}" class="validate" name="email" required>
                                 <label for="email_inline">Correo</label>
                             </div>
-                        </div>
-                        <div class="row">
                             <div class="input-field col s12 m6 l6">
                                 <input placeholder="area" id="area" type="text" class="validate" value="{{apiusers.area}}" name="area" required>
                                 <label for="area">Area de trabajo</label>
                             </div>
                         </div>
+                        <div class="s12">
+                          <table class="aws-table">
+                            <thead>
+                              <tr>
+                                <th class="center">Selecciona</th>
+                                <th>Grupo</th>
+                                <th>Descripción</th>
+                                <th></th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              {% for res in datagroups %}
+                                <tr>
+                                  <td class="center">
+                                    <p>
+                                      <label>
+                                        <input name="group_checkbox_{{ res.id }}" type="checkbox" value="{{ res.id }}"
+                                          {% if res.id in getidgroup %}
+                                            checked disabled
+                                          {% endif %}>
+                                        <span></span>
+                                      </label>
+                                    </p>
+                                  </td>
+                                  <td>
+                                    {{res.name}}
+                                  </td>
+                                  <td>
+                                    {{res.desc}}
+                                  </td>
+                                  <td>
+                                    {% if res.id in getidgroup %}
+                                      <button id="regenAvalive" class="borderless-button" type="submit" value="[{{ res.id }},{{ apiusers.id }}]" name="idugrelation" formaction="/deleteusergroup">
+                                        Delete
+                                      </button>
+                                    {% endif %}
+                                  </td>
+                                </tr>
+                              {% endfor %}
+                            </tbody>
+                          </table>
+                        </div>
+                        <br><br>
                         <div class="row">
-                            <div class="input-field col s12 m4 l4">
-                                <select class="blue-text text-darken-2" name="group" required>
-                                    <option value="{{apiusers.group}}" selected>{{apiusers.group}}</option>
-                                    <option value="GroupTI">GroupTI</option>
-                                    <option value="GroupAPS">GroupAPS</option>
-                                    <option value="GroupDB">GroupDB</option>
-                                    <option value="GroupSIO">GroupSIO</option>
-                                    <option value="GroupID">GroupID</option>
-                                    <option value="GroupEXT">GroupEXT</option>
-                                </select>
-                                <label>Grupo al que pertenece</label>
-                            </div>
                             <div class="input-field col s12 m4 l4">
                                 <select class="blue-text text-darken-2" name="bastion" required>
                                     {% if apiusers.status%}
@@ -88,7 +132,8 @@
                         </div>
                         <div class="row">
                             <div class="form-field">
-                                <button class="btn add-button miBoton" type="submit" onclick="mostrarPreload()" name="conf">Modificar
+                                <input name="valuesSeleccts" type="hidden" value="">
+                                <button id="regenAvalive" class="btn add-button miBoton" onclick="mostrarPreload(); getValueIds();" name="conf">Modificar
                                 </button>
                                 <button class="btn del-button" type="submit" formmethod="get" formnovalidate="novalidate" formaction="/users" name="cancelar" >cancelar
                                 </button>

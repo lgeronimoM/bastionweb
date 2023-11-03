@@ -1,11 +1,11 @@
 ---
-# vars file for roles/addCustomUsers
+# vars file for roles/manageCustomUsers
 
-usuario: "test-user2"
-grupo: "GroupTI"
-email: ", luis.geronimo@encontrack.com"
-dirfile: "/home/lgeronimo/files/PEMFiles/test-user2"
-dirgoogle: "/home/lgeronimo/files/google-auth"
+usuario: "luis.geronimo"
+email: "luis.geronimo@encontrack.com, sysadmin@encontrack.com"
+dirfile: "/home/ansadmin/luis.geronimo"
+dirgoogle: "/home/ansadmin"
+dirfiles: "/home/luisgeronimo/Documents/Desarrollos/flask/bastionWEB/files"
 
 # SERVER ACCESS
 
@@ -25,4 +25,8 @@ dnsbastion: "bastion.amtelser.com"
 
 serverapp: 127.0.0.1
 
-admin_user: lgeronimo
+admin_user: ansadmin
+
+grupos:
+  - GroupSysadmins
+  - NETWORK_EC2

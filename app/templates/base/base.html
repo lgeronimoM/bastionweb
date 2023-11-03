@@ -22,8 +22,6 @@
         <li style="margin-right: 50px;">{{user}}</li>
       </ul>
       <ul id="nav-mobile" class="right hide-on-med-and-down">
-        <li><i class="material-icons white-text">widgets</i></li>
-        <li style="margin-right: 50px;"><a href="https://github.com/lgeronimoM/bastionweb">Proyecto Github</a></li>
         <li><i class="material-icons white-text">storage</i></li>
         <li style="margin-right: 50px;"> <a href="/admin">adminBD</a></li>
         <li><i class="material-icons darken-4"><b>exit_to_app</b></i></li>
@@ -33,34 +31,41 @@
   </nav>
 </div>
 <div class="container row section">
-  <div class="col s12 m6 l6">
-    <h3 style="font-family: 'Roboto', sans-serif; font-weight: bold;"><img class="responsive-img" src="{{ url_for('static', filename='img/logo.png' ) }}" style="width: 80px;"> BastionHost</h3>
-    <p>Aplicación web versión 2.0 multi-task.</p>
+  <div class="col s12 m4 l4" style="margin-top: 60px;">
+    <img class="responsive-img" src="{{ url_for('static', filename='img/logoencontrack.png' ) }}" style="width: 200px;">
+    <p>Webadmin portal para la administracion y control de accesos sysadmin versión 2.11.</p>
   </div>
-  <div class="col s12 m6 l6">
+  <div class="col s12 m8 l8" style="margin-top: 40px;">
     <div class="row menu-navbar center">
-      <div class="col s3">
+      <div class="col s2">
         <a href="/">
           <i class="medium material-icons black-text text-darken-4">home</i>
         </a>
         <p>Inicio</p>
         <div class="line"></div>
       </div>
-      <div class="col s3">
+      <div class="col s2">
         <a href="/users">
           <i class="medium material-icons black-text text-darken-4">supervisor_account</i>
         </a>
-        <p>Usuarios</p>
+        <p>IAM Acceso</p>
         <div class="line"></div>
       </div>
-      <div class="col s3">
+      <div class="col s2">
+        <a href="/permissions">
+          <i class="medium material-icons black-text text-darken-4">security</i>
+        </a>
+        <p>Roles</p>
+        <div class="line"></div>
+      </div>
+      <div class="col s2">
         <a href="/servers">
           <i class="medium material-icons black-text text-darken-4">devices</i>
         </a>
         <p>Servidores</p>
         <div class="line"></div>
       </div>
-      <div class="col s3">
+      <div class="col s2">
         <a href="/bastion">
           <i class="medium material-icons black-text text-darken-4">vpn_key</i>
         </a>
@@ -73,7 +78,27 @@
 {% block content %} 
 
 {% endblock content %}
-</div>
+<footer class="page-footer white">
+  <div class="container">
+    <div class="row">
+      <div class="col l6 s12">
+        <h5 class="black-text">Administración de TI</h5>
+        <p class="black-text text-lighten-4">webadmin portal de administración para servidores de districion Linux creado en 2018.</p>
+      </div>
+    </div>
+  </div>
+  <div class="footer-copyright">
+    <div class="container">
+    <span class="black-text">© 2014 Copyright Text</span>
+    <div class="right">
+      <a href="htps://github.com/lgeronimoM/bastionweb" class="black-text">
+        <i class="material-icons">widgets</i>
+        link Proyecto Github
+      </a>
+    </div>
+    </div>
+  </div>
+</footer>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
@@ -83,49 +108,96 @@
   });
 </script>
 <script src="{{ url_for('static', filename='js/select_search.js') }}"></script>
-<script type="text/javascript">
-  $(function () {
-    $("#chkPassport").click(function () {
-      if ($(this).is(":checked")) {
-        $("#dvPassport").show();
-        $("#AddPassport").hide();
-      } else {
-        $("#dvPassport").hide();
-        $("#AddPassport").show();
+<script src="{{ url_for('static', filename='js/checkbox_bastion.js') }}"></script>
+<script src="{{ url_for('static', filename='js/modal_log_bastion.js') }}"></script>
+<script src="{{ url_for('static', filename='js/session_polity.js') }}"></script>
+
+<script>
+  document.getElementById("iamSelect").addEventListener("change", function() {
+      var select = document.getElementById("iamSelect");
+      var opcionSeleccionada = select.options[select.selectedIndex].value;
+
+      // Enviar la selección como una solicitud POST
+      if (opcionSeleccionada !== "") {
+          fetch(opcionSeleccionada, {
+              method: "POST"
+          })
+          .then(response => {
+              // Redirigir al usuario a la ruta seleccionada
+              window.location.href = opcionSeleccionada;
+          })
+          .catch(error => {
+              console.error("Error al enviar la solicitud POST:", error);
+          });
       }
-    });
   });
 
-  //Add a JQuery click event handler onto our checkbox.
-  $('#terms_and_conditions').click(function(){
-    //If the checkbox is checked.
-    if($(this).is(':checked')){
-      //Enable the submit button.
-      $('#submit_button').attr("disabled", false);
-    } else{
-      //If it is not checked, disable the button.
-      $('#submit_button').attr("disabled", true);
-    }
-  });
+</script>
+  
+<script>
+  // Obtén referencias a los elementos del DOM
+var checkbox = document.getElementById("activeOptionsUsers");
+var editarUsuarioOptions = document.querySelectorAll('.editarUsuario');
+var eliminarUsuarioOptions = document.querySelectorAll('.eliminarUsuario');
 
-  function habilitarBotones() {
-    var checkboxes = document.querySelectorAll('#activeEditor');
-    var botones = document.querySelectorAll('#regenAvalive');
+// Agrega un evento change al checkbox
+checkbox.addEventListener("change", function() {
+    // Habilita o deshabilita las opciones específicas en función del estado del checkbox
+    editarUsuarioOptions.forEach(function(option) {
+        option.disabled = !checkbox.checked;
+    });
+    eliminarUsuarioOptions.forEach(function(option) {
+        option.disabled = !checkbox.checked;
+    });
+});
+ 
+</script>
 
-    var alMenosUnCheckboxSeleccionado = false;
+<script>
+  document.getElementById("iamUserSelect").addEventListener("change", function() {
+      var select = document.getElementById("iamUserSelect");
+      var selectedUserId = select.options[select.selectedIndex].value;
+      var currentPage = window.location.pathname.split('/').pop();  // Obtiene la página actual de la URL
+      console.log("ID de usuario seleccionado: " + selectedUserId);
 
-    checkboxes.forEach(function(checkbox) {
-      if (checkbox.checked) {
-        alMenosUnCheckboxSeleccionado = true;
+      // Redirigir a la misma página con el parámetro userselect y la página actual
+      if (selectedUserId !== "") {
+          window.location.href = currentPage + '?selectusers=True&userselect=' + selectedUserId;
       }
-    });
+  });
+</script>
 
-    botones.forEach(function(boton) {
-      boton.disabled = !alMenosUnCheckboxSeleccionado;
-    });
-  }
+<script>
+  document.getElementById("iamGroupSelect").addEventListener("change", function() {
+      var select = document.getElementById("iamGroupSelect");
+      var selectedGroupId = select.options[select.selectedIndex].value;
+      var currentPage = window.location.pathname.split('/').pop();  // Obtiene la página actual de la URL
+      console.log("ID de grupo seleccionado: " + selectedGroupId);
 
-  function obtenerValores() {
+      // Redirigir a la misma página con el parámetro userselect y la página actual
+      if (selectedGroupId !== "") {
+          window.location.href = currentPage + '?selectgroups=True&groupselect=' + selectedGroupId;
+      }
+  });
+</script>
+
+<script>
+  document.getElementById("permissionServerSelect").addEventListener("change", function() {
+      var select = document.getElementById("permissionServerSelect");
+      var selecteServerId = select.options[select.selectedIndex].value;
+      var currentPage = window.location.pathname.split('/').pop();  // Obtiene la página actual de la URL
+      console.log("ID de Server seleccionado: " + selecteServerId);
+
+      // Redirigir a la misma página con el parámetro userselect y la página actual
+      if (selecteServerId !== "") {
+          window.location.href = currentPage + '?serverselect=' + selecteServerId;
+      }
+  });
+</script>
+
+<script>
+
+function obtenerValores() {
     var checkboxes = document.querySelectorAll('#activeEditor:checked');
     var valoresSeleccionados = [];
 
@@ -138,85 +210,27 @@
 
     // Enviar el formulario al servidor
     document.getElementById("miFormulario").submit();
-  }
-</script>
-
-<!--modal para contenido del log -->
-<script>
-  document.addEventListener('DOMContentLoaded', function() {
-    var logButton = document.getElementById('logButton');
-    var logModal = document.getElementById('logModal');
-    var logContent = document.getElementById('log-content');
-    var closeButton = document.getElementById('closeButton');
-
-    // Inicializar el modal
-    var modalInstance = M.Modal.init(logModal, {});
-
-    // Agregar evento click al botón para mostrar el modal
-    logButton.addEventListener('click', function() {
-      // Hacer la solicitud al servidor para obtener el log
-      fetch('/get_log')
-        .then(response => response.text())
-        .then(data => {
-          // Colocar el contenido del log en el elemento pre dentro del modal
-          logContent.textContent = data;
-
-          // Abrir el modal
-          modalInstance.open();
-        })
-        .catch(error => {
-          console.error('Error al obtener el log:', error);
-        });
-    });
-
-    // Agregar evento click al botón de cerrar modal
-    closeButton.addEventListener('click', function() {
-      // Cerrar el modal
-      modalInstance.close();
-    });
-  });      
-</script>
-
-<!--modal para loading -->
-<script> 
-  document.addEventListener('DOMContentLoaded', function() {
-    var modal = document.getElementById("miModal");
-    var instance = M.Modal.init(modal, {dismissible: false});
-
-    window.mostrarPreload = function() {
-      deshabilitarModal();
-      instance.open();
-    };
-
-    window.habilitarModal = function() {
-      instance.options.dismissible = true;
-      modal.style.pointerEvents = "auto";
-    };
-
-    window.deshabilitarModal = function() {
-      instance.options.dismissible = false;
-      modal.style.pointerEvents = "none";
-    };
-
-    // Inicializar el modal al cargar el contenido
-    var elems = document.querySelectorAll('.modal');
-    var instances = M.Modal.init(elems);
-  });
-</script>
-
-<!--cerrar session al cerrar la ventana -->
-<script>
-  // Función para enviar una solicitud AJAX para cerrar la sesión
-  function cerrarSesion() {
-      var xhr = new XMLHttpRequest();
-      xhr.open('GET', '/logout', true);  // Ruta para cerrar sesión en tu aplicación Flask
-      xhr.send();
-  }
+}
   
-  // Evento que se activa al cerrar la ventana
-  window.addEventListener('unload', function() {
-      cerrarSesion();
+</script>
+
+<script>
+
+function getValueIds() {
+  var checkboxes = document.querySelectorAll('input[type="checkbox"]:checked');
+  var valoresSeleccionados = [];
+
+  checkboxes.forEach(function (checkbox) {
+    valoresSeleccionados.push(checkbox.value);
   });
+
+  // Actualiza el campo oculto con los valores seleccionados
+  document.querySelector('input[name="valuesSeleccts"]').value = valoresSeleccionados.join(',');
+
+  // Envía el formulario al servidor
+  document.getElementById("FormsIds").submit();
+}
+
 </script>
 
 </body>
