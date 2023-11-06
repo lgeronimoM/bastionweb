@@ -1,7 +1,9 @@
 venv/
-bastion_*
 __pycache__*
-properties.py*
-logs/
-files/
-db/
+logs/bastion_*
+db/des-data.db
+data_file.csv
+log.txt
+files/google-auth/*
+files/PEMFiles/*
+files/audit/*
