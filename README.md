@@ -10,7 +10,7 @@ Canal de youtube #SysAdminOne
 
 Titulo
 ------------------
-DNS Web
+Bastión Host WEB
 
 Descripción
 ------------------
