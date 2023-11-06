@@ -14,19 +14,15 @@ DNS Web
 
 Descripción
 ------------------
-Servicio de dns a instalar "ansible".
-
-Aplicacion web con flask en python version 3 para la administracion de accesos de usuarios. 
+Una aplicacion web que ayuda a la administracion y coniguracion de un bastión host.  Un bastión host es como host de salto (jump host en inglés), es un servidor o sistema informático que se configura de manera segura para actuar como un punto de entrada único a una red privada o segmento de red. Su principal propósito es aumentar la seguridad de una red al limitar el acceso directo a otros sistemas dentro de esa red.
 
 Sistema Operativo
 ------------------
-Para el maestro: Centos7/8 
- 
-Para el esclavo: Centos7/8
+Linux 
 
 Recursos
 ------------------
-2 cpu
+2 CPU's
 2GB RAM
 10GB HDD
 internet
