@@ -205,11 +205,12 @@ def bastionclient(iduser, user, email):
 def combastion():
     idaccess = request.form.get('valoresSeleccionados')
     elementos = idaccess.split(',')
-    idservers = [int(elemento) for elemento in elementos]
-    apibastion = requests.get(urlbastion, headers=headers, verify=False).json()
-    ipbastion=apibastion['ip']
-    for serverid in idservers:
-        apiaccess = requests.get(urlaccess+'/'+str(serverid), headers=headers, verify=False).json()
+    idaccessserver = [int(elemento) for elemento in elementos]
+    getugpolicies = db.session.query(UGPolicies).all()
+    for accessid in idaccessserver:
+        getpolicyids_list = []
+        listpolicy = []
+        apiaccess = requests.get(urlaccess+'/'+str(accessid), headers=headers, verify=False).json()
         iduser = apiaccess['userid']
         idserver = apiaccess['serverid']
         apiusers = requests.get(urlusers+'/'+str(iduser), headers=headers, verify=False).json()
@@ -218,22 +219,64 @@ def combastion():
         server=apiservers['hostname']
         user=apiusers['username']
         email=apiusers['email']
-        getgroup = requests.get(urlugrelation, headers=headers, verify=False).json()
+        namekey=apiservers['namekey']
+        filekey=namekey+'_'+ipserver+'.pem'
         getidsgroups = []
+        getgsrelation = db.session.query(GSRelation).all()
+        getugrelation = db.session.query(UGRelation).all()
+        getgroup = db.session.query(Groups).all()
+        getpolicies = db.session.query(Policy).all()
+        for res in getgsrelation:
+            if str(res.idserver) == str(idserver):
+                getidsgroups.append(res.idug)
+        for idspolicies in getugpolicies:
+            for idgroup in getidsgroups:
+                if idspolicies.type_ug == "group" and idspolicies.id_ug == idgroup:
+                    getpolicyids_list.append(idspolicies.id_policy)
+        getpolicyids = list(set(getpolicyids_list))
+        for idspoli in getpolicies:
+            for ids in getpolicyids:
+                if idspoli.id == ids:
+                    listpolicy.append({idspoli.name: idspoli.policy})
+        sudoers_delete_policies()
+        namepolicies=[]
+        for item in listpolicy:
+            for key, value in item.items():
+                namepolicies.append(key)
+                sudoers_policies(key,value)
+        group_policies = {}
+        # Itera a través de los grupos en getidsgroups
+        for idgroup in getidsgroups:
+            # Inicializa una lista vacía para las políticas de este grupo
+            group_policies[idgroup] = []
+
+            # Itera a través de las políticas y encuentra las que corresponden a este grupo
+            for ugpolicy in getugpolicies:
+                if str(ugpolicy.id_ug) == str(idgroup) and ugpolicy.type_ug == "group":
+                    for getpolicy in getpolicies:
+                        if str(getpolicy.id) == str(ugpolicy.id_policy):
+                            group_policies[idgroup].append(getpolicy.name)
+        sudoers_delete_groups()
+        # Ahora, imprime la información de los grupos con sus políticas
+        for idgroup, policies in group_policies.items():
+            group_name = None
+            for res in getgroup:
+                if str(res.id) == str(idgroup):
+                    group_name = res.name
+            if group_name and policies:
+                formatted_policies = ", ".join(policies)
+                sudoers_groups(group_name,formatted_policies)
+        getusergroups = []
         getnamesgroups = []
-        for res in getgroup:
-            if res['id_user'] == int(iduser):
-                getidsgroups.append(res['id_group'])
-        for getidg in getidsgroups:
+        for res in getugrelation:
+            if res.id_user == int(iduser):
+                getusergroups.append(res.id_group)
+        for getidg in getusergroups:
             apigroups = requests.get(urlapigroups+'/'+str(getidg), headers=headers, verify=False).json()
             getnamesgroups.append(apigroups['name'])
-        apigroups = requests.get(urlapigroups+'/'+str(getidg), headers=headers, verify=False).json()
-        group=apigroups['name']
-        namekey=apiservers['namekey']
         inventory_ansible()
-        filekey=namekey+'_'+ipserver+'.pem'
         var_ansible(user, getnamesgroups, email, ipserver, namekey)
-        content={ "tagsexc": ['adduser-host', 'permissions'], "ipmanage": ipserver, "fileprivatekey":fileprivatekey, "passwd": "", "user": userans, "inventory":inventoryfile, "play":playbookyml }
+        content={ "tagsexc": ['adduser-host', 'permissions', 'role-sudo'], "ipmanage": ipserver, "fileprivatekey":fileprivatekey, "passwd": "", "user": userans, "inventory":inventoryfile, "play":playbookyml }
         r = requests.post(url_api_ansible, json=content, headers=headers, verify=False)
         result=r.json()
         if result['status']==0:
@@ -309,7 +352,16 @@ def deleteaccess():
         var_ansible(user, getnamesgroups, email, ipserver, namekey)
         
         role = ['report']
-        response, status_code = api_playbook_role(role)
+        results, status_code = api_playbook_role(role)
+        if status_code == 200:
+            if results == 4:
+                flash(f'Error al intentar conectar al servidor', 'error')
+            elif results == 0:
+                flash(f'Se genera correctamente', 'ok')
+            elif results == 2:
+                flash(f'Tienes que revisar el servidor hay problemas con el playbook', 'error')
+        else:
+            flash('Error al obtener la respuesta del servidor', 'error')
 
         input_file = dirfiles+'/audit/audit_'+user+'_'+ipserver+'.txt'
         output_file = dirfiles+'/audit/audit_filt_'+user+'_'+ipserver+'.txt'
@@ -393,40 +445,6 @@ def generate_audit_report(records_file, out_file):
             
             report_file.write("\n")
 
-@app.route("/message", methods=['POST'])
-@login_required
-def message():
-    accessid = str(request.form['idaccess'])
-    userid = str(request.form['iduser'])
-    apiaccess = requests.get(urlaccess+'/'+accessid, headers=headers, verify=False).json()
-    keypair = apiaccess['keypair']
-    keyqr = apiaccess['keyqr'] 
-    server = apiaccess['server'] 
-    user = apiaccess['user']
-    port = port_smtp
-    smtp_server = host_smtp
-    sender_email = user_smtp
-    receiver_email = reception_mails
-    password = pass_smtp
-    subject = "Notificación"
-    body = "Este mensaje es para reenviar el acceso para el usuario "+user+", el cual esta dado de alta en nuestro servidor bastion con nombre "+server+". y su email "+keypair+"\nSe contacto con usted por el siguiente problema: "+keyqr
-    # Create a multipart message and set headers
-    message = MIMEMultipart()
-    message["From"] = sender_email
-    message["To"] = receiver_email
-    message["Subject"] = subject
-    message["Bcc"] = receiver_email  # Recommended for mass emails
-    # Add body to email
-    message.attach(MIMEText(body, "plain"))
-    text = message.as_string()
-    # Log in to server using secure context and send email
-    context = ssl.create_default_context()
-    with smtplib.SMTP(smtp_server, port) as server:
-        server.starttlsx(context=context)
-        server.login(sender_email, password)
-        server.sendmail(sender_email, receiver_email, text)
-    return redirect(url_for('bastion', filteruser=userid))
-
 @app.route('/addbastionserver', methods=['POST'])
 @login_required
 def addbastionserver():
@@ -459,10 +477,10 @@ def addbastionserver():
     else:
         idg = getidg
         idserverselect = idserver
-        getpolicies = db.session.query(Policy).all()
         getugpolicies = db.session.query(UGPolicies).all()
         getserver = db.session.query(Servers).all()
         getgrupo = db.session.query(Groups).all()
+        getpolicies = db.session.query(Policy).all()
         
         for res in getserver:
             if str(idserverselect) == str(res.id):
@@ -531,7 +549,17 @@ def addbastionserver():
             
                 sudoers_groups(group_name,formatted_policies)
         role = ['role-sudo']
-        response, status_code = api_playbook_role(role)
+        results, status_code = api_playbook_role(role)
+        if status_code == 200:
+            if results == 4:
+                flash(f'Error al intentar conectar al servidor', 'error')
+            elif results == 0:
+                flash(f'reporte', 'ok')
+            elif results == 2:
+                flash(f'Tienes que revisar el servidor hay problemas con el playbook', 'error')
+        else:
+            flash('Error al obtener la respuesta del servidor', 'error')
+        
         content={ "tagsexc": [ 'permissions','adduser-host'], "ipmanage": ipserver, "fileprivatekey":fileprivatekey, "passwd": "", "user": userans, "inventory":inventoryfile, "play":playbookyml }
         r=requests.post(url_api_ansible, json=content, headers=headers, verify=False)
         result=r.json()

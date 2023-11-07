@@ -93,7 +93,7 @@
                                   </td>
                                   <td>
                                     {% if res.id in getidgroup %}
-                                      <button id="regenAvalive" class="borderless-button" type="submit" value="[{{ res.id }},{{ apiusers.id }}]" name="idugrelation" formaction="/deleteusergroup">
+                                      <button id="regenAvalive" class="borderless-button" onclick="mostrarPreload();" type="submit" value="[{{ res.id }},{{ apiusers.id }}]" name="idugrelation" formaction="/deleteusergroup">
                                         Delete
                                       </button>
                                     {% endif %}

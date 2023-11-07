@@ -282,6 +282,7 @@
     state: present
   with_items: "{{ grupos }}"
   tags: adduser-host
+  ignore_errors: yes
 
 - name: Crear el directorio de inicio del usuario
   file:
@@ -311,6 +312,7 @@
     append: yes
   with_items: "{{ grupos }}"
   tags: adduser-host
+  ignore_errors: yes
 
 - name: Respaldar archivo a mi servidor local private key tipo server
   fetch:
@@ -636,6 +638,7 @@
   with_items: 
     - "{{grupos}}"
   tags: role-sudo
+  ignore_errors: yes
   
 - name: Modificar grupos del "{{ usuario }}"
   user:
@@ -643,6 +646,7 @@
     groups: "{{ grupos }}"
     append: no
   tags: role-sudo
+  ignore_errors: yes
   
 ##################################################################################################
 
@@ -652,3 +656,4 @@
     groups: "{{grupos}}"
     append: no
   tags: deleterole-sudo
+  ignore_errors: yes
