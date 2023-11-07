@@ -1,65 +1,95 @@
-Licencia
--------
+# DNS Web en Bastión Host
+
+## Licencia
 BSD
 
-Autor
-------------------
-Luis Manuel Geronimo Sandoval 
+## Autor
+Luis Manuel Geronimo Sandoval
 
-Canal de youtube #SysAdminOne
+- Canal de YouTube: #SysAdminOne
 
-Titulo
-------------------
-DNS Web
+## Descripción
+Este proyecto implementa un servidor web en un bastión host. Un bastión host, también conocido como host de salto (jump host en inglés), es un servidor o sistema informático que se configura de manera segura para actuar como un punto de entrada único a una red privada o segmento de red. Su principal propósito es aumentar la seguridad de una red al limitar el acceso directo a otros sistemas dentro de esa red. Además, se puede administrar el archivo de sudo en Linux con políticas establecidas.
 
-Descripción
-------------------
-servidor web de bastión host.
-
-Un bastión host, también conocido como host de salto (jump host en inglés), es un servidor o sistema informático que se configura de manera segura para actuar como un punto de entrada único a una red privada o segmento de red. Su principal propósito es aumentar la seguridad de una red al limitar el acceso directo a otros sistemas dentro de esa red.
-
-Ademas de que se puede administrar el archivo de sudo en linux con las politicas establecidas.
-------------------
-SO
-------------------
+## Sistema Operativo
 Linux
-------------------
-Recursos
-------------------
-2 cpu
-2GB RAM
-10GB HDD
-internet
-------------------
-Procesos de instalación
-------------------
 
-*Habilita el puerto 5000 en el firewall
-*Crear y configurar un usuario maestro para el nodo control y todo los nodos clientes
+## Recursos
+- 2 CPU
+- 2GB de RAM
+- 10GB de Disco Duro
+- Conexión a Internet
 
-sudo useradd ansadmin
-sudo ssh-keygen -t rsa -b 4096 -f ~/.ssh/bastion_ansadmin.pem
-sudo ssh-copy-id -i ~/.ssh/bastion_ansadmin.pem ansamdin@192.168.3.x 
+## Procesos de Instalación
+1. **Habilita el puerto 5000 en el firewall.**
 
-*Configurar el archivo sudo
-sudo vi /etc/sudoers
-#agregar la siguiete linea que otorga permisos de configuracion
-ansadmin	ALL=(ALL)	NOPASSWD: ALL
+2. **Crear y configurar un usuario maestro para el nodo de control y los nodos clientes:**
 
-*Instala git
-*Descarga el proyecto bastionweb
+   ```bash
+   sudo useradd ansadmin
+   sudo ssh-keygen -t rsa -b 4096 -f ~/.ssh/bastion_ansadmin.pem
+   sudo ssh-copy-id -i ~/.ssh/bastion_ansadmin.pem ansadmin@192.168.3.x
+    ```
+3. **Configura el archivo sudo para otorgar permisos de configuración.**
 
-cd /tmp
-sudo git clone https://github.com/lgeronimoM/bastionweb.git
-cd /tmp/bastionweb
-sudo chmod u+x install.sh
-sudo ./install.sh
-sudo systemctl start bastion
+   Para otorgar permisos de configuración, sigue estos pasos:
 
-Generar un llave pem con un usuario ansadmin
-------------------
-acceso web
-------------------
-usuario: admin
-contraseña: bastion
-------------------
+   - Edita el archivo `/etc/sudoers` con un editor de texto como `vi` o `nano`:
+
+     ```bash
+     sudo vi /etc/sudoers
+     ```
+
+   - Agrega la siguiente línea al archivo para otorgar permisos:
+
+     ```bash
+     ansadmin ALL=(ALL) NOPASSWD: ALL
+     ```
+
+   Esto permite que el usuario `ansadmin` ejecute comandos `sudo` sin ingresar una contraseña.
+
+4. **Instala Git.**
+
+5. **Descarga el proyecto bastionweb.**
+
+   Sigue estos pasos para instalar Git y descargar el proyecto:
+
+   - Navega al directorio temporal:
+
+     ```bash
+     cd /tmp
+     ```
+
+   - Clona el repositorio de GitHub que contiene el proyecto `bastionweb`:
+
+     ```bash
+     sudo git clone https://github.com/lgeronimoM/bastionweb.git
+     ```
+
+   - Accede al directorio del proyecto:
+
+     ```bash
+     cd /tmp/bastionweb
+     ```
+
+   - Haz que el script de instalación sea ejecutable:
+
+     ```bash
+     sudo chmod u+x install.sh
+     ```
+
+   - Ejecuta el script de instalación:
+
+     ```bash
+     sudo ./install.sh
+     ```
+
+   - Inicia el servicio `bastion`:
+
+     ```bash
+     sudo systemctl start bastion
+     ```
+
+## Acceso Web
+- **Usuario:** admin
+- **Contraseña:** bastion
